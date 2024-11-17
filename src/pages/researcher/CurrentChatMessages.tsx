@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Card, Divider, Text } from '@mantine/core';
+import { Badge, Card, Divider, LoadingOverlay, Text } from '@mantine/core';
 
 interface ChatMessage {
   sender: string;
@@ -22,27 +22,30 @@ export interface CurrentChatMessagesProps {
 }
 
 export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({ messages }) => {
+  const [showLoadingMessagePlaceholder, setShowLoadingMessagePlaceholder] = useState(false);
   return (
-    <Card withBorder shadow="sm" style={{ height: '75%', overflowY: 'auto' }}>
-      {messages.map((message, index) => (
-        <div key={index}>
-          <Text size="xs" mt="sm" style={{ opacity: 0.7, fontWeight: 500 }}>
-            {message.sender} - {message.time}
-          </Text>
-          <Text size="md" mt="xs">
-            {message.content}
-          </Text>
-          {message.tokens !== null && (
-            <Card withBorder shadow="xs" p="md" radius="md" mt="xs">
-              <Text size="sm">{message.content}</Text>
-              <Badge size="sm" color="blue" mt="sm">
-                {message.tokens} tokens
-              </Badge>
-            </Card>
-          )}
-          {index < messages.length - 1 && <Divider my="sm" />}
-        </div>
-      ))}
-    </Card>
+    <>
+      <Card withBorder shadow="sm" style={{ height: '75%', overflowY: 'auto' }}>
+        {messages.map((message, index) => (
+          <div key={index}>
+            <Text size="xs" mt="sm" style={{ opacity: 0.7, fontWeight: 500 }}>
+              {message.sender} - {message.time}
+            </Text>
+            <Text size="md" mt="xs">
+              {message.content}
+            </Text>
+            {message.tokens !== null && (
+              <Card withBorder shadow="xs" p="md" radius="md" mt="xs">
+                <Text size="sm">{message.content}</Text>
+                <Badge size="sm" color="blue" mt="sm">
+                  {message.tokens} tokens
+                </Badge>
+              </Card>
+            )}
+            {index < messages.length - 1 && <Divider my="sm" />}
+          </div>
+        ))}
+      </Card>
+    </>
   );
 };

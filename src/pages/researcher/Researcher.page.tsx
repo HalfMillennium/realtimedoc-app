@@ -1,37 +1,30 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { IconCloudUpload, IconHistory, IconPin, IconSend } from '@tabler/icons-react';
 import {
-  Avatar,
-  Badge,
+  IconBooks,
+  IconCircleDashed,
+  IconCircleDashedCheck,
+  IconSend,
+  IconX,
+} from '@tabler/icons-react';
+import {
   Button,
   Card,
   Divider,
-  Group,
+  LoadingOverlay,
   Text,
   Textarea,
   useMantineColorScheme,
 } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { Header } from '@/components/Header/Header';
+import { ChatHistorySidebar } from './ChatHistorySidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
-
-interface HistoryResult {
-  id: string;
-  title: string;
-}
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
-  const [historyResults, setHistoryResults] = useState<HistoryResult[]>([
-    { id: '1', title: 'How can I improve my time management?' },
-    { id: '2', title: 'How do I start investing in stocks?' },
-    { id: '3', title: 'How can I reduce stress at work?' },
-  ]);
-  const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
-  const [pinnedHistoryResults, setPinnedHistoryResults] = useState<HistoryResult[]>([
-    { id: '3', title: 'How can I reduce stress at work?' },
-  ]);
+  const [loadingDataSet, setLoadingDataSet] = useState(true);
+  const [selectedDataset, setSelectedDataset] = useState<string>('');
   const [chatMessages, setChatMessages] = useState([
     {
       sender: 'Alex Ferguson',
@@ -48,12 +41,7 @@ export const Researcher: React.FC = () => {
     },
   ]);
   const [newMessage, setNewMessage] = useState('');
-
-  const handleFileUpload = (files: File[]) => {
-    setFileSetStream((prevSets) => [...prevSets, files]);
-    alert(`Uploaded file: ${files[0].name}`);
-  };
-
+  const [isNewMessageLoading, setIsNewMessageLoading] = useState(false);
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
 
@@ -70,7 +58,7 @@ export const Researcher: React.FC = () => {
     // Simulate a response from the chat bot
     setTimeout(() => {
       const botResponse = {
-        sender: 'Ciphy.io',
+        sender: 'Prisma',
         time: new Date().toLocaleTimeString(),
         content: 'This is a simulated response from the chat bot.',
         tokens: Math.floor(Math.random() * 100),
@@ -78,6 +66,18 @@ export const Researcher: React.FC = () => {
       setChatMessages((prevMessages) => [...prevMessages, botResponse]);
     }, 1000);
   };
+
+  interface SupportedDataSet {
+    label: string;
+    id: string;
+  }
+
+  const availableDataSets: SupportedDataSet[] = [
+    { label: 'Housing Market Data', id: 'housing' },
+    { label: 'Labor Market Data', id: 'labor' },
+    { label: 'Public Government Data', id: 'government' },
+    { label: 'Public Financial Data', id: 'financial' },
+  ];
 
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
@@ -97,75 +97,26 @@ export const Researcher: React.FC = () => {
           style={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row', gap: 20 }}
         >
           {/* Left Sidebar */}
-          <div style={{ width: '20%' }}>
-            <Group>
-              <Avatar radius="xl" />
-              <div>
-                <Text size="md">Alex Ferguson</Text>
-                <Text size="xs">Chat User</Text>
-              </div>
-            </Group>
-            <Divider my="sm" />
-            <div style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
-              <IconPin size={16} />
-              <Text size="xs" style={{ fontWeight: 700 }}>
-                Pinned
-              </Text>
-            </div>
-            {pinnedHistoryResults.map((entry) => (
-              <div key={entry.id} style={{ padding: 10 }}>
-                <Text size="sm" mt="sm">
-                  {entry.title}
-                </Text>
-              </div>
-            ))}
-            <Divider my="sm" />
-            <div style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
-              <IconHistory size={16} />
-              <Text size="xs" style={{ fontWeight: 700 }}>
-                Chat History
-              </Text>
-            </div>
-            {historyResults.map((entry) => (
-              <div key={entry.id} style={{ padding: 10 }}>
-                <Text size="sm" mt="sm">
-                  {entry.title}
-                </Text>
-              </div>
-            ))}
-            <Divider my="sm" />
-
-            <Dropzone onDrop={handleFileUpload} maxSize={30 * 1024 ** 2}>
-              <Button
-                fullWidth
-                style={{
-                  display: 'flex',
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 16,
-                  background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
-                  color: 'black',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                  transition: 'background 0.3s ease',
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = 'linear-gradient(to right, #fad0c4, #ff9a9e)')
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = 'linear-gradient(to right, #ff9a9e, #fad0c4)')
-                }
-              >
-                <IconCloudUpload size={18} style={{ marginRight: 5, color: 'black' }} />
-                Upload Document & Start Chat
-              </Button>
-            </Dropzone>
-          </div>
+          <ChatHistorySidebar />
 
           {/* Chat Area */}
           <div style={{ flex: 1, padding: '8px' }}>
             <CurrentChatMessages messages={chatMessages} />
+            {isNewMessageLoading && (
+              <Card
+                withBorder
+                shadow="xs"
+                p="md"
+                radius="md"
+                mt="xs"
+                style={{ position: 'relative', backdropFilter: 'blur(5px)' }}
+              >
+                <LoadingOverlay visible loaderProps={{ type: 'bars', color: 'orange' }} />
+                <Text size="sm" style={{ opacity: 0.5 }}>
+                  Placeholder message...
+                </Text>
+              </Card>
+            )}
             <div style={{ position: 'relative', marginTop: '16px' }}>
               <Textarea
                 placeholder="How can I help you?"
@@ -197,16 +148,95 @@ export const Researcher: React.FC = () => {
 
           {/* Right Sidebar */}
           <div style={{ width: '20%', padding: '8px' }}>
-            <Card withBorder shadow="sm">
-              <Text size="sm">GPT-4 Model</Text>
-              <Text size="xs" mt="sm">
-                The latest GPT-4 model with improved instruction following...
-              </Text>
+            <Card withBorder>
+              <div
+                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                  <IconBooks size={18} />
+                  <Text style={{ fontSize: 16, fontWeight: 300 }}>Live Datasets</Text>
+                </div>
+                <Button
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 5,
+                    alignItems: 'center',
+                    padding: '5px 10px',
+                    borderRadius: 5,
+                    backgroundColor: '#FEC98F',
+                    width: 'auto',
+                  }}
+                  onClick={() => setSelectedDataset('')}
+                >
+                  <IconX size={14} color="black" />
+                  <Text style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}>
+                    Reset
+                  </Text>
+                </Button>
+              </div>
               <Divider my="sm" />
-              <Text size="sm">Token Usage</Text>
-              <Text size="xs" mt="sm">
-                Tokens are the basic units of text that language models process...
-              </Text>
+              <div>
+                {availableDataSets.map((dataset, index) => (
+                  <Card
+                    key={index}
+                    withBorder
+                    shadow="sm"
+                    style={{
+                      marginBottom: '8px',
+                      cursor: 'pointer',
+                      backgroundColor: selectedDataset === dataset.id ? '#f1f1f1' : 'transparent',
+                    }}
+                    onClick={() => setSelectedDataset(dataset.id)}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 10,
+                        padding: 10,
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {selectedDataset !== dataset.id && <IconCircleDashed size={16} />}
+                      {selectedDataset === dataset.id && (
+                        <>
+                          <LoadingOverlay
+                            visible={loadingDataSet}
+                            zIndex={1000}
+                            loaderProps={{ color: '#FEC98F', type: 'bars' }}
+                          />
+                          <IconCircleDashedCheck size={16} color="green" />
+                        </>
+                      )}
+                      <div>
+                        <input
+                          type="radio"
+                          name="dataset"
+                          id={`dataset-${index}`}
+                          style={{ display: 'none' }}
+                        />
+                        <label htmlFor={`dataset-${index}`} style={{ cursor: 'pointer' }}>
+                          <Text
+                            size="sm"
+                            style={{
+                              fontWeight: 300,
+                              color:
+                                selectedDataset === dataset.id
+                                  ? 'black'
+                                  : colorScheme === 'dark'
+                                    ? '#f1f1f1'
+                                    : 'black',
+                            }}
+                          >
+                            {dataset.label}
+                          </Text>
+                        </label>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
             </Card>
           </div>
         </div>
