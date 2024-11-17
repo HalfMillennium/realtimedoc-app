@@ -160,7 +160,6 @@ export const Researcher: React.FC = () => {
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    gap: 5,
                     alignItems: 'center',
                     padding: '5px 10px',
                     borderRadius: 5,
@@ -169,7 +168,7 @@ export const Researcher: React.FC = () => {
                   }}
                   onClick={() => setSelectedDataset('')}
                 >
-                  <IconX size={14} color="black" />
+                  <IconX size={14} color="black" style={{ marginRight: 5 }} />
                   <Text style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}>
                     Reset
                   </Text>
