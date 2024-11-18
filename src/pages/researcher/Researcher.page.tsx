@@ -33,7 +33,7 @@ export const Researcher: React.FC = () => {
       tokens: null,
     },
     {
-      sender: 'Ciphy.io',
+      sender: 'Prisma',
       time: '2:46 PM',
       content:
         'Sure! Our model counts tokens in both input and output, including spaces and special characters...',
