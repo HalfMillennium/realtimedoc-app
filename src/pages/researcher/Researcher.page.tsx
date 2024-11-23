@@ -18,7 +18,7 @@ import {
 } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { Header } from '@/components/Header/Header';
-import { ChatHistorySidebar } from './ChatHistorySidebar';
+import { ChatHistorySidebar } from './components/ChatHistorySidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
 
 export const Researcher: React.FC = () => {
@@ -129,20 +129,21 @@ export const Researcher: React.FC = () => {
                 }}
                 style={{ width: '100%', borderColor: colorScheme === 'light' ? 'black' : 'white' }}
               />
-              <IconSend
-                size={42}
+              <div 
                 style={{
                   position: 'absolute',
                   right: 20,
                   top: '50%',
                   padding: 10,
                   backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
-                  borderRadius: 100,
                   transform: 'translateY(-50%)',
                   cursor: 'pointer',
-                }}
-                onClick={handleSendMessage}
-              />
+                }} 
+                onClick={handleSendMessage}>
+                <IconSend
+                  size={24}
+                />
+              </div>
             </div>
           </div>
 

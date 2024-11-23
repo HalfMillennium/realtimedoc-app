@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { IconBooks, IconCloudUpload, IconHistory, IconPin, IconSend } from '@tabler/icons-react';
 import { Avatar, Button, Card, Divider, Group, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
+import { ChatHistoryListItem } from './ChatHistoryListItem';
 
 export interface HistoryResult {
   id: string;
@@ -49,19 +50,7 @@ export const ChatHistorySidebar = () => {
             justifyContent: 'center',
           }}
         >
-          <Text
-            size="sm"
-            mt="sm"
-            style={{
-              borderRadius: 5,
-              padding: 10,
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-          >
-            {entry.title}
-          </Text>
+          <ChatHistoryListItem title={entry.title} entryId={entry.id}/>
         </div>
       ))}
       <Divider my="sm" />
@@ -80,19 +69,7 @@ export const ChatHistorySidebar = () => {
             justifyContent: 'center',
           }}
         >
-          <Text
-            size="sm"
-            mt="sm"
-            style={{
-              borderRadius: 5,
-              padding: 10,
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-          >
-            {entry.title}
-          </Text>
+          <ChatHistoryListItem title={entry.title} entryId={entry.id}/>
         </div>
       ))}
       <Divider my="sm" />
