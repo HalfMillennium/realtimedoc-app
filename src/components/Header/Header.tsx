@@ -1,4 +1,5 @@
 import { IconChevronDown, IconMoon, IconSun } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import {
   Burger,
   Center,
@@ -35,8 +36,9 @@ const links = [
   },
 ];
 
-export default function Header() {
+export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const navigate = useNavigate();
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
       <Menu.Item key={item.link}>{item.label}</Menu.Item>
@@ -75,10 +77,12 @@ export default function Header() {
   });
 
   return (
-    <header className={classes.header}>
+    <div className={classes.header}>
       <Container size="md">
         <div className={classes.inner}>
-          <Title order={2}>[ yourplace ]</Title>
+          <Title order={2} style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
+            _prisma_
+          </Title>
           <Group gap={5} visibleFrom="sm">
             {items}
           </Group>
@@ -115,6 +119,6 @@ export default function Header() {
           )}
         </div>
       </Container>
-    </header>
+    </div>
   );
 }
