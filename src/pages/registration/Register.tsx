@@ -17,15 +17,6 @@ import classes from './Register.module.css';
 
 interface RegisterProps {}
 
-interface BoxStyles {
-  width: string;
-  height: string;
-  display: string;
-  justifyContent: string;
-  alignItems: string;
-  backgroundColor: string;
-}
-
 interface BoxContentStyles {
   width: number;
   padding: string;
@@ -38,7 +29,7 @@ export const Register: React.FC<RegisterProps> = () => {
   const { colorScheme } = useMantineColorScheme();
 
   const boxContentStyles: BoxContentStyles = {
-    width: 400,
+    width: 600,
     padding: '2rem',
     borderRadius: '8px',
     backgroundColor: colorScheme === 'dark' ? '#212121' : '#fafafa',
@@ -46,12 +37,12 @@ export const Register: React.FC<RegisterProps> = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', height: '100%' }}>
       <Box
         className={classes.pageBody}
         style={{
           width: '100%',
-          height: '100vh',
+          height: '100%',
           display: 'flex',
           justifyContent: 'center',
           justifyItems: 'center',
@@ -91,45 +82,54 @@ export const Register: React.FC<RegisterProps> = () => {
               style={{
                 display: 'flex',
                 width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                gap: 10,
+                flexDirection: 'column',
+                gap: 30,
               }}
             >
-              <TextInput label="First name" placeholder="First name" size="md" required />
-              <TextInput label="Last name" placeholder="Last name" size="md" required />
-            </div>
-            <TextInput
-              label="Email address or phone number"
-              placeholder="Enter your email or phone"
-              size="md"
-              required
-            />
-            <PasswordInput label="Password" placeholder="Choose a good one" size="md" required />
-            <Button fullWidth size="md" color="teal">
-              Continue
-            </Button>
-            <div
-              style={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text size="sm">
-                Already have an account?{' '}
-                <Anchor href="#" size="sm">
-                  Sign In
-                </Anchor>
-              </Text>
-            </div>
+              <div
+                style={{
+                  display: 'flex',
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  gap: 20,
+                }}
+              >
+                <TextInput style={{display: 'flex', flex: 1, flexDirection: 'column' }} label="First name" placeholder="First name" size="md" required />
+                <TextInput style={{display: 'flex', flex: 1, flexDirection: 'column' }} label="Last name" placeholder="Last name" size="md" required />
+              </div>
+              <TextInput
+                label="Email address"
+                placeholder="Enter your email"
+                size="md"
+                required
+              />
+              <PasswordInput label="Password" placeholder="Choose a good one" size="md" required />
+              <Button fullWidth size="md" color="teal">
+                Continue
+              </Button>
+              <div
+                style={{
+                  display: 'flex',
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text size="sm">
+                  Already have an account?{' '}
+                  <Anchor href="#" size="sm">
+                    Sign In
+                  </Anchor>
+                </Text>
+              </div>
 
-            <Divider label="OR" labelPosition="center" />
+              <Divider label="OR" labelPosition="center" />
 
-            <Stack>
-              <GoogleButton />
-            </Stack>
+              <Stack>
+                <GoogleButton />
+              </Stack>
+            </div>
           </Stack>
         </Box>
       </Box>

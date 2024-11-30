@@ -3,7 +3,7 @@ import { HomePage } from './pages/home/Home.page';
 import { Researcher } from './pages/researcher/Researcher.page';
 import { Register } from './pages/registration/Register';
 
-import Layout from './Layout';
+import Layout from './layout/Layout';
 export interface UserDetails {
   name: string;
   email: string;
