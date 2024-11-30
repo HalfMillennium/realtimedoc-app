@@ -8,21 +8,12 @@ interface ChatMessage {
   tokens: number | null;
 }
 
-const noMessages: ChatMessage[] = [
-  {
-    sender: 'No Messages',
-    time: '2:45 PM',
-    content: 'Hey, can you explain how the model determines token usage and tracks interactions?',
-    tokens: 32,
-  },
-];
-
 export interface CurrentChatMessagesProps {
   messages: ChatMessage[];
+  isLoadingNewMessage: boolean;
 }
 
-export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({ messages }) => {
-  const [showLoadingMessagePlaceholder, setShowLoadingMessagePlaceholder] = useState(false);
+export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({ messages, isLoadingNewMessage }) => {
   return (
     <>
       <Card withBorder shadow="sm" style={{ height: '75%', overflowY: 'auto' }}>
@@ -45,6 +36,21 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({ messag
             {index < messages.length - 1 && <Divider my="sm" />}
           </div>
         ))}
+                    {isLoadingNewMessage && (
+              <Card
+                withBorder
+                shadow="xs"
+                p="md"
+                radius="md"
+                mt="xs"
+                style={{ position: 'relative', backdropFilter: 'blur(5px)' }}
+              >
+                <LoadingOverlay visible loaderProps={{ type: 'dots', color: 'orange' }} />
+                <Text size="sm" style={{ opacity: 0.5 }}>
+                  Loading new message...
+                </Text>
+              </Card>
+            )}
       </Card>
     </>
   );

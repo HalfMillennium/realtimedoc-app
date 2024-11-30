@@ -41,10 +41,9 @@ export const Researcher: React.FC = () => {
     },
   ]);
   const [newMessage, setNewMessage] = useState('');
-  const [isNewMessageLoading, setIsNewMessageLoading] = useState(false);
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
-
+    setIsLoadingNewMessage(true);
     const newChatMessage = {
       sender: 'Alex Ferguson',
       time: new Date().toLocaleTimeString(),
@@ -63,6 +62,7 @@ export const Researcher: React.FC = () => {
         content: 'This is a simulated response from the chat bot.',
         tokens: Math.floor(Math.random() * 100),
       };
+      setIsLoadingNewMessage(false);
       setChatMessages((prevMessages) => [...prevMessages, botResponse]);
     }, 1000);
   };
@@ -79,9 +79,10 @@ export const Researcher: React.FC = () => {
     { label: 'Public Financial Data', id: 'financial' },
   ];
 
+  const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false);
+
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-      <Header />
       <div
         style={{
           display: 'flex',
@@ -101,22 +102,7 @@ export const Researcher: React.FC = () => {
 
           {/* Chat Area */}
           <div style={{ flex: 1, padding: '8px' }}>
-            <CurrentChatMessages messages={chatMessages} />
-            {isNewMessageLoading && (
-              <Card
-                withBorder
-                shadow="xs"
-                p="md"
-                radius="md"
-                mt="xs"
-                style={{ position: 'relative', backdropFilter: 'blur(5px)' }}
-              >
-                <LoadingOverlay visible loaderProps={{ type: 'bars', color: 'orange' }} />
-                <Text size="sm" style={{ opacity: 0.5 }}>
-                  Placeholder message...
-                </Text>
-              </Card>
-            )}
+            <CurrentChatMessages messages={chatMessages} isLoadingNewMessage={isLoadingNewMessage}/>
             <div style={{ position: 'relative', marginTop: '16px' }}>
               <Textarea
                 placeholder="How can I help you?"
@@ -129,21 +115,24 @@ export const Researcher: React.FC = () => {
                 }}
                 style={{ width: '100%', borderColor: colorScheme === 'light' ? 'black' : 'white' }}
               />
-              <div 
+              <Button
                 style={{
                   position: 'absolute',
                   right: 20,
                   top: '50%',
-                  padding: 10,
                   backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
                   transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                }} 
-                onClick={handleSendMessage}>
-                <IconSend
-                  size={24}
-                />
-              </div>
+                  borderRadius: '100%',
+                  width: 45,
+                  height: 45,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onClick={handleSendMessage}
+              >
+                <IconSend size={24} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'}/>
+              </Button>
             </div>
           </div>
 

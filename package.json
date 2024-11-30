@@ -20,10 +20,12 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@mantine/carousel": "^7.14.3",
     "@mantine/core": "7.13.5",
     "@mantine/dropzone": "^7.14.1",
     "@mantine/form": "^7.14.1",
     "@mantine/hooks": "7.13.5",
+    "@reduxjs/toolkit": "^2.3.0",
     "@tabler/icons": "^3.22.0",
     "@tabler/icons-react": "^3.21.0",
     "react": "^18.3.1",

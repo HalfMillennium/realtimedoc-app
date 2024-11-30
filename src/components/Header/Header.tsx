@@ -1,14 +1,17 @@
-import { IconChevronDown, IconMoon, IconSun } from '@tabler/icons-react';
+import { IconChevronDown, IconMoon, IconSun, IconUserCog } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Burger,
+  Button,
   Center,
   Container,
   Group,
   Menu,
+  Modal,
   Title,
   useMantineColorScheme,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { AccountOverview, UserDetails } from '@/pages/account/AccountOverview';
 import classes from './Header.module.css';
 
 const links = [
@@ -36,9 +39,18 @@ const links = [
   },
 ];
 
+const exampleUser: UserDetails = {
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  avatarUrl: 'https://example.com/avatar.jpg',
+  membershipLevel: 'Gold',
+  accountBalance: 1000,
+};
+
 export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
+  const [opened, { open, close }] = useDisclosure(false);
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
       <Menu.Item key={item.link}>{item.label}</Menu.Item>
@@ -86,37 +98,57 @@ export function Header() {
           <Group gap={5} visibleFrom="sm">
             {items}
           </Group>
-          {colorScheme === 'dark' ? (
+          <Group gap={10}>
+            {colorScheme === 'dark' ? (
+              <div
+                onClick={() => setColorScheme('light')}
+                style={{
+                  padding: '10px',
+                  cursor: 'pointer',
+                  backgroundColor: '#212121',
+                  borderRadius: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <IconSun size={22} />
+              </div>
+            ) : (
+              <div
+                onClick={() => setColorScheme('dark')}
+                style={{
+                  padding: '10px',
+                  cursor: 'pointer',
+                  backgroundColor: '#efefef',
+                  borderRadius: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <IconMoon size={18} />
+              </div>
+            )}
             <div
-              onClick={() => setColorScheme('light')}
+              onClick={open}
               style={{
                 padding: '10px',
                 cursor: 'pointer',
-                backgroundColor: '#212121',
+                backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
                 borderRadius: '100%',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
             >
-              <IconSun size={22} />
+              <IconUserCog size={22} />
             </div>
-          ) : (
-            <div
-              onClick={() => setColorScheme('dark')}
-              style={{
-                padding: '10px',
-                cursor: 'pointer',
-                backgroundColor: '#efefef',
-                borderRadius: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <IconMoon size={18} />
-            </div>
-          )}
+
+            <Modal opened={opened} onClose={close} title="Account Overview" size="md" centered>
+              <AccountOverview userDetails={exampleUser} />
+            </Modal>
+          </Group>
         </div>
       </Container>
     </div>

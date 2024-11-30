@@ -14,6 +14,16 @@ export const ChatHistorySidebar = () => {
   const handleFileUpload = (files: File[]) => {
     setFileSetStream((prevSets) => [...prevSets, files]);
     alert(`Uploaded file: ${files[0].name}`);
+    const formData = new FormData();
+    formData.append('file', files[0]);
+
+    fetch('http://localhost:8000/create-convo/1234', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
   };
 
   const [historyResults, setHistoryResults] = useState<HistoryResult[]>([

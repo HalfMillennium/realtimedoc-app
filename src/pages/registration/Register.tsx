@@ -47,7 +47,6 @@ export const Register: React.FC<RegisterProps> = () => {
 
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-      <Header />
       <Box
         className={classes.pageBody}
         style={{

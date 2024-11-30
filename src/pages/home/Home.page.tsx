@@ -1,22 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Button,
-  NumberInput,
-  PasswordInput,
-  SegmentedControl,
-  Select,
-  Text,
-  Textarea,
-  TextInput,
-  Title,
-  useMantineColorScheme,
-} from '@mantine/core';
-import { Header } from '@/components/Header/Header';
-import { ContactForm } from './activities/ContactForm';
+import { Button, Text, Title, useMantineColorScheme } from '@mantine/core';
 import { CurrentActivity } from './activities/CurrentActivity';
-import { HowItWorks } from './activities/HowItWorks';
-import { SegmentMenuOptions } from './menus/segment_menu';
 
 export function HomePage() {
   const { colorScheme } = useMantineColorScheme();
@@ -25,8 +10,18 @@ export function HomePage() {
     navigate('/researcher');
   };
   return (
-    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', height: '100%', gap: 100 }}>
-      <Header />
+    <div
+      style={{
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        height: '100%',
+        gap: 100,
+        paddingTop: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <div
         style={{
           display: 'flex',
