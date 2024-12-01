@@ -1,31 +1,27 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {
-  IconBooks,
-  IconCircleDashed,
-  IconCircleDashedCheck,
-  IconSend,
-  IconX,
-} from '@tabler/icons-react';
-import {
-  Button,
-  Card,
-  Divider,
-  Flex,
-  LoadingOverlay,
-  Text,
-  Textarea,
-  useMantineColorScheme,
-} from '@mantine/core';
-import { Dropzone } from '@mantine/dropzone';
-import { Header } from '@/components/Header/Header';
+import { IconSend } from '@tabler/icons-react';
+import { Button, Textarea, useMantineColorScheme } from '@mantine/core';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
+import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
+
+export interface SupportedDataSet {
+  label: string;
+  id: string;
+}
+
+const availableDataSets: SupportedDataSet[] = [
+  { label: 'Housing Market Data', id: 'housing' },
+  { label: 'Labor Market Data', id: 'labor' },
+  { label: 'Public Government Data', id: 'government' },
+  { label: 'Public Financial Data', id: 'financial' },
+];
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const [loadingDataSet, setLoadingDataSet] = useState(true);
-  const [selectedDataset, setSelectedDataset] = useState<string>('');
+  const [selectedDataSet, setSelectedDataSet] = useState<SupportedDataSet | undefined>(undefined);
   const [chatMessages, setChatMessages] = useState([
     {
       sender: 'Alex Ferguson',
@@ -67,18 +63,6 @@ export const Researcher: React.FC = () => {
       setChatMessages((prevMessages) => [...prevMessages, botResponse]);
     }, 1000);
   };
-
-  interface SupportedDataSet {
-    label: string;
-    id: string;
-  }
-
-  const availableDataSets: SupportedDataSet[] = [
-    { label: 'Housing Market Data', id: 'housing' },
-    { label: 'Labor Market Data', id: 'labor' },
-    { label: 'Public Government Data', id: 'government' },
-    { label: 'Public Financial Data', id: 'financial' },
-  ];
 
   const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false);
 
@@ -140,108 +124,13 @@ export const Researcher: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <div style={{ width: '20%', padding: '8px' }}>
-            <Card withBorder>
-              <div
-                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
-              >
-                <Flex style={{ flexDirection: 'column', gap: 10 }}>
-                  <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
-                    <IconBooks size={18} />
-                    <Text style={{ fontSize: 16, fontWeight: 300 }}>Live Datasets</Text>
-                  </div>
-                  <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
-                    Combine the information in your uploaded documents with Prisma's up-to-date data
-                    libraries to further enhance generated insights.
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Button
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      padding: '5px 10px',
-                      borderRadius: 5,
-                      backgroundColor: '#FEC98F',
-                      width: 'auto',
-                    }}
-                    onClick={() => setSelectedDataset('')}
-                  >
-                    <IconX size={14} color="black" style={{ marginRight: 5 }} />
-                    <Text
-                      style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}
-                    >
-                      Reset
-                    </Text>
-                  </Button>
-                </Flex>
-              </div>
-              <Divider my="sm" />
-              <div>
-                {availableDataSets.map((dataset, index) => (
-                  <Card
-                    key={index}
-                    withBorder
-                    shadow="sm"
-                    style={{
-                      marginBottom: '8px',
-                      cursor: 'pointer',
-                      backgroundColor: selectedDataset === dataset.id ? '#f1f1f1' : 'transparent',
-                    }}
-                    onClick={() => setSelectedDataset(dataset.id)}
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: 10,
-                        padding: 10,
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                      }}
-                    >
-                      {selectedDataset !== dataset.id && <IconCircleDashed size={16} />}
-                      {selectedDataset === dataset.id && (
-                        <>
-                          <LoadingOverlay
-                            visible={loadingDataSet}
-                            zIndex={1000}
-                            loaderProps={{ color: '#FEC98F', type: 'bars' }}
-                          />
-                          <IconCircleDashedCheck size={16} color="green" />
-                        </>
-                      )}
-                      <div>
-                        <input
-                          type="radio"
-                          name="dataset"
-                          id={`dataset-${index}`}
-                          style={{ display: 'none' }}
-                        />
-                        <label htmlFor={`dataset-${index}`} style={{ cursor: 'pointer' }}>
-                          <Text
-                            size="sm"
-                            style={{
-                              fontWeight: 300,
-                              color:
-                                selectedDataset === dataset.id
-                                  ? 'black'
-                                  : colorScheme === 'dark'
-                                    ? '#f1f1f1'
-                                    : 'black',
-                            }}
-                          >
-                            {dataset.label}
-                          </Text>
-                        </label>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </Card>
-          </div>
+          <ResearcherRightSidebar
+            selectedDataSet={selectedDataSet}
+            setSelectedDataSet={setSelectedDataSet}
+            loadingDataSet={loadingDataSet}
+            setLoadingDataSet={setLoadingDataSet}
+            availableDataSets={availableDataSets}
+          />
         </div>
       </div>
     </div>
