@@ -131,7 +131,7 @@ export const Researcher: React.FC = () => {
                 }}
                 onClick={handleSendMessage}
               >
-                <IconSend size={24} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'}/>
+                <IconSend size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'}/>
               </Button>
             </div>
           </div>

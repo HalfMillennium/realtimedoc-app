@@ -32,9 +32,6 @@ export const ChatHistorySidebar = () => {
     { id: '3', title: 'How can I reduce stress at work?' },
   ]);
 
-  const [pinnedHistoryResults, setPinnedHistoryResults] = useState<HistoryResult[]>([
-    { id: '3', title: 'How can I reduce stress at work?' },
-  ]);
   return (
     <div style={{ width: '20%' }}>
       <Group>
@@ -45,28 +42,9 @@ export const ChatHistorySidebar = () => {
         </div>
       </Group>
       <Divider my="sm" />
-      <div style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
-        <IconPin size={16} />
-        <Text size="xs" style={{ fontWeight: 700 }}>
-          Pinned
-        </Text>
-      </div>
-      {pinnedHistoryResults.map((entry) => (
-        <div
-          key={entry.id}
-          style={{
-            transition: 'background-color 0.3s ease',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <ChatHistoryListItem title={entry.title} entryId={entry.id}/>
-        </div>
-      ))}
-      <Divider my="sm" />
-      <div style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: 5, opacity: 0.5 }}>
         <IconHistory size={16} />
-        <Text size="xs" style={{ fontWeight: 700 }}>
+        <Text size="xs" style={{ fontWeight: 300 }}>
           Chat History
         </Text>
       </div>

@@ -1,7 +1,7 @@
-import { IconChevronDown, IconMoon, IconSun, IconUserCog } from '@tabler/icons-react';
+import { IconChevronDown, IconMoon, IconSun } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Button,
+  Avatar,
   Center,
   Container,
   Group,
@@ -11,7 +11,7 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { AccountOverview, UserDetails } from '@/pages/account/AccountOverview';
+import {AccountOverview} from '../../pages/account/AccountOverview';
 import classes from './Header.module.css';
 
 const links = [
@@ -38,14 +38,6 @@ const links = [
     ],
   },
 ];
-
-const exampleUser: UserDetails = {
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  avatarUrl: 'https://example.com/avatar.jpg',
-  membershipLevel: 'Gold',
-  accountBalance: 1000,
-};
 
 export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -130,24 +122,15 @@ export function Header() {
                 <IconMoon size={18} />
               </div>
             )}
-            <div
-              onClick={open}
+            <Avatar
               style={{
-                padding: '10px',
                 cursor: 'pointer',
-                backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
-                borderRadius: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
               }}
-            >
-              <IconUserCog size={22} />
-            </div>
-
-            <Modal opened={opened} onClose={close} title="Account Overview" size="md" centered>
-              <AccountOverview userDetails={exampleUser} />
-            </Modal>
+              radius="xl"
+              size="md"
+              onClick={open}
+            />
+              <AccountOverview open={opened} close={close}/>
           </Group>
         </div>
       </Container>
