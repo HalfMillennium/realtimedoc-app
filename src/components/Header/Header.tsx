@@ -85,7 +85,7 @@ export function Header() {
       <Container size="md">
         <div className={classes.inner}>
           <Title order={2} style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
-            _prisma_
+            prismaAI
           </Title>
           <Group gap={5} visibleFrom="sm">
             {items}
@@ -125,9 +125,11 @@ export function Header() {
             <Avatar
               style={{
                 cursor: 'pointer',
+                backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
               }}
               radius="xl"
               size="md"
+              color={colorScheme === 'dark' ? 'orange' : 'blue'}
               onClick={open}
             />
               <AccountOverview open={opened} close={close}/>

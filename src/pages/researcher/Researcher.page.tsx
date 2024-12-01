@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   Divider,
+  Flex,
   LoadingOverlay,
   Text,
   Textarea,
@@ -18,7 +19,7 @@ import {
 } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { Header } from '@/components/Header/Header';
-import { ChatHistorySidebar } from './components/ChatHistorySidebar';
+import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { CurrentChatMessages } from './CurrentChatMessages';
 
 export const Researcher: React.FC = () => {
@@ -98,11 +99,14 @@ export const Researcher: React.FC = () => {
           style={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row', gap: 20 }}
         >
           {/* Left Sidebar */}
-          <ChatHistorySidebar />
+          <ResearcherLeftSideBar />
 
           {/* Chat Area */}
           <div style={{ flex: 1, padding: '8px' }}>
-            <CurrentChatMessages messages={chatMessages} isLoadingNewMessage={isLoadingNewMessage}/>
+            <CurrentChatMessages
+              messages={chatMessages}
+              isLoadingNewMessage={isLoadingNewMessage}
+            />
             <div style={{ position: 'relative', marginTop: '16px' }}>
               <Textarea
                 placeholder="How can I help you?"
@@ -131,7 +135,7 @@ export const Researcher: React.FC = () => {
                 }}
                 onClick={handleSendMessage}
               >
-                <IconSend size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'}/>
+                <IconSend size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
               </Button>
             </div>
           </div>
@@ -142,27 +146,37 @@ export const Researcher: React.FC = () => {
               <div
                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
               >
-                <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
-                  <IconBooks size={18} />
-                  <Text style={{ fontSize: 16, fontWeight: 300 }}>Live Datasets</Text>
-                </div>
-                <Button
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: '5px 10px',
-                    borderRadius: 5,
-                    backgroundColor: '#FEC98F',
-                    width: 'auto',
-                  }}
-                  onClick={() => setSelectedDataset('')}
-                >
-                  <IconX size={14} color="black" style={{ marginRight: 5 }} />
-                  <Text style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}>
-                    Reset
+                <Flex style={{ flexDirection: 'column', gap: 10 }}>
+                  <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                    <IconBooks size={18} />
+                    <Text style={{ fontSize: 16, fontWeight: 300 }}>Live Datasets</Text>
+                  </div>
+                  <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
+                    Combine the information in your uploaded documents with Prisma's up-to-date data
+                    libraries to further enhance generated insights.
                   </Text>
-                </Button>
+                </Flex>
+                <Flex>
+                  <Button
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: '5px 10px',
+                      borderRadius: 5,
+                      backgroundColor: '#FEC98F',
+                      width: 'auto',
+                    }}
+                    onClick={() => setSelectedDataset('')}
+                  >
+                    <IconX size={14} color="black" style={{ marginRight: 5 }} />
+                    <Text
+                      style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}
+                    >
+                      Reset
+                    </Text>
+                  </Button>
+                </Flex>
               </div>
               <Divider my="sm" />
               <div>

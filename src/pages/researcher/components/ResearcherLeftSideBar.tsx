@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { IconBooks, IconCloudUpload, IconHistory, IconPin, IconSend } from '@tabler/icons-react';
-import { Avatar, Button, Card, Divider, Group, Text } from '@mantine/core';
+import { Avatar, Button, Card, Divider, Flex, Group, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
 
@@ -9,7 +9,7 @@ export interface HistoryResult {
   title: string;
 }
 
-export const ChatHistorySidebar = () => {
+export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
   const handleFileUpload = (files: File[]) => {
     setFileSetStream((prevSets) => [...prevSets, files]);
@@ -62,6 +62,7 @@ export const ChatHistorySidebar = () => {
       ))}
       <Divider my="sm" />
 
+      <Flex style={{ flexDirection: 'column', gap: 10 }}>
       <Dropzone
         onDrop={handleFileUpload}
         maxSize={30 * 1024 ** 2}
@@ -90,6 +91,10 @@ export const ChatHistorySidebar = () => {
           Upload Document & Start Chat
         </Button>
       </Dropzone>
+                  <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
+                    To start a new chat with Prisma AI, simply upload a new PDF document.
+                  </Text>
+        </Flex>
     </div>
   );
 };
