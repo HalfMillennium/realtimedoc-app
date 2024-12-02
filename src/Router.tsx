@@ -1,16 +1,17 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HomePage } from './pages/home/Home.page';
-import { Researcher } from './pages/researcher/Researcher.page';
-import { Register } from './pages/registration/Register';
-
 import Layout from './layout/Layout';
+import { HomePage } from './pages/home/Home.page';
+import { PricingPage } from './pages/pricing/PricingPage';
+import { Register } from './pages/registration/Register';
+import { Researcher } from './pages/researcher/Researcher.page';
+
 export interface UserDetails {
   name: string;
   email: string;
   avatarUrl: string;
   membershipLevel: string;
   accountBalance: number;
-};
+}
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,11 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register />,
-      }
+      },
+      {
+        path: '/pricing',
+        element: <PricingPage />,
+      },
     ],
   },
 ]);
