@@ -14,7 +14,6 @@ export const DataSetOptionsPanel: React.FC<DataSetOptionsPanelProps> = ({ option
     <RadioGroup
       style={{ padding: 10, paddingBottom: 20 }}
       value={value}
-      color={colorScheme === 'dark' ? 'white' : 'black'}
       onChange={setValue}
       label={
         <Text
@@ -27,7 +26,12 @@ export const DataSetOptionsPanel: React.FC<DataSetOptionsPanelProps> = ({ option
     >
       <Flex style={{ flexDirection: 'column', gap: 10 }}>
         {options.map((option) => (
-          <Radio value={option.id} label={option.title} description={option.subtitle} />
+          <Radio
+            color={COLORS.teal}
+            value={option.id}
+            label={<Text style={{ cursor: 'pointer', lineHeight: 1 }}>{option.title}</Text>}
+            description={option.subtitle}
+          />
         ))}
       </Flex>
     </RadioGroup>

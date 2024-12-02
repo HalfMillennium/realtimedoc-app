@@ -73,7 +73,7 @@ export const ResearcherLeftSideBar = () => {
             justifyContent: 'center',
             background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            borderRadius: '8px',
+            borderRadius: 5,
           }}
         >
           <Button
@@ -82,7 +82,7 @@ export const ResearcherLeftSideBar = () => {
               justifyContent: 'center',
               alignItems: 'center',
               color: 'black',
-              borderRadius: '8px',
+              borderRadius: 5,
               backgroundColor: 'transparent',
               transition: 'background 0.3s ease',
             }}
