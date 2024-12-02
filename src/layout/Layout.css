@@ -2,10 +2,11 @@
 .layout {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full height of the viewport */
+  height: 100vh;
 }
 
 .main-content {
-  flex: 1; /* Grow to fill the available space */
-  overflow: auto; /* Add scrolling if content overflows */
+  display: flex;
+  flex: 1;
+  overflow: auto;
 }

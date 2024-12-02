@@ -18,12 +18,12 @@ export const ResearcherLeftSideBar = () => {
     formData.append('file', files[0]);
 
     fetch('http://localhost:8000/create-convo/1234', {
-        method: 'POST',
-        body: formData,
+      method: 'POST',
+      body: formData,
     })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error('Error:', error));
   };
 
   const [historyResults, setHistoryResults] = useState<HistoryResult[]>([
@@ -57,44 +57,44 @@ export const ResearcherLeftSideBar = () => {
             justifyContent: 'center',
           }}
         >
-          <ChatHistoryListItem title={entry.title} entryId={entry.id}/>
+          <ChatHistoryListItem title={entry.title} entryId={entry.id} />
         </div>
       ))}
       <Divider my="sm" />
 
       <Flex style={{ flexDirection: 'column', gap: 10 }}>
-      <Dropzone
-        onDrop={handleFileUpload}
-        maxSize={30 * 1024 ** 2}
-        style={{
-          display: 'flex',
-          flex: 1,
-          marginTop: 16,
-          justifyContent: 'center',
-          background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          borderRadius: '8px',
-        }}
-      >
-        <Button
-          fullWidth
+        <Dropzone
+          onDrop={handleFileUpload}
+          maxSize={30 * 1024 ** 2}
           style={{
+            display: 'flex',
+            flex: 1,
+            marginTop: 16,
             justifyContent: 'center',
-            alignItems: 'center',
-            color: 'black',
+            background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             borderRadius: '8px',
-            backgroundColor: 'transparent',
-            transition: 'background 0.3s ease',
           }}
         >
-          <IconCloudUpload size={18} style={{ paddingRight: 5, color: 'black' }} />
-          Upload Document & Start Chat
-        </Button>
-      </Dropzone>
-                  <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
-                    To start a new chat with Prisma AI, simply upload a new PDF document.
-                  </Text>
-        </Flex>
+          <Button
+            fullWidth
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: 'black',
+              borderRadius: '8px',
+              backgroundColor: 'transparent',
+              transition: 'background 0.3s ease',
+            }}
+          >
+            <IconCloudUpload size={18} style={{ paddingRight: 5, color: 'black' }} />
+            Upload Document & Start Chat
+          </Button>
+        </Dropzone>
+        <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
+          To start a new chat with Prisma AI, simply upload a new PDF document.
+        </Text>
+      </Flex>
     </div>
   );
 };

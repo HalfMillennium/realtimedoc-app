@@ -5,13 +5,16 @@ import {
   Center,
   Container,
   Group,
+  Image,
   Menu,
   Modal,
   Title,
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {AccountOverview} from '../../pages/account/AccountOverview';
+import darkModeLogo from '../../assets/logo_dark_mode.png';
+import lightModeLogo from '../../assets/logo_light_mode.png';
+import { AccountOverview } from '../../pages/account/AccountOverview';
 import classes from './Header.module.css';
 
 const links = [
@@ -84,9 +87,11 @@ export function Header() {
     <div className={classes.header}>
       <Container size="md">
         <div className={classes.inner}>
-          <Title order={2} style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
-            prismaAI
-          </Title>
+          <Image
+            src={colorScheme === 'dark' ? darkModeLogo : lightModeLogo}
+            style={{ width: 'auto', height: 20, cursor: 'pointer' }}
+            onClick={() => navigate('/')}
+          />
           <Group gap={5} visibleFrom="sm">
             {items}
           </Group>
@@ -132,7 +137,7 @@ export function Header() {
               color={colorScheme === 'dark' ? 'orange' : 'blue'}
               onClick={open}
             />
-              <AccountOverview open={opened} close={close}/>
+            <AccountOverview open={opened} close={close} />
           </Group>
         </div>
       </Container>

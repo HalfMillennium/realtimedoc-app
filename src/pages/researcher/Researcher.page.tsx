@@ -2,25 +2,47 @@ import * as React from 'react';
 import { useState } from 'react';
 import { IconSend } from '@tabler/icons-react';
 import { Button, Textarea, useMantineColorScheme } from '@mantine/core';
+import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
 
+export interface DataSetOption {
+  id: string;
+  title: string;
+  subtitle: string;
+}
+
 export interface SupportedDataSet {
   label: string;
   id: string;
+  options?: DataSetOption[];
 }
 
 const availableDataSets: SupportedDataSet[] = [
   { label: 'Housing Market Data', id: 'housing' },
   { label: 'Labor Market Data', id: 'labor' },
-  { label: 'Public Government Data', id: 'government' },
+  {
+    label: 'Economic Spending Data',
+    id: 'government',
+    options: [
+      {
+        id: 'usaConsumerSpending',
+        title: 'US Consumers',
+        subtitle: 'Latest available macro-economic data for US-based consumers.',
+      },
+      {
+        id: 'usaGovernmentSpending',
+        title: 'US Government',
+        subtitle: 'Latest available macro-economic data for the US government.',
+      },
+    ],
+  },
   { label: 'Public Financial Data', id: 'financial' },
 ];
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
-  const [loadingDataSet, setLoadingDataSet] = useState(true);
   const [selectedDataSet, setSelectedDataSet] = useState<SupportedDataSet | undefined>(undefined);
   const [chatMessages, setChatMessages] = useState([
     {
@@ -67,18 +89,19 @@ export const Researcher: React.FC = () => {
   const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false);
 
   return (
-    <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 30 }}>
       <div
         style={{
           display: 'flex',
           width: '100%',
-          height: '97vh',
           flexDirection: 'column',
+          flex: 1,
           padding: 30,
+          paddingTop: 50,
           gap: 10,
         }}
       >
-        {/* Main Content */}
+        <ResearcherPageHeader />
         <div
           style={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row', gap: 20 }}
         >
@@ -86,7 +109,14 @@ export const Researcher: React.FC = () => {
           <ResearcherLeftSideBar />
 
           {/* Chat Area */}
-          <div style={{ flex: 1, padding: '8px' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              padding: '8px',
+            }}
+          >
             <CurrentChatMessages
               messages={chatMessages}
               isLoadingNewMessage={isLoadingNewMessage}
@@ -127,8 +157,6 @@ export const Researcher: React.FC = () => {
           <ResearcherRightSidebar
             selectedDataSet={selectedDataSet}
             setSelectedDataSet={setSelectedDataSet}
-            loadingDataSet={loadingDataSet}
-            setLoadingDataSet={setLoadingDataSet}
             availableDataSets={availableDataSets}
           />
         </div>
