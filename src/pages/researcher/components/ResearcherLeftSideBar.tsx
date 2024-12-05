@@ -92,7 +92,7 @@ export const ResearcherLeftSideBar = () => {
           </Button>
         </Dropzone>
         <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
-          To start a new chat with Prisma AI, simply upload a new PDF document.
+          To start a new chat with realtimedoc, simply upload a new PDF document.
         </Text>
       </Flex>
     </div>

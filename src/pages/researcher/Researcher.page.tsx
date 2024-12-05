@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { IconSend } from '@tabler/icons-react';
-import { Button, Textarea, useMantineColorScheme } from '@mantine/core';
+import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
 import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
@@ -94,10 +94,11 @@ export const Researcher: React.FC = () => {
         style={{
           display: 'flex',
           width: '100%',
+          height: '100%',
           flexDirection: 'column',
           flex: 1,
           padding: 30,
-          paddingTop: 50,
+          paddingTop: 15,
           gap: 10,
         }}
       >
@@ -117,10 +118,12 @@ export const Researcher: React.FC = () => {
               padding: '8px',
             }}
           >
-            <CurrentChatMessages
-              messages={chatMessages}
-              isLoadingNewMessage={isLoadingNewMessage}
-            />
+            <Flex style={{ flex: 1, overflowY: 'scroll', width: '100%' }}>
+              <CurrentChatMessages
+                messages={chatMessages}
+                isLoadingNewMessage={isLoadingNewMessage}
+              />
+            </Flex>
             <div style={{ position: 'relative', marginTop: '16px' }}>
               <Textarea
                 placeholder="How can I help you?"

@@ -18,7 +18,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   isLoadingNewMessage,
 }) => {
   return (
-    <Card withBorder shadow="sm" style={{ height: '85%', overflowY: 'auto' }}>
+    <Card withBorder shadow="sm" style={{ height: '100%', overflowY: 'scroll', width: '100%' }}>
       {messages.map((message, index) => (
         <div key={index}>
           <Text size="xs" mt="sm" style={{ opacity: 0.7, fontWeight: 500 }}>

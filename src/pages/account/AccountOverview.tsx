@@ -42,7 +42,14 @@ export const AccountOverview: React.FC<AccountOverviewProps> = ({open, close}) =
     <Modal
     opened={open}
     onClose={close}
-    title="Account Overview"
+    title={
+      <Text
+      size="xs"
+      style={{ marginBottom: 10, fontWeight: 300, letterSpacing: 1 }}
+    >
+      ACCOUNT OVERVIEW
+    </Text>
+    }
     centered
     size="sm"
   >

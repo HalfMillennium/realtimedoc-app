@@ -23,10 +23,7 @@ const links = [
     link: '#1',
     label: 'Learn',
     links: [
-      { link: '/docs', label: 'Documentation' },
-      { link: '/resources', label: 'Resources' },
-      { link: '/community', label: 'Community' },
-      { link: '/blog', label: 'Blog' },
+      { link: '/faq', label: 'FAQ' },
     ],
   },
   { link: '/about', label: 'About' },
@@ -35,9 +32,7 @@ const links = [
     link: '#2',
     label: 'Support',
     links: [
-      { link: '/faq', label: 'FAQ' },
-      { link: '/demo', label: 'Book a demo' },
-      { link: '/forums', label: 'Forums' },
+      { link: '/contact', label: 'Contact' },
     ],
   },
 ];
@@ -48,7 +43,10 @@ export function Header() {
   const [opened, { open, close }] = useDisclosure(false);
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+      <Menu.Item key={item.link} onClick={() => 
+        navigate(item.link)}>
+        {item.label}
+      </Menu.Item>
     ));
 
     if (menuItems) {
@@ -56,9 +54,10 @@ export function Header() {
         <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
           <Menu.Target>
             <a
-              href={link.link}
               className={classes.link}
-              onClick={(event) => event.preventDefault()}
+              onClick={(event) => {
+                event.preventDefault();
+              }}
             >
               <Center>
                 <span className={classes.linkLabel}>{link.label}</span>

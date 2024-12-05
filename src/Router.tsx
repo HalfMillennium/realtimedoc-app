@@ -4,6 +4,7 @@ import { HomePage } from './pages/home/Home.page';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { Register } from './pages/registration/Register';
 import { Researcher } from './pages/researcher/Researcher.page';
+import { FAQPage } from './pages/faq/FAQPage';
 
 export interface UserDetails {
   name: string;
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
         path: '/pricing',
         element: <PricingPage />,
       },
+      {
+        path: '/faq',
+        element: <FAQPage/>
+      }
     ],
   },
 ]);

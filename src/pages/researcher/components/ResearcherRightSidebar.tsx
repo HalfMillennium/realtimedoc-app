@@ -37,7 +37,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
               justifyContent: 'space-between',
             }}
           >
-            <div style={{ display: 'flex', gap: 5, alignItems: 'center', padding: '5px' }}>
+            <div style={{ display: 'flex', gap: 5, alignItems: 'center', paddingBottom: '5px' }}>
               <IconBooks size={18} color={COLORS.peach} />
               <Text style={{ fontSize: 16, fontWeight: 300 }}>Live Datasets</Text>
             </div>
