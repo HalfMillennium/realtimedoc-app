@@ -13,7 +13,7 @@ export const ResearcherPageHeader: React.FC = () => {
         {/* Title and Description */}
         <div>
           <Text style={{ fontWeight: 700, fontSize: 36 }} size="xl">
-            Researcher
+            Research Suite
           </Text>
           <Text size="sm" color="dimmed">
             Upload your files to generate actionable insights, or connect live external databases

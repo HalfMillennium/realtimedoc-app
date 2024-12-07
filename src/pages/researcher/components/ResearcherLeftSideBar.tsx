@@ -2,35 +2,21 @@ import { useState } from 'react';
 import { IconBooks, IconCloudUpload, IconHistory, IconPin, IconSend } from '@tabler/icons-react';
 import { Avatar, Button, Card, Divider, Flex, Group, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
+import { Conversation, Message } from '@/store/conversations/conversationsSlice';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
-
-export interface HistoryResult {
-  id: string;
-  title: string;
-}
+import { EXAMPLE_CONVERSATIONS } from './utils';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
+  const dispatch = useDispatch();
   const handleFileUpload = (files: File[]) => {
     setFileSetStream((prevSets) => [...prevSets, files]);
     alert(`Uploaded file: ${files[0].name}`);
     const formData = new FormData();
     formData.append('file', files[0]);
-
-    fetch('http://localhost:8000/create-convo/1234', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error('Error:', error));
   };
 
-  const [historyResults, setHistoryResults] = useState<HistoryResult[]>([
-    { id: '1', title: 'How can I improve my time management?' },
-    { id: '2', title: 'How do I start investing in stocks?' },
-    { id: '3', title: 'How can I reduce stress at work?' },
-  ]);
+  const [conversationHistory, setConversationHistory] = useState<Conversation[]>(EXAMPLE_CONVERSATIONS);
 
   return (
     <div style={{ width: '20%' }}>
@@ -48,16 +34,17 @@ export const ResearcherLeftSideBar = () => {
           Chat History
         </Text>
       </div>
-      {historyResults.map((entry) => (
+      {conversationHistory.map((conversation) => (
         <div
-          key={entry.id}
+          key={conversation.id}
           style={{
             transition: 'background-color 0.3s ease',
             alignItems: 'center',
             justifyContent: 'center',
           }}
+          onClick={() => (dispatchEvent())}
         >
-          <ChatHistoryListItem title={entry.title} entryId={entry.id} />
+          <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
         </div>
       ))}
       <Divider my="sm" />

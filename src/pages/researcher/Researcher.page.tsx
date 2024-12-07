@@ -76,7 +76,7 @@ export const Researcher: React.FC = () => {
     // Simulate a response from the chat bot
     setTimeout(() => {
       const botResponse = {
-        sender: 'Prisma',
+        sender: 'RealTimDoc AI',
         time: new Date().toLocaleTimeString(),
         content: 'This is a simulated response from the chat bot.',
         tokens: Math.floor(Math.random() * 100),
@@ -118,7 +118,7 @@ export const Researcher: React.FC = () => {
               padding: '8px',
             }}
           >
-            <Flex style={{ flex: 1, overflowY: 'scroll', width: '100%' }}>
+            <Flex style={{ flex: 1, width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}>
               <CurrentChatMessages
                 messages={chatMessages}
                 isLoadingNewMessage={isLoadingNewMessage}

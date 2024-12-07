@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { IconLogout2 } from '@tabler/icons-react';
 import {
   Avatar,
-  Badge,
   Button,
   Center,
   Divider,
@@ -11,12 +10,15 @@ import {
   Modal,
   Stack,
   Text,
+  Textarea,
+  TextInput,
 } from '@mantine/core';
 
 interface User {
+  profileName: string;
   username: string;
-  email: string;
-  subscriptionTier: 'Free' | 'Premium';
+  status: string;
+  about: string;
 }
 
 interface AccountOverviewProps {
@@ -24,90 +26,79 @@ interface AccountOverviewProps {
   close: () => void;
 }
 
-export const AccountOverview: React.FC<AccountOverviewProps> = ({open, close}) => {
+export const AccountOverview: React.FC<AccountOverviewProps> = ({ open, close }) => {
   const [user, setUser] = useState<User>({
-    username: 'johnnydoe11',
-    email: 'johndoe@example.com',
-    subscriptionTier: 'Free',
+    profileName: 'Kevin Heart',
+    username: '@kevinunhuy',
+    status: 'On duty',
+    about: 'Discuss only on work hours, unless you wanna discuss about music 🎸',
   });
-
-  const toggleSubscription = () => {
-    setUser((prevUser) => ({
-      ...prevUser,
-      subscriptionTier: prevUser.subscriptionTier === 'Free' ? 'Premium' : 'Free',
-    }));
-  };
 
   return (
     <Modal
-    opened={open}
-    onClose={close}
-    title={
-      <Text
-      size="xs"
-      style={{ marginBottom: 10, fontWeight: 300, letterSpacing: 1 }}
+      opened={open}
+      onClose={close}
+      title={
+        <Text size="sm" style={{ letterSpacing: 1.2, textTransform: 'uppercase', fontWeight: 500 }}>
+          Account Overview
+        </Text>
+      }
+      centered
+      size="md"
     >
-      ACCOUNT OVERVIEW
-    </Text>
-    }
-    centered
-    size="sm"
-  >
-    <Stack gap="lg">
-      <Flex style={{ flexDirection: 'column', gap: 5 }}>
-        <Center>
-          <Avatar radius="xl" size={62} />
-        </Center>
-        <Text size="md" style={{ textAlign: 'center', fontWeight: 400 }}>
-          {user.username}
-        </Text>
-        <Text size="sm" style={{ textAlign: 'center', opacity: 0.7 }}>
-          {user.email}
-        </Text>
-        <Center style={{ marginTop: 5 }}>
-          <Badge
-            color={user.subscriptionTier === 'Free' ? 'gray' : 'teal'}
-            size="lg"
-            variant="filled"
-          >
-            {user.subscriptionTier} Tier
-          </Badge>
-        </Center>
-      </Flex>
+      <Stack gap="md">
+        {/* Profile Picture Section */}
+        <Flex direction="column" align="center" gap={10}>
+          <Avatar radius="xl" size={70} style={{backgroundColor: 'transparent'}} />
+          <Group gap="sm">
+            <Button variant="default">Change picture</Button>
+            <Button variant="outline" color="red">
+              Delete picture
+            </Button>
+          </Group>
+        </Flex>
 
-      {user.subscriptionTier === 'Free' && (
-        <Stack gap="sm" mt="md">
-          <Text size="sm" style={{ textAlign: 'center' }}>
-            Upgrade to <strong>Premium</strong> for exclusive features!
-          </Text>
-          <Button
-            fullWidth
-            variant="gradient"
-            gradient={{ from: 'teal', to: 'lime' }}
-            onClick={toggleSubscription}
-          >
-            Upgrade to Premium
-          </Button>
+        {/* Profile Details */}
+        <Stack gap="xs">
+          <TextInput
+            label="Profile name"
+            value={user.profileName}
+            onChange={(e) => setUser({ ...user, profileName: e.target.value })}
+          />
+          <TextInput
+            label="Username"
+            value={user.username}
+            disabled
+            description="Available change in 25/04/2024"
+          />
+          <TextInput
+            label="Status recently"
+            value={user.status}
+            onChange={(e) => setUser({ ...user, status: e.target.value })}
+          />
+          <Textarea
+            label="About me"
+            value={user.about}
+            minRows={3}
+            onChange={(e) => setUser({ ...user, about: e.target.value })}
+          />
         </Stack>
-      )}
 
-      <Divider />
-
-      {/* Actions */}
-      <Flex
-        style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-end', gap: 10 }}
-      >
-        <Button variant="default" onClick={close}>
-          Close
-        </Button>
-        <Button color="gray">
-          <Flex style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-            <IconLogout2 size={16} />
-            Logout
-          </Flex>
-        </Button>
-      </Flex>
-    </Stack>
-  </Modal>
+        <Divider />
+        <Flex style={{ width: '100%', justifyContent: 'flex-end' }}>
+          <Group gap="sm">
+            <Button variant="default" onClick={close}>
+              Close
+            </Button>
+            <Button variant="defualt">
+              <Flex align="center" gap={6}>
+                <IconLogout2 size={16} />
+                Logout
+              </Flex>
+            </Button>
+          </Group>
+        </Flex>
+      </Stack>
+    </Modal>
   );
 };
