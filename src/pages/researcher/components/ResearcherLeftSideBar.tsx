@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { IconBooks, IconCloudUpload, IconHistory, IconPin, IconSend } from '@tabler/icons-react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Button, Card, Divider, Flex, Group, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
-import { Conversation, Message } from '@/store/conversations/conversationsSlice';
+import {
+  Conversation,
+  Message,
+  setCurrentConversation,
+} from '@/store/conversations/conversationsSlice';
+import { RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
-import { EXAMPLE_CONVERSATIONS } from './utils';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
+  const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const dispatch = useDispatch();
   const handleFileUpload = (files: File[]) => {
     setFileSetStream((prevSets) => [...prevSets, files]);
@@ -16,7 +22,13 @@ export const ResearcherLeftSideBar = () => {
     formData.append('file', files[0]);
   };
 
-  const [conversationHistory, setConversationHistory] = useState<Conversation[]>(EXAMPLE_CONVERSATIONS);
+  // Access the user state from the Redux store
+  const allConversations = conversationsSelector.conversations;
+  const currentConversation = conversationsSelector.currentConversation;
+
+  const [conversationHistory, setConversationHistory] = useState<Conversation[]>(
+    Array.from(allConversations?.values()) ?? []
+  );
 
   return (
     <div style={{ width: '20%' }}>
@@ -42,7 +54,7 @@ export const ResearcherLeftSideBar = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          onClick={() => (dispatchEvent())}
+          onClick={() => dispatch(setCurrentConversation({ conversationId: conversation.id }))}
         >
           <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
         </div>

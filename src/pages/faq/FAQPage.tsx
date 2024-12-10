@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Title, Text, Space, Card, Grid, Flex, Badge } from '@mantine/core';
+import { Badge, Card, Container, Flex, Grid, Space, Text, Title } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
 export const FAQPage: React.FC = () => {
@@ -69,35 +69,36 @@ export const FAQPage: React.FC = () => {
 
   return (
     <Container size="lg" style={{ marginTop: 50, justifyItems: 'center' }}>
-      <Title style={{textAlign: 'center',  marginBottom: 20}} order={1}>
+      <Title style={{ textAlign: 'center', marginBottom: 20 }} order={1}>
         RealTimeDoc FAQ
       </Title>
-      <Text style={{textAlign: 'center', marginBottom: 40}}>
+      <Text style={{ textAlign: 'center', marginBottom: 40 }}>
         Frequently Asked Questions about uploading PDF documents and querying AI with RealTimeDoc.
       </Text>
 
-      <Grid style={{width: '70%'}} gutter="lg">
+      <Grid style={{ width: '70%' }} gutter="lg">
         {faqItems.map((faq) => (
-          <Grid.Col key={faq.number} >
+          <Grid.Col key={faq.number}>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
               <Flex style={{ marginBottom: 10, gap: 10, verticalAlign: 'middle' }}>
                 <Badge color={COLORS.teal} size="lg">{`#${faq.number}`}</Badge>
-                <Text style={{fontWeight: 700}} size="lg">
+                <Text style={{ fontWeight: 700 }} size="lg">
                   {faq.question}
                 </Text>
               </Flex>
-              <Text size="sm">
-                {faq.answer}
-              </Text>
+              <Text size="sm">{faq.answer}</Text>
             </Card>
           </Grid.Col>
         ))}
       </Grid>
 
       <Space h="xl" />
-      <Text style={{textAlign: 'center'}} size="sm" color="dimmed">
+      <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
         Have more questions? Contact our support team at{' '}
-        <a href="mailto:support@realtimedoc.com" style={{ textDecoration: 'none', color: '#1c7ed6' }}>
+        <a
+          href="mailto:support@realtimedoc.com"
+          style={{ textDecoration: 'none', color: '#1c7ed6' }}
+        >
           support@realtimedoc.com
         </a>
         .

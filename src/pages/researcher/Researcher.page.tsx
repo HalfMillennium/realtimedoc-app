@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { IconSend } from '@tabler/icons-react';
+import { useSelector } from 'react-redux';
 import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
+import { Message } from '@/store/conversations/conversationsSlice';
+import { RootState } from '@/store/store';
 import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
@@ -44,45 +47,34 @@ const availableDataSets: SupportedDataSet[] = [
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const [selectedDataSet, setSelectedDataSet] = useState<SupportedDataSet | undefined>(undefined);
-  const [chatMessages, setChatMessages] = useState([
-    {
-      sender: 'Alex Ferguson',
-      time: '2:45 PM',
-      content: 'Hey, can you explain how the model determines token usage and tracks interactions?',
-      tokens: null,
-    },
-    {
-      sender: 'Prisma',
-      time: '2:46 PM',
-      content:
-        'Sure! Our model counts tokens in both input and output, including spaces and special characters...',
-      tokens: 32,
-    },
-  ]);
+  const currentChatMessages = useSelector(
+    (state: RootState) => state.conversations.currentConversation.messages
+  );
   const [newMessage, setNewMessage] = useState('');
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
     setIsLoadingNewMessage(true);
     const newChatMessage = {
-      sender: 'Alex Ferguson',
-      time: new Date().toLocaleTimeString(),
+      id: crypto.randomUUID(),
+      author: 'Alex Ferguson',
+      timestamp: new Date().toLocaleTimeString(),
       content: newMessage,
-      tokens: null,
     };
 
-    setChatMessages((prevMessages) => [...prevMessages, newChatMessage]);
+    //setChatMessages((prevMessages) => [...prevMessages, newChatMessage]);
     setNewMessage('');
 
     // Simulate a response from the chat bot
     setTimeout(() => {
       const botResponse = {
-        sender: 'RealTimDoc AI',
-        time: new Date().toLocaleTimeString(),
+        id: crypto.randomUUID(),
+        author: 'RealTimDoc AI',
+        timestamp: new Date().toLocaleTimeString(),
         content: 'This is a simulated response from the chat bot.',
-        tokens: Math.floor(Math.random() * 100),
+        tag: 'Bot Response',
       };
       setIsLoadingNewMessage(false);
-      setChatMessages((prevMessages) => [...prevMessages, botResponse]);
+      //setChatMessages((prevMessages) => [...prevMessages, botResponse]);
     }, 1000);
   };
 
@@ -120,7 +112,7 @@ export const Researcher: React.FC = () => {
           >
             <Flex style={{ flex: 1, width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}>
               <CurrentChatMessages
-                messages={chatMessages}
+                messages={currentChatMessages}
                 isLoadingNewMessage={isLoadingNewMessage}
               />
             </Flex>
