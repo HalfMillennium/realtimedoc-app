@@ -27,7 +27,7 @@ export const ResearcherLeftSideBar = () => {
   const currentConversation = conversationsSelector.currentConversation;
 
   const [conversationHistory, setConversationHistory] = useState<Conversation[]>(
-    Array.from(allConversations?.values()) ?? []
+    Object.values(allConversations)
   );
 
   return (

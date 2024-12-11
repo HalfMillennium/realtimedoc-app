@@ -47,29 +47,11 @@ export const AccountOverview: React.FC<AccountOverviewProps> = ({ open, close })
       size="md"
     >
       <Stack gap="md">
-        {/* Profile Picture Section */}
-        <Flex direction="column" align="center" gap={10}>
-          <Avatar radius="xl" size={70} style={{backgroundColor: 'transparent'}} />
-          <Group gap="sm">
-            <Button variant="default">Change picture</Button>
-            <Button variant="outline" color="red">
-              Delete picture
-            </Button>
-          </Group>
-        </Flex>
-
-        {/* Profile Details */}
         <Stack gap="xs">
-          <TextInput
-            label="Profile name"
-            value={user.profileName}
-            onChange={(e) => setUser({ ...user, profileName: e.target.value })}
-          />
           <TextInput
             label="Username"
             value={user.username}
             disabled
-            description="Available change in 25/04/2024"
           />
           <TextInput
             label="Status recently"

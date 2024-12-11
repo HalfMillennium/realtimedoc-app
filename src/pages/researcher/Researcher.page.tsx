@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { IconSend } from '@tabler/icons-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
-import { Message } from '@/store/conversations/conversationsSlice';
+import { updateConversation } from '@/store/conversations/conversationsSlice';
 import { RootState } from '@/store/store';
 import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
@@ -50,7 +50,9 @@ export const Researcher: React.FC = () => {
   const currentChatMessages = useSelector(
     (state: RootState) => state.conversations.currentConversation.messages
   );
+  const currentConversation = useSelector((state: RootState) => state.conversations.currentConversation);
   const [newMessage, setNewMessage] = useState('');
+  const dispatch = useDispatch();
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
     setIsLoadingNewMessage(true);
@@ -73,8 +75,7 @@ export const Researcher: React.FC = () => {
         content: 'This is a simulated response from the chat bot.',
         tag: 'Bot Response',
       };
-      setIsLoadingNewMessage(false);
-      //setChatMessages((prevMessages) => [...prevMessages, botResponse]);
+      dispatch(updateConversation({ message: botResponse, conversationId: currentConversation.id }));
     }, 1000);
   };
 

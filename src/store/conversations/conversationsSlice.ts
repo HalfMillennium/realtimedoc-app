@@ -19,6 +19,10 @@ export interface Conversation {
   messages: Message[];
 }
 
+export interface ConversationMap {
+  [key: string]: Conversation;
+}
+
 export const uploadFileAndCreateConversation = createAsyncThunk(
   'conversations/uploadFileAndCreateConversation',
   async (formData: FormData, thunkAPI) => {
@@ -43,27 +47,27 @@ export const conversationsSlice = createSlice({
       state,
       action: PayloadAction<{ conversationId: string; message: Message }>
     ) => {
-      const conversation = state.conversations.get(action.payload.conversationId);
+      const conversation = state.conversations[action.payload.conversationId];
       if (conversation) {
         conversation.messages.push(action.payload.message);
       }
     },
     setCurrentConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
-      const conversation = state.conversations.get(action.payload.conversationId);
+      const conversation = state.conversations[action.payload.conversationId];
       console.log('new conversationId', action.payload.conversationId);
       if (conversation) {
         state.currentConversation = conversation;
       }
     },
     deleteConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
-      state.conversations.delete(action.payload.conversationId);
+      delete state.conversations[action.payload.conversationId];
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(uploadFileAndCreateConversation.fulfilled, (state, action) => {
       // Add user to the state array
-      state.conversations.set(action.payload.conversationId, action.payload);
+      state.conversations[action.payload.conversationId] = action.payload;
     });
   },
 });
