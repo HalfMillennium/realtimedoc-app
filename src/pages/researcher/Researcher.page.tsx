@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { IconSend } from '@tabler/icons-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
-import { updateConversation } from '@/store/conversations/conversationsSlice';
+import { setCurrentConversation, updateConversation } from '@/store/conversations/conversationsSlice';
 import { RootState } from '@/store/store';
 import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
@@ -23,11 +23,10 @@ export interface SupportedDataSet {
 }
 
 const availableDataSets: SupportedDataSet[] = [
-  { label: 'Housing Market Data', id: 'housing' },
-  { label: 'Labor Market Data', id: 'labor' },
+  { label: 'Financial Market News', id: 'financial' },
   {
     label: 'Economic Spending Data',
-    id: 'government',
+    id: 'spending',
     options: [
       {
         id: 'usaConsumerSpending',
@@ -41,7 +40,6 @@ const availableDataSets: SupportedDataSet[] = [
       },
     ],
   },
-  { label: 'Public Financial Data', id: 'financial' },
 ];
 
 export const Researcher: React.FC = () => {
@@ -63,8 +61,9 @@ export const Researcher: React.FC = () => {
       content: newMessage,
     };
 
-    //setChatMessages((prevMessages) => [...prevMessages, newChatMessage]);
-    setNewMessage('');
+    dispatch(updateConversation({ message: newChatMessage, conversationId: currentConversation.id }));
+    // Idk why I have to do this... will investigate at some point
+    dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
 
     // Simulate a response from the chat bot
     setTimeout(() => {
@@ -75,7 +74,11 @@ export const Researcher: React.FC = () => {
         content: 'This is a simulated response from the chat bot.',
         tag: 'Bot Response',
       };
+      setNewMessage('');
       dispatch(updateConversation({ message: botResponse, conversationId: currentConversation.id }));
+      // Again, messages should auto-update, shouldn't have to do this
+      dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
+      setIsLoadingNewMessage(false);
     }, 1000);
   };
 

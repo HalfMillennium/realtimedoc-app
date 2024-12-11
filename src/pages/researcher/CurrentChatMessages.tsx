@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Badge, Card, Divider, LoadingOverlay, Text } from '@mantine/core';
 import { Message } from '@/store/conversations/conversationsSlice';
 

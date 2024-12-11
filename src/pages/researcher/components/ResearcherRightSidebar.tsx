@@ -109,7 +109,6 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
             </>
           ))}
         </div>
-        <Divider my="sm" />
         <Flex style={{ justifyContent: 'flex-end' }}>
           <Button
             style={{

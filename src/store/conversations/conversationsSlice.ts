@@ -54,7 +54,6 @@ export const conversationsSlice = createSlice({
     },
     setCurrentConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
       const conversation = state.conversations[action.payload.conversationId];
-      console.log('new conversationId', action.payload.conversationId);
       if (conversation) {
         state.currentConversation = conversation;
       }
