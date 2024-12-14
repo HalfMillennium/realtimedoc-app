@@ -1,15 +1,16 @@
 import { Badge, Card, Divider, LoadingOverlay, Text } from '@mantine/core';
 import { Message } from '@/store/conversations/conversationsSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export interface CurrentChatMessagesProps {
-  messages: Message[];
   isLoadingNewMessage: boolean;
 }
 
 export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
-  messages,
   isLoadingNewMessage,
 }) => {
+  const messages = useSelector((state: RootState) => state.conversations.currentConversation.messages);
   return (
     <Card
       withBorder

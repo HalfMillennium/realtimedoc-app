@@ -45,15 +45,12 @@ const availableDataSets: SupportedDataSet[] = [
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const [selectedDataSet, setSelectedDataSet] = useState<SupportedDataSet | undefined>(undefined);
-  const currentChatMessages = useSelector(
-    (state: RootState) => state.conversations.currentConversation.messages
-  );
   const currentConversation = useSelector((state: RootState) => state.conversations.currentConversation);
+  const isLoadingNewMessage = useSelector((state: RootState) => state.conversations.isLoadingNewMessage);
   const [newMessage, setNewMessage] = useState('');
   const dispatch = useDispatch();
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
-    setIsLoadingNewMessage(true);
     const newChatMessage = {
       id: crypto.randomUUID(),
       author: 'Alex Ferguson',
@@ -62,27 +59,23 @@ export const Researcher: React.FC = () => {
     };
 
     dispatch(updateConversation({ message: newChatMessage, conversationId: currentConversation.id }));
-    // Idk why I have to do this... will investigate at some point
     dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
 
     // Simulate a response from the chat bot
     setTimeout(() => {
       const botResponse = {
         id: crypto.randomUUID(),
-        author: 'RealTimDoc AI',
+        author: 'RealTimeDoc AI',
         timestamp: new Date().toLocaleTimeString(),
         content: 'This is a simulated response from the chat bot.',
         tag: 'Bot Response',
       };
       setNewMessage('');
       dispatch(updateConversation({ message: botResponse, conversationId: currentConversation.id }));
-      // Again, messages should auto-update, shouldn't have to do this
       dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
-      setIsLoadingNewMessage(false);
+      //setIsLoadingNewMessage(false);
     }, 1000);
   };
-
-  const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false);
 
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 30 }}>
@@ -116,7 +109,6 @@ export const Researcher: React.FC = () => {
           >
             <Flex style={{ flex: 1, width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}>
               <CurrentChatMessages
-                messages={currentChatMessages}
                 isLoadingNewMessage={isLoadingNewMessage}
               />
             </Flex>

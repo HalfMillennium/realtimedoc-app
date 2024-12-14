@@ -51,10 +51,10 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
         </Flex>
         <Divider my="sm" />
         <div>
-          {availableDataSets.map((dataset, index) => (
+          {availableDataSets.map((dataset) => (
             <>
               <Card
-                key={index}
+                key={dataset.id}
                 withBorder
                 shadow="sm"
                 style={{
@@ -81,10 +81,10 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                     <input
                       type="radio"
                       name="dataset"
-                      id={`dataset-${index}`}
+                      id={`dataset:${dataset.id}`}
                       style={{ display: 'none' }}
                     />
-                    <label htmlFor={`dataset-${index}`} style={{ cursor: 'pointer' }}>
+                    <label htmlFor={`dataset:${dataset.id}`} style={{ cursor: 'pointer' }}>
                       <Text
                         size="sm"
                         style={{
