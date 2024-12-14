@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { IconSend } from '@tabler/icons-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
-import { Message } from '@/store/conversations/conversationsSlice';
+import { setCurrentConversation, updateConversation } from '@/store/conversations/conversationsSlice';
 import { RootState } from '@/store/store';
 import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
@@ -23,11 +23,10 @@ export interface SupportedDataSet {
 }
 
 const availableDataSets: SupportedDataSet[] = [
-  { label: 'Housing Market Data', id: 'housing' },
-  { label: 'Labor Market Data', id: 'labor' },
+  { label: 'Financial Market News', id: 'financial' },
   {
     label: 'Economic Spending Data',
-    id: 'government',
+    id: 'spending',
     options: [
       {
         id: 'usaConsumerSpending',
@@ -41,19 +40,17 @@ const availableDataSets: SupportedDataSet[] = [
       },
     ],
   },
-  { label: 'Public Financial Data', id: 'financial' },
 ];
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const [selectedDataSet, setSelectedDataSet] = useState<SupportedDataSet | undefined>(undefined);
-  const currentChatMessages = useSelector(
-    (state: RootState) => state.conversations.currentConversation.messages
-  );
+  const currentConversation = useSelector((state: RootState) => state.conversations.currentConversation);
+  const isLoadingNewMessage = useSelector((state: RootState) => state.conversations.isLoadingNewMessage);
   const [newMessage, setNewMessage] = useState('');
+  const dispatch = useDispatch();
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
-    setIsLoadingNewMessage(true);
     const newChatMessage = {
       id: crypto.randomUUID(),
       author: 'Alex Ferguson',
@@ -61,24 +58,24 @@ export const Researcher: React.FC = () => {
       content: newMessage,
     };
 
-    //setChatMessages((prevMessages) => [...prevMessages, newChatMessage]);
-    setNewMessage('');
+    dispatch(updateConversation({ message: newChatMessage, conversationId: currentConversation.id }));
+    dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
 
     // Simulate a response from the chat bot
     setTimeout(() => {
       const botResponse = {
         id: crypto.randomUUID(),
-        author: 'RealTimDoc AI',
+        author: 'RealTimeDoc AI',
         timestamp: new Date().toLocaleTimeString(),
         content: 'This is a simulated response from the chat bot.',
         tag: 'Bot Response',
       };
-      setIsLoadingNewMessage(false);
-      //setChatMessages((prevMessages) => [...prevMessages, botResponse]);
+      setNewMessage('');
+      dispatch(updateConversation({ message: botResponse, conversationId: currentConversation.id }));
+      dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
+      //setIsLoadingNewMessage(false);
     }, 1000);
   };
-
-  const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false);
 
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 30 }}>
@@ -112,7 +109,6 @@ export const Researcher: React.FC = () => {
           >
             <Flex style={{ flex: 1, width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}>
               <CurrentChatMessages
-                messages={currentChatMessages}
                 isLoadingNewMessage={isLoadingNewMessage}
               />
             </Flex>

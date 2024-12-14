@@ -1,4 +1,4 @@
-import { Conversation } from '@/store/conversations/conversationsSlice';
+import { Conversation, ConversationMap } from '@/store/conversations/conversationsSlice';
 
 export const EXAMPLE_CONVERSATIONS: Conversation[] = [
   {
@@ -99,6 +99,10 @@ export const EXAMPLE_CONVERSATIONS: Conversation[] = [
   },
 ];
 
-export const EXAMPLE_CONVERSATIONS_MAP: Map<string, Conversation> = new Map(
-  EXAMPLE_CONVERSATIONS.map((conversation) => [conversation.id, conversation])
+export const EXAMPLE_CONVERSATIONS_MAP: ConversationMap = EXAMPLE_CONVERSATIONS.reduce(
+  (acc, conversation) => {
+    acc[conversation.id] = conversation;
+    return acc;
+  },
+  {} as ConversationMap
 );

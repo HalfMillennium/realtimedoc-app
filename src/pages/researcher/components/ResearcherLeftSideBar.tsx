@@ -1,34 +1,30 @@
 import { useState } from 'react';
-import { IconBooks, IconCloudUpload, IconHistory, IconPin, IconSend } from '@tabler/icons-react';
+import { IconCloudUpload, IconHistory } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Button, Card, Divider, Flex, Group, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
+import { uploadFileAndCreateConversation } from '@/store/conversations/conversationsSlice';
 import {
   Conversation,
   Message,
   setCurrentConversation,
 } from '@/store/conversations/conversationsSlice';
-import { RootState } from '@/store/store';
+import { AppDispatch, RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const handleFileUpload = (files: File[]) => {
     setFileSetStream((prevSets) => [...prevSets, files]);
-    alert(`Uploaded file: ${files[0].name}`);
     const formData = new FormData();
     formData.append('file', files[0]);
+    dispatch(uploadFileAndCreateConversation({formData, userId: '123'}));
   };
 
   // Access the user state from the Redux store
   const allConversations = conversationsSelector.conversations;
-  const currentConversation = conversationsSelector.currentConversation;
-
-  const [conversationHistory, setConversationHistory] = useState<Conversation[]>(
-    Array.from(allConversations?.values()) ?? []
-  );
 
   return (
     <div style={{ width: '20%' }}>
@@ -46,7 +42,7 @@ export const ResearcherLeftSideBar = () => {
           Chat History
         </Text>
       </div>
-      {conversationHistory.map((conversation) => (
+      {Object.values(allConversations).map((conversation) => (
         <div
           key={conversation.id}
           style={{

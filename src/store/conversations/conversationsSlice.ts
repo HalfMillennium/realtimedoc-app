@@ -19,51 +19,85 @@ export interface Conversation {
   messages: Message[];
 }
 
-export const uploadFileAndCreateConversation = createAsyncThunk(
-  'conversations/uploadFileAndCreateConversation',
-  async (formData: FormData, thunkAPI) => {
-    const response = await fetch('http://localhost:8000/create-convo', {
-      method: 'POST',
-      body: formData,
-    }).catch((error) => console.error('Error:', error));
-    if (!!response) {
-      return response.json();
-    }
+export interface ConversationMap {
+  [key: string]: Conversation;
+}
+
+export const uploadFileAndCreateConversation = createAsyncThunk<
+  any,
+  { formData: FormData, userId: string }
+>('conversations/uploadFileAndCreateConversation', async ({formData, userId}, thunkAPI) => {
+  const response = await fetch(`http://localhost:8000/create-convo/${userId}`, {
+    method: 'POST',
+    body: formData,
+  }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
+  if (!!response) {
+    return response.json();
   }
-);
+});
+
+export const getNewChatResponse = createAsyncThunk<
+  any,
+  { conversationId: string, message: string, selectedDatasetName: string|undefined }
+>('conversations/getNewChatResponse', async ({conversationId, message, selectedDatasetName}, thunkAPI) => {
+  const response = await fetch(`http://localhost:8000/new-message/${conversationId}`, {
+    method: 'POST',
+    body: JSON.stringify({ message }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).catch((error) => console.error('Failed to getNewChatResponse:', error));
+  if (!!response) {
+    return response.json();
+  }
+});
 
 export const conversationsSlice = createSlice({
   name: 'conversations',
   initialState: {
     conversations: EXAMPLE_CONVERSATIONS_MAP,
     currentConversation: EXAMPLE_CONVERSATIONS[0],
+    isLoadingNewMessage: false,
   },
   reducers: {
     updateConversation: (
       state,
       action: PayloadAction<{ conversationId: string; message: Message }>
     ) => {
-      const conversation = state.conversations.get(action.payload.conversationId);
+      const conversation = state.conversations[action.payload.conversationId];
       if (conversation) {
         conversation.messages.push(action.payload.message);
       }
     },
     setCurrentConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
-      const conversation = state.conversations.get(action.payload.conversationId);
-      console.log('new conversationId', action.payload.conversationId);
+      const conversation = state.conversations[action.payload.conversationId];
       if (conversation) {
         state.currentConversation = conversation;
       }
     },
     deleteConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
-      state.conversations.delete(action.payload.conversationId);
+      delete state.conversations[action.payload.conversationId];
     },
   },
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(uploadFileAndCreateConversation.pending, (state) => {
+      state.isLoadingNewMessage = true;
+    }),
     builder.addCase(uploadFileAndCreateConversation.fulfilled, (state, action) => {
       // Add user to the state array
-      state.conversations.set(action.payload.conversationId, action.payload);
+      state.conversations[action.payload.conversationId] = {
+        id: action.payload.conversationId,
+        title: action.payload.conversationTitle,
+        embeddingId: action.payload.embeddingId,
+        messages: [{
+          id: Math.random().toString(16).slice(2),
+          author: 'RealTimeDoc AI',
+          content: action.payload.message,
+          timestamp: new Date().toLocaleTimeString(),
+        }],
+      };
+      state.isLoadingNewMessage = false;
+      state.currentConversation = state.conversations[action.payload.conversationId];
     });
   },
 });

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { Conversation, conversationsReducer } from './conversations/conversationsSlice';
+import { membershipReducer } from './membership/membershipSlice';
 
 export interface User {
   id: string;
@@ -10,6 +11,7 @@ export interface User {
 export const store = configureStore({
   reducer: {
     conversations: conversationsReducer,
+    membership: membershipReducer,
   },
 });
 
