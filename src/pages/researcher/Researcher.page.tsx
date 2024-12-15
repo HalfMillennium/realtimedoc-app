@@ -88,8 +88,9 @@ export const Researcher: React.FC = () => {
     }, 1000);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && newMessage.trim() !== '') {
+      setNewMessage('');
       handleSendMessage();
     }
   };
@@ -133,9 +134,9 @@ export const Researcher: React.FC = () => {
                 radius="sm"
                 size="md"
                 value={newMessage}
+                onKeyDown={handleKeyDown}
                 onChange={(e) => {
                   setNewMessage(e.currentTarget.value);
-                  console.log('cT.value: ', e.currentTarget.value);
                 }}
                 style={{ width: '100%', borderColor: colorScheme === 'light' ? 'black' : 'white' }}
               />
@@ -153,7 +154,7 @@ export const Researcher: React.FC = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
-                onClick={handleKeyPress}
+                onClick={handleSendMessage}
               >
                 <IconSend size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
               </Button>
