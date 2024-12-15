@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { IconSend } from '@tabler/icons-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
-import { setCurrentConversation, updateConversation } from '@/store/conversations/conversationsSlice';
+import {
+  setCurrentConversation,
+  updateConversation,
+} from '@/store/conversations/conversationsSlice';
 import { RootState } from '@/store/store';
 import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
@@ -45,8 +48,12 @@ const availableDataSets: SupportedDataSet[] = [
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const [selectedDataSet, setSelectedDataSet] = useState<SupportedDataSet | undefined>(undefined);
-  const currentConversation = useSelector((state: RootState) => state.conversations.currentConversation);
-  const isLoadingNewMessage = useSelector((state: RootState) => state.conversations.isLoadingNewMessage);
+  const currentConversation = useSelector(
+    (state: RootState) => state.conversations.currentConversation
+  );
+  const isLoadingNewMessage = useSelector(
+    (state: RootState) => state.conversations.isLoadingNewMessage
+  );
   const [newMessage, setNewMessage] = useState('');
   const dispatch = useDispatch();
   const handleSendMessage = () => {
@@ -58,7 +65,9 @@ export const Researcher: React.FC = () => {
       content: newMessage,
     };
 
-    dispatch(updateConversation({ message: newChatMessage, conversationId: currentConversation.id }));
+    dispatch(
+      updateConversation({ message: newChatMessage, conversationId: currentConversation.id })
+    );
     dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
 
     // Simulate a response from the chat bot
@@ -71,10 +80,18 @@ export const Researcher: React.FC = () => {
         tag: 'Bot Response',
       };
       setNewMessage('');
-      dispatch(updateConversation({ message: botResponse, conversationId: currentConversation.id }));
+      dispatch(
+        updateConversation({ message: botResponse, conversationId: currentConversation.id })
+      );
       dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
       //setIsLoadingNewMessage(false);
     }, 1000);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && newMessage.trim() !== '') {
+      handleSendMessage();
+    }
   };
 
   return (
@@ -108,9 +125,7 @@ export const Researcher: React.FC = () => {
             }}
           >
             <Flex style={{ flex: 1, width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}>
-              <CurrentChatMessages
-                isLoadingNewMessage={isLoadingNewMessage}
-              />
+              <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
             </Flex>
             <div style={{ position: 'relative', marginTop: '16px' }}>
               <Textarea
@@ -138,7 +153,7 @@ export const Researcher: React.FC = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
-                onClick={handleSendMessage}
+                onClick={handleKeyPress}
               >
                 <IconSend size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
               </Button>

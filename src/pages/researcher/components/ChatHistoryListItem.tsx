@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, useMantineColorScheme } from '@mantine/core';
 import { useSelector } from 'react-redux';
+import { Badge, Flex, Text, useMantineColorScheme } from '@mantine/core';
 import { RootState } from '@/store/store';
 
 interface ChatHistoryListItemProps {
@@ -8,19 +8,32 @@ interface ChatHistoryListItemProps {
   conversationId: string;
 }
 
-export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({ title, conversationId }) => {
+export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
+  title,
+  conversationId,
+}) => {
   const { colorScheme } = useMantineColorScheme();
-  const currentConversation = useSelector((state: RootState) => state.conversations.currentConversation);
+  const currentConversation = useSelector(
+    (state: RootState) => state.conversations.currentConversation
+  );
+  const conversation = useSelector(
+    (state: RootState) => state.conversations.conversations[conversationId]
+  );
 
   return (
-    <Text
-      size="sm"
+    <Flex
       mt="sm"
       style={{
         borderRadius: 5,
         padding: 10,
         cursor: 'pointer',
-        backgroundColor: currentConversation.id === conversationId ? (colorScheme === 'light' ? '#f0f0f0' : 'black') : 'transparent',
+        backgroundColor:
+          currentConversation.id === conversationId
+            ? colorScheme === 'light'
+              ? '#f0f0f0'
+              : 'black'
+            : 'transparent',
+        justifyContent: 'space-between',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = colorScheme === 'light' ? '#f0f0f0' : 'black';
@@ -31,7 +44,12 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({ title,
         }
       }}
     >
-      {title}
-    </Text>
+      <Text size="sm">{title}</Text>
+      {conversation.messages.length === 1 && (
+        <Badge size="sm" color="green">
+          Ready
+        </Badge>
+      )}
+    </Flex>
   );
 };
