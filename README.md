@@ -1,34 +1,54 @@
-# Mantine Vite template
+RealTimeDoc App
+===============
 
-## Features
+RealTimeDoc App is the UI frontend for a web application that enables users to upload PDF documents, query their content, and integrate the data with live datasets for enhanced insights. Built with a modern technology stack, the app delivers a seamless, intuitive, and efficient user experience.
 
-This template comes with the following features:
+* * *
 
-- [PostCSS](https://postcss.org/) with [mantine-postcss-preset](https://mantine.dev/styles/postcss-preset)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Storybook](https://storybook.js.org/)
-- [Vitest](https://vitest.dev/) setup with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
-- ESLint setup with [eslint-config-mantine](https://github.com/mantinedev/eslint-config-mantine)
+Features
+--------
 
-## npm scripts
+*   **PDF Uploading:** Upload PDF documents effortlessly.
+*   **Data Querying:** Extract meaningful insights from uploaded PDFs.
+*   **Live Dataset Integration:** Combine PDF data with live datasets for deeper analysis.
+*   **Intuitive UI:** Powered by the Mantine UI library for a sleek and user-friendly interface.
+*   **State Management:** Uses React Redux and Redux Toolkit for efficient state handling.
 
-## Build and dev scripts
+* * *
 
-- `dev` – start development server
-- `build` – build production version of the app
-- `preview` – locally preview production build
+Tech Stack
+----------
 
-### Testing scripts
+*   **React:** A library for building user interfaces.
+*   **TypeScript:** Ensures type safety and improves code maintainability.
+*   **Mantine UI:** Provides customizable and accessible React components.
+*   **React Redux:** Manages state efficiently across the application.
+*   **Redux Toolkit:** Simplifies Redux logic and reduces boilerplate.
 
-- `typecheck` – checks TypeScript types
-- `lint` – runs ESLint
-- `prettier:check` – checks files with Prettier
-- `vitest` – runs vitest tests
-- `vitest:watch` – starts vitest watch
-- `test` – runs `vitest`, `prettier:check`, `lint` and `typecheck` scripts
+* * *
 
-### Other scripts
+Getting Started
+---------------
 
-- `storybook` – starts storybook dev server
-- `storybook:build` – build production storybook bundle to `storybook-static`
-- `prettier:write` – formats all files with Prettier
+### Prerequisites
+
+*   **Node.js:** Version 16 or later
+*   **Package Manager:** npm or yarn
+
+### Installation
+
+1.  **Clone the repository:**
+    
+        git clone https://github.com/HalfMillennium/realtimedoc-app.git
+        cd realtimedoc-app
+                    
+    
+2.  **Install dependencies:**
+    
+        npm install
+    
+3.  **Start the development server:**
+    
+        npm run dev
+    
+4.  **Open the app in your browser:** Visit [http://localhost:5173](http://localhost:5173) to view the application.
