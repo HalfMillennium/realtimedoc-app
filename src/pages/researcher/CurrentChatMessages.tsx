@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Badge, Card, Divider, LoadingOverlay, Text } from '@mantine/core';
 import { Message } from '@/store/conversations/conversationsSlice';
-import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 export interface CurrentChatMessagesProps {
@@ -10,11 +11,21 @@ export interface CurrentChatMessagesProps {
 export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   isLoadingNewMessage,
 }) => {
-  const messages = useSelector((state: RootState) => state.conversations.currentConversation.messages);
+  const messages = useSelector(
+    (state: RootState) => state.conversations.currentConversation.messages
+  );
+  useEffect(() => {
+    // Scroll to the bottom when new messages are added
+    const chatContainer = document.querySelector('.chat-container');
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }, [messages]);
   return (
     <Card
       withBorder
       shadow="sm"
+      className="chat-container"
       style={{ height: '100%', width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}
     >
       {messages.map((message, index) => (
