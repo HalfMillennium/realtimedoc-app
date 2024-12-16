@@ -26,7 +26,13 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
       withBorder
       shadow="sm"
       className="chat-container"
-      style={{ height: '100%', width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}
+      style={{
+        height: '100%',
+        width: '100%',
+        overflowY: 'scroll',
+        scrollbarWidth: 'none',
+        scrollBehavior: 'smooth',
+      }}
     >
       {messages.map((message, index) => (
         <div key={index}>

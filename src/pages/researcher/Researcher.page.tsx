@@ -4,10 +4,11 @@ import { IconSend } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
 import {
+  getNewChatResponse,
   setCurrentConversation,
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
-import { RootState } from '@/store/store';
+import { AppDispatch, RootState } from '@/store/store';
 import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
@@ -54,13 +55,14 @@ export const Researcher: React.FC = () => {
   const isLoadingNewMessage = useSelector(
     (state: RootState) => state.conversations.isLoadingNewMessage
   );
+  const currentUser = useSelector((state: RootState) => state.user);
   const [newMessage, setNewMessage] = useState('');
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
     const newChatMessage = {
       id: crypto.randomUUID(),
-      author: 'Alex Ferguson',
+      author: currentUser.name,
       timestamp: new Date().toLocaleTimeString(),
       content: newMessage,
     };
@@ -79,6 +81,13 @@ export const Researcher: React.FC = () => {
         content: 'This is a simulated response from the chat bot.',
         tag: 'Bot Response',
       };
+      dispatch(
+        getNewChatResponse({
+          conversationId: currentConversation.id,
+          message: newMessage,
+          selectedDatasetName: 'financial',
+        })
+      );
       setNewMessage('');
       dispatch(
         updateConversation({ message: botResponse, conversationId: currentConversation.id })
@@ -125,7 +134,15 @@ export const Researcher: React.FC = () => {
               padding: '8px',
             }}
           >
-            <Flex style={{ flex: 1, width: '100%', overflowY: 'scroll', scrollbarWidth: 'none' }}>
+            <Flex
+              style={{
+                flex: 1,
+                width: '100%',
+                overflowY: 'scroll',
+                scrollbarWidth: 'none',
+                scrollBehavior: 'smooth',
+              }}
+            >
               <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
             </Flex>
             <div style={{ position: 'relative', marginTop: '16px' }}>

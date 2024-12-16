@@ -1,17 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { Conversation, conversationsReducer } from './conversations/conversationsSlice';
 import { membershipReducer } from './membership/membershipSlice';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+import { userReducer } from './user/userSlice';
 
 export const store = configureStore({
   reducer: {
     conversations: conversationsReducer,
     membership: membershipReducer,
+    user: userReducer,
   },
 });
 
