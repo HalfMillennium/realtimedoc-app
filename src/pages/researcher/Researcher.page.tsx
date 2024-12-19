@@ -66,35 +66,17 @@ export const Researcher: React.FC = () => {
       timestamp: new Date().toLocaleTimeString(),
       content: newMessage,
     };
-
     dispatch(
       updateConversation({ message: newChatMessage, conversationId: currentConversation.id })
     );
     dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
-
-    // Simulate a response from the chat bot
-    setTimeout(() => {
-      const botResponse = {
-        id: crypto.randomUUID(),
-        author: 'RealTimeDoc AI',
-        timestamp: new Date().toLocaleTimeString(),
-        content: 'This is a simulated response from the chat bot.',
-        tag: 'Bot Response',
-      };
-      dispatch(
-        getNewChatResponse({
-          conversationId: currentConversation.id,
-          message: newMessage,
-          selectedDatasetName: 'financial',
-        })
-      );
-      setNewMessage('');
-      dispatch(
-        updateConversation({ message: botResponse, conversationId: currentConversation.id })
-      );
-      dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
-      //setIsLoadingNewMessage(false);
-    }, 1000);
+    dispatch(
+      getNewChatResponse({
+        conversationId: currentConversation.id,
+        message: newMessage,
+        selectedDatasetName: 'financial',
+      })
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

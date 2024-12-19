@@ -35,32 +35,45 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
       }}
     >
       {messages.map((message, index) => (
-        <div key={index}>
-          <Text size="xs" mt="sm" style={{ opacity: 0.7, fontWeight: 500 }}>
-            {message.author} - {message.timestamp}
-          </Text>
-          <Text size="md" mt="xs">
-            {message.content}
-          </Text>
+        <>
           {!!message.tag && (
-            <Card withBorder shadow="xs" p="md" radius="md" mt="xs">
-              <Text size="sm">{message.content}</Text>
-              <Badge size="sm" color="blue" mt="sm">
-                {message.tag}
-              </Badge>
-            </Card>
+            <>
+              <div
+                key={index}
+                style={{ padding: 10, backgroundColor: '#4d4c4c', borderRadius: 10 }}
+              >
+                <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
+                  {message.author} - {message.timestamp}
+                </Text>
+                <Text size="md">{message.content}</Text>
+                <Badge size="sm" color="blue">
+                  {message.tag}
+                </Badge>
+              </div>
+
+              {index < messages.length - 1 && <Divider my="sm" />}
+            </>
           )}
-          {index < messages.length - 1 && <Divider my="sm" />}
-        </div>
+          {!!!message.tag && (
+            <>
+              <div key={index}>
+                <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
+                  {message.author} - {message.timestamp}
+                </Text>
+                <Text size="md">{message.content}</Text>
+              </div>
+              {index < messages.length - 1 && <Divider my="sm" />}
+            </>
+          )}
+        </>
       ))}
       {isLoadingNewMessage && (
         <Card
           withBorder
           shadow="xs"
-          p="md"
           radius="md"
-          mt="xs"
-          style={{ position: 'relative', backdropFilter: 'blur(5px)' }}
+          mt="sm"
+          style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
         >
           <LoadingOverlay visible loaderProps={{ type: 'dots', color: 'orange' }} />
         </Card>
