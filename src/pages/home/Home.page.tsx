@@ -62,7 +62,7 @@ export function HomePage() {
             component="span"
             gradient={{ from: 'pink', to: 'yellow' }}
           >
-            PRISMA
+            realtimedoc
           </Text>
           <div style={{ display: 'flex', width: 500, textAlign: 'center' }}>
             <Text

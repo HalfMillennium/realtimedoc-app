@@ -19,13 +19,13 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
   const { colorScheme } = useMantineColorScheme();
   return (
     <div style={{ width: '20%', padding: '8px' }}>
-      <Card withBorder>
+      <Card withBorder style={{ gap: 10 }}>
         <Flex
           style={{
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
-            gap: 0,
+            gap: 5,
             width: '100%',
           }}
         >

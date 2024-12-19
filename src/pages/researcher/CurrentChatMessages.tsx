@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Badge, Card, Divider, LoadingOverlay, Text } from '@mantine/core';
+import { Badge, Card, Divider, LoadingOverlay, Text, useMantineColorScheme } from '@mantine/core';
+import { COLORS } from '@/common/colors';
 import { Message } from '@/store/conversations/conversationsSlice';
 import { RootState } from '@/store/store';
 
@@ -14,6 +15,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   const messages = useSelector(
     (state: RootState) => state.conversations.currentConversation.messages
   );
+  const { colorScheme } = useMantineColorScheme();
   useEffect(() => {
     // Scroll to the bottom when new messages are added
     const chatContainer = document.querySelector('.chat-container');
@@ -40,13 +42,17 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             <>
               <div
                 key={index}
-                style={{ padding: 10, backgroundColor: '#4d4c4c', borderRadius: 10 }}
+                style={{
+                  padding: 10,
+                  backgroundColor: colorScheme === 'dark' ? '#4d4c4c' : `${COLORS.teal}20`,
+                  borderRadius: 10,
+                }}
               >
                 <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
                   {message.author} - {message.timestamp}
                 </Text>
                 <Text size="md">{message.content}</Text>
-                <Badge size="sm" color="blue">
+                <Badge size="sm" color={COLORS.teal}>
                   {message.tag}
                 </Badge>
               </div>
@@ -72,6 +78,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
           withBorder
           shadow="xs"
           radius="md"
+          p="lg"
           mt="sm"
           style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
         >
