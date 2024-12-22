@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { IconBooks, IconCircleDashed, IconCircleDashedCheck, IconX } from '@tabler/icons-react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Divider, Flex, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { SupportedDataSet } from '../Researcher.page';
+import { deselectAllDatasets, selectDataset } from '@/store/datasets/datasetsSlice';
+import { AppDispatch, RootState } from '@/store/store';
 import { DataSetOptionsPanel } from './DataSetOptionsPanel';
 
 interface ResearcherRightSidebarProps {
-  availableDataSets: SupportedDataSet[];
-  selectedDataSet: SupportedDataSet | undefined;
-  setSelectedDataSet: (dataSet: SupportedDataSet | undefined) => void;
+  selectedDataSetId: string | undefined;
 }
 
 export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
-  selectedDataSet,
-  setSelectedDataSet,
-  availableDataSets,
+  selectedDataSetId,
 }) => {
   const { colorScheme } = useMantineColorScheme();
+  const dispatch = useDispatch<AppDispatch>();
+  const availableDataSets = useSelector((state: RootState) => state.datasets.availableDataSets);
   return (
     <div style={{ width: '20%', padding: '8px' }}>
       <Card withBorder style={{ gap: 10 }}>
@@ -60,9 +60,9 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                 style={{
                   marginBottom: '8px',
                   cursor: 'pointer',
-                  backgroundColor: selectedDataSet?.id === dataset.id ? COLORS.teal : 'transparent',
+                  backgroundColor: selectedDataSetId === dataset.id ? COLORS.teal : 'transparent',
                 }}
-                onClick={() => setSelectedDataSet(dataset)}
+                onClick={() => dispatch(selectDataset({ datasetId: dataset.id }))}
               >
                 <div
                   style={{
@@ -73,8 +73,8 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                     alignItems: 'center',
                   }}
                 >
-                  {selectedDataSet?.id !== dataset.id && <IconCircleDashed size={16} />}
-                  {selectedDataSet?.id === dataset.id && (
+                  {selectedDataSetId !== dataset.id && <IconCircleDashed size={16} />}
+                  {selectedDataSetId === dataset.id && (
                     <IconCircleDashedCheck size={16} color="white" />
                   )}
                   <div>
@@ -90,7 +90,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                         style={{
                           fontWeight: 300,
                           color:
-                            !!selectedDataSet && selectedDataSet.id === dataset.id
+                            !!selectedDataSetId && selectedDataSetId === dataset.id
                               ? 'white'
                               : colorScheme === 'dark'
                                 ? '#f1f1f1'
@@ -103,7 +103,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                   </div>
                 </div>
               </Card>
-              {!!dataset.options && !!selectedDataSet && selectedDataSet.id === dataset.id && (
+              {!!dataset.options && !!selectedDataSetId && selectedDataSetId === dataset.id && (
                 <DataSetOptionsPanel options={dataset.options} />
               )}
             </>
@@ -120,7 +120,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
               backgroundColor: '#FEC98F',
               width: 'auto',
             }}
-            onClick={() => setSelectedDataSet(undefined)}
+            onClick={() => dispatch(deselectAllDatasets())}
           >
             <IconX size={14} color="black" style={{ marginRight: 5 }} />
             <Text style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}>

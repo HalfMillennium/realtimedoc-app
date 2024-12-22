@@ -1,13 +1,24 @@
 import { useState } from 'react';
 import { IconCloudUpload, IconHistory } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Button, Card, Divider, Flex, Group, Text } from '@mantine/core';
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  Flex,
+  Group,
+  LoadingOverlay,
+  Text,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
-import { uploadFileAndCreateConversation } from '@/store/conversations/conversationsSlice';
+import { COLORS } from '@/common/colors';
 import {
   Conversation,
   Message,
   setCurrentConversation,
+  uploadFileAndCreateConversation,
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
@@ -20,11 +31,14 @@ export const ResearcherLeftSideBar = () => {
     setFileSetStream((prevSets) => [...prevSets, files]);
     const formData = new FormData();
     formData.append('file', files[0]);
-    dispatch(uploadFileAndCreateConversation({formData, userId: '123'}));
+    dispatch(uploadFileAndCreateConversation({ formData, userId: '123' }));
   };
-
+  const isLoadingNewConversation = useSelector(
+    (state: RootState) => state.conversations.isLoadingNewConversation
+  );
   // Access the user state from the Redux store
   const allConversations = conversationsSelector.conversations;
+  const { colorScheme } = useMantineColorScheme();
 
   return (
     <div style={{ width: '20%' }}>
@@ -55,8 +69,18 @@ export const ResearcherLeftSideBar = () => {
           <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
         </div>
       ))}
+      {isLoadingNewConversation && (
+        <Card
+          withBorder
+          shadow="xs"
+          p="lg"
+          mt="sm"
+          style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
+        >
+          <LoadingOverlay visible loaderProps={{ type: 'dots', color: COLORS.teal }} />
+        </Card>
+      )}
       <Divider my="sm" />
-
       <Flex style={{ flexDirection: 'column', gap: 10 }}>
         <Dropzone
           onDrop={handleFileUpload}

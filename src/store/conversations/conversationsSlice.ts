@@ -27,7 +27,7 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
   any,
   { formData: FormData; userId: string }
 >('conversations/uploadFileAndCreateConversation', async ({ formData, userId }, thunkAPI) => {
-  const response = await fetch(`http://localhost:8000/create-convo/${userId}`, {
+  const response = await fetch(`/api/create-convo/${userId}`, {
     method: 'POST',
     body: formData,
   }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
@@ -42,7 +42,7 @@ export const getNewChatResponse = createAsyncThunk<
 >(
   'conversations/getNewChatResponse',
   async ({ conversationId, message, selectedDatasetName }, thunkAPI) => {
-    const response = await fetch(`http://localhost:8000/new-message/${conversationId}`, {
+    const response = await fetch(`/api/new-message/${conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
         queryText: message,
@@ -64,6 +64,7 @@ export const conversationsSlice = createSlice({
     conversations: EXAMPLE_CONVERSATIONS_MAP,
     currentConversation: EXAMPLE_CONVERSATIONS[0],
     isLoadingNewMessage: false,
+    isLoadingNewConversation: false,
   },
   reducers: {
     updateConversation: (
@@ -87,7 +88,7 @@ export const conversationsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(uploadFileAndCreateConversation.pending, (state) => {
-      state.isLoadingNewMessage = true;
+      state.isLoadingNewConversation = true;
     }),
       builder.addCase(uploadFileAndCreateConversation.fulfilled, (state, action) => {
         // Add user to the state array
@@ -104,7 +105,7 @@ export const conversationsSlice = createSlice({
             },
           ],
         };
-        state.isLoadingNewMessage = false;
+        state.isLoadingNewConversation = false;
         state.currentConversation = state.conversations[action.payload.conversationId];
       }),
       builder.addCase(getNewChatResponse.pending, (state) => {

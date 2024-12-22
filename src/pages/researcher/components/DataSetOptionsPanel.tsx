@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Radio, RadioGroup, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { DataSetOption } from '../Researcher.page';
+import { DataSetOption } from '@/store/datasets/datasetsSlice';
 
 interface DataSetOptionsPanelProps {
   options: DataSetOption[];

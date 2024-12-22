@@ -14,41 +14,10 @@ import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
 
-export interface DataSetOption {
-  id: string;
-  title: string;
-  subtitle: string;
-}
-
-export interface SupportedDataSet {
-  label: string;
-  id: string;
-  options?: DataSetOption[];
-}
-
-const availableDataSets: SupportedDataSet[] = [
-  { label: 'Financial Market News', id: 'financial' },
-  {
-    label: 'Economic Spending Data',
-    id: 'spending',
-    options: [
-      {
-        id: 'usaConsumerSpending',
-        title: 'US Consumers',
-        subtitle: 'Latest available macro-economic data for US-based consumers.',
-      },
-      {
-        id: 'usaGovernmentSpending',
-        title: 'US Government',
-        subtitle: 'Latest available macro-economic data for the US government.',
-      },
-    ],
-  },
-];
-
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
-  const [selectedDataSet, setSelectedDataSet] = useState<SupportedDataSet | undefined>(undefined);
+  const availableDataSets = useSelector((state: RootState) => state.datasets.availableDataSets);
+  const selectedDataSetId = useSelector((state: RootState) => state.datasets.selectedDataSetId);
   const currentConversation = useSelector(
     (state: RootState) => state.conversations.currentConversation
   );
@@ -160,11 +129,7 @@ export const Researcher: React.FC = () => {
             </div>
           </div>
 
-          <ResearcherRightSidebar
-            selectedDataSet={selectedDataSet}
-            setSelectedDataSet={setSelectedDataSet}
-            availableDataSets={availableDataSets}
-          />
+          <ResearcherRightSidebar selectedDataSetId={selectedDataSetId} />
         </div>
       </div>
     </div>

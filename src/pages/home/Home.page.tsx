@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Text, Title, useMantineColorScheme } from '@mantine/core';
 import { CurrentActivity } from './activities/CurrentActivity';
@@ -9,6 +9,11 @@ export function HomePage() {
   const handleTryItNowClick = () => {
     navigate('/researcher');
   };
+  useEffect(() => {
+    fetch('/api/hello')
+      .then((res) => res.json())
+      .then((data) => console.log('Message from server:', data));
+  }, []);
   return (
     <div
       style={{
