@@ -51,11 +51,12 @@ export const ResearcherPageHeader: React.FC = () => {
               }}
             >
               <IconCrown size={14} style={{ marginRight: 10, color: 'white' }} />
-              <Text style={{ fontSize: 14 }}>Upgrade to Premium</Text>
+              <Text style={{ fontSize: 14, fontWeight: 700 }}>Upgrade to Premium</Text>
             </Button>
           </Flex>
           <Button
-            variant="outline"
+            variant="light"
+            radius={10}
             color={colorScheme === 'dark' ? COLORS.mantineDefaultGray : COLORS.mantineDefaultBlack}
             style={{
               boxShadow: '0px 5px 5px #00000010',

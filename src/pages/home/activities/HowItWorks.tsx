@@ -27,6 +27,10 @@ export const HowItWorks: React.FC = () => {
       >
         <List.Item>Upload your PDF documents through our intuitive web app.</List.Item>
         <List.Item>Ask questions or search specific content using natural language.</List.Item>
+        <List.Item>
+          (Optional) Select one of our live datasets to enhance the insights present in your
+          document.
+        </List.Item>
         <List.Item>Receive instant, accurate results powered by advanced AI.</List.Item>
       </List>
 
@@ -46,7 +50,10 @@ export const HowItWorks: React.FC = () => {
         }
       >
         <List.Item>Save time by automating document searches and analyses.</List.Item>
-        <List.Item>Enable deeper insights without manual effort.</List.Item>
+        <List.Item>
+          Enable deeper insights without manual effort by allowing you to incorporate real-time
+          datasets into your pre-existing docs.
+        </List.Item>
         <List.Item>Provide a seamless way to interact with critical information.</List.Item>
       </List>
     </Container>

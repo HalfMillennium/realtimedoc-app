@@ -6,6 +6,7 @@ import { COLORS } from '@/common/colors';
 import { deselectAllDatasets, selectDataset } from '@/store/datasets/datasetsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { DataSetOptionsPanel } from './DataSetOptionsPanel';
+import { useUser } from '@clerk/clerk-react'
 
 interface ResearcherRightSidebarProps {
   selectedDataSetId: string | undefined;
@@ -116,7 +117,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
               flexDirection: 'row',
               alignItems: 'center',
               padding: '5px 10px',
-              borderRadius: 5,
+              borderRadius: 10,
               backgroundColor: '#FEC98F',
               width: 'auto',
             }}

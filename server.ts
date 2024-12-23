@@ -1,10 +1,10 @@
-import { clerkMiddleware, requireAuth } from '@clerk/express';
+import { requireAuth } from '@clerk/express';
 import cors from 'cors';
 import express from 'express';
 import multer from 'multer';
 
 const app = express();
-const port = 5000;
+const port = 5050;
 const apiUrl = 'http://localhost:8000';
 const upload = multer();
 
@@ -12,12 +12,9 @@ const upload = multer();
 app.use(cors());
 app.use(express.json());
 
-app.use(clerkMiddleware());
-
 // Route to handle FormData
 app.post(
   '/api/create-convo/:userId',
-  requireAuth({ signInUrl: '/sign-in' }),
   upload.single('file'),
   async (req, res) => {
     try {

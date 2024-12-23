@@ -15,6 +15,7 @@ export const CurrentActivity = () => {
         display: 'flex',
         flex: 1,
         position: 'relative',
+        padding: 50,
         justifyContent: 'center',
         backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
         borderTopLeftRadius: '2rem',

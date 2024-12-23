@@ -22,16 +22,29 @@ import {
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
+import { useAuth, useUser } from '@clerk/clerk-react';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
+  const {getToken} = useAuth();
+  const { isSignedIn, user, isLoaded } = useUser();
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const dispatch = useDispatch<AppDispatch>();
-  const handleFileUpload = (files: File[]) => {
+  const handleFileUpload = async (files: File[]) => {
+    /*const token = await getToken();
+    if(!!token) {
+      setFileSetStream((prevSets) => [...prevSets, files]);
+      const formData = new FormData();
+      formData.append('file', files[0]);
+      dispatch(uploadFileAndCreateConversation({ authToken: token, formData, userId: '123' })); 
+      return;
+    }*/
     setFileSetStream((prevSets) => [...prevSets, files]);
     const formData = new FormData();
     formData.append('file', files[0]);
-    dispatch(uploadFileAndCreateConversation({ formData, userId: '123' }));
+    dispatch(uploadFileAndCreateConversation({ formData, userId: '123' })); 
+    return;
+    console.error('No auth token found, failed to upload file and create conversation');
   };
   const isLoadingNewConversation = useSelector(
     (state: RootState) => state.conversations.isLoadingNewConversation
@@ -45,7 +58,7 @@ export const ResearcherLeftSideBar = () => {
       <Group>
         <Avatar radius="xl" />
         <div>
-          <Text size="md">Alex Ferguson</Text>
+          <Text size="md">{user?.fullName ?? 'Arbitrary Robert'}</Text>
           <Text size="xs">Chat User</Text>
         </div>
       </Group>
@@ -97,16 +110,16 @@ export const ResearcherLeftSideBar = () => {
             justifyContent: 'center',
             background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            borderRadius: 5,
+            borderRadius: 10,
           }}
         >
           <Button
             fullWidth
+            radius={10}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
               color: 'black',
-              borderRadius: 5,
               backgroundColor: 'transparent',
               transition: 'background 0.3s ease',
             }}

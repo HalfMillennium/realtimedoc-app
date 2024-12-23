@@ -43,24 +43,18 @@ export const FAQPage: React.FC = () => {
     },
     {
       number: 7,
-      question: 'Can RealTimeDoc be integrated into my existing workflows?',
-      answer:
-        'Yes, RealTimeDoc offers API support, allowing you to integrate its functionality into your current applications and workflows.',
-    },
-    {
-      number: 8,
       question: 'What industries benefit most from RealTimeDoc?',
       answer:
         'RealTimeDoc is versatile and benefits a variety of industries, including legal, finance, healthcare, and research. Any organization that frequently works with PDFs can streamline their workflows using RealTimeDoc.',
     },
     {
-      number: 9,
+      number: 8,
       question: 'What happens if the AI cannot find an answer to my query?',
       answer:
         'If the AI cannot find an answer within your PDF or the live data libraries, it will inform you and provide suggestions for refining your query or additional steps to take.',
     },
     {
-      number: 10,
+      number: 9,
       question: 'How can I get started with RealTimeDoc?',
       answer:
         'Simply sign up on our platform, upload your PDF documents, and start querying! RealTimeDoc’s intuitive interface makes it easy to get started in minutes.',
@@ -91,18 +85,6 @@ export const FAQPage: React.FC = () => {
           </Grid.Col>
         ))}
       </Grid>
-
-      <Space h="xl" />
-      <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
-        Have more questions? Contact our support team at{' '}
-        <a
-          href="mailto:support@realtimedoc.com"
-          style={{ textDecoration: 'none', color: '#1c7ed6' }}
-        >
-          support@realtimedoc.com
-        </a>
-        .
-      </Text>
     </Container>
   );
 };

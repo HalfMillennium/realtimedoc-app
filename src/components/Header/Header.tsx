@@ -1,21 +1,20 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
-import { IconChevronDown, IconMoon, IconSun } from '@tabler/icons-react';
+import { IconChevronDown, IconMoon, IconSun, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Avatar,
+  Button,
   Center,
   Container,
+  Flex,
   Group,
   Image,
   Menu,
-  Modal,
-  Title,
+  Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
-import { AccountOverview } from '../../pages/account/AccountOverview';
 import classes from './Header.module.css';
 
 const links = [
@@ -104,7 +103,7 @@ export function Header() {
                   alignItems: 'center',
                 }}
               >
-                <IconSun size={22} />
+                <IconSun size={20} />
               </div>
             ) : (
               <div
@@ -119,11 +118,30 @@ export function Header() {
                   alignItems: 'center',
                 }}
               >
-                <IconMoon size={18} />
+                <IconMoon size={16} />
               </div>
             )}
             <SignedOut>
-              <SignInButton />
+              <SignInButton>
+                <Button
+                  radius={10}
+                  variant="light"
+                  color={colorScheme === 'dark' ? 'orange' : 'pink'}
+                  style={{
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    paddingLeft: 12,
+                    paddingRight: 12,
+                    paddingTop: 8,
+                    paddingBottom: 8,
+                  }}
+                >
+                  <Flex direction="row" gap="10" style={{alignItems: 'center'}}>
+                    <IconUser size={16} />
+                    <Text style={{ fontSize: 14, fontWeight: 600 }}>Sign In / Register</Text>
+                  </Flex>
+                </Button>
+              </SignInButton>
             </SignedOut>
             <SignedIn>
               <UserButton />

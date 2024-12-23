@@ -13,8 +13,10 @@ import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
+import { useUser, useAuth } from '@clerk/clerk-react';
 
 export const Researcher: React.FC = () => {
+  const { getToken } = useAuth();
   const { colorScheme } = useMantineColorScheme();
   const availableDataSets = useSelector((state: RootState) => state.datasets.availableDataSets);
   const selectedDataSetId = useSelector((state: RootState) => state.datasets.selectedDataSetId);
@@ -24,14 +26,15 @@ export const Researcher: React.FC = () => {
   const isLoadingNewMessage = useSelector(
     (state: RootState) => state.conversations.isLoadingNewMessage
   );
-  const currentUser = useSelector((state: RootState) => state.user);
+  const { user } = useUser();
   const [newMessage, setNewMessage] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  const handleSendMessage = () => {
-    if (newMessage.trim() === '') return;
+  const handleSendMessage = async () => {
+    const token = await getToken();
+    if (newMessage.trim() === '' || !!!token) return;
     const newChatMessage = {
       id: crypto.randomUUID(),
-      author: currentUser.name,
+      author: user?.fullName ?? 'Arbitrary Robert',
       timestamp: new Date().toLocaleTimeString(),
       content: newMessage,
     };

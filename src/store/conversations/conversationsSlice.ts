@@ -1,3 +1,4 @@
+import { useAuth } from '@clerk/clerk-react';
 import { createAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   EXAMPLE_CONVERSATIONS,
@@ -27,13 +28,13 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
   any,
   { formData: FormData; userId: string }
 >('conversations/uploadFileAndCreateConversation', async ({ formData, userId }, thunkAPI) => {
-  const response = await fetch(`/api/create-convo/${userId}`, {
-    method: 'POST',
-    body: formData,
-  }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
-  if (!!response) {
-    return response.json();
-  }
+    const response = await fetch(`/api/create-convo/${userId}`, {
+      method: 'POST',
+      body: formData,
+    }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
+    if (!!response) {
+      return response.json();
+    }
 });
 
 export const getNewChatResponse = createAsyncThunk<
