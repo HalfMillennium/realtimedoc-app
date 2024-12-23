@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { IconLogout2 } from '@tabler/icons-react';
+import { IconCrown, IconLogout2 } from '@tabler/icons-react';
+import { useSelector } from 'react-redux';
 import {
   Button,
   Divider,
@@ -11,12 +12,10 @@ import {
   Textarea,
   TextInput,
 } from '@mantine/core';
-import { User } from '../../types/user';
-import { IconCrown } from '@tabler/icons-react';
-import {COLORS} from '@/common/colors';
+import { COLORS } from '@/common/colors';
 import { MEMBERSHIP_TYPES } from '@/store/membership/membershipSlice';
-import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { User } from '../../types/user';
 
 interface AccountOverviewProps {
   open: boolean;
@@ -53,8 +52,8 @@ export const AccountOverview: React.FC<AccountOverviewProps> = ({ open, close })
           <TextInput label="Email Address" value={user.email} disabled />
           <TextInput label="Member Since" value={user.memberSince} disabled />
         </Stack>
-        <Flex style={{flexDirection: 'column', gap: 5, alignItems: 'center'}}>
-        <Flex
+        <Flex style={{ flexDirection: 'column', gap: 5, alignItems: 'center' }}>
+          <Flex
             style={{
               width: '100%',
               justifyContent: 'center',
@@ -71,7 +70,7 @@ export const AccountOverview: React.FC<AccountOverviewProps> = ({ open, close })
                 color: 'white',
                 borderRadius: 5,
                 backgroundColor: 'transparent',
-                width:'100%',
+                width: '100%',
                 transition: 'background 0.3s ease',
               }}
             >
@@ -79,7 +78,7 @@ export const AccountOverview: React.FC<AccountOverviewProps> = ({ open, close })
               Upgrade to Premium
             </Button>
           </Flex>
-          <Text style={{fontSize: 12}}>
+          <Text style={{ fontSize: 12 }}>
             Upgrade today to unlock unlimited document uploads & chats!
           </Text>
         </Flex>

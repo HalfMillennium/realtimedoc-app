@@ -122,17 +122,6 @@ export function Header() {
                 <IconMoon size={18} />
               </div>
             )}
-            <Avatar
-              style={{
-                cursor: 'pointer',
-                backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
-              }}
-              radius="xl"
-              size="md"
-              color={colorScheme === 'dark' ? 'orange' : 'blue'}
-              onClick={open}
-            />
-            <AccountOverview open={opened} close={close} />
             <SignedOut>
               <SignInButton />
             </SignedOut>

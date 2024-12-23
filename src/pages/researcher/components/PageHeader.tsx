@@ -42,7 +42,6 @@ export const ResearcherPageHeader: React.FC = () => {
             <Button
               fullWidth
               radius={10}
-              p="sm"
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
