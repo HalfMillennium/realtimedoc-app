@@ -75,7 +75,12 @@ export const ResearcherLeftSideBar = () => {
           shadow="xs"
           p="lg"
           mt="sm"
-          style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
+          style={{
+            padding: 10,
+            position: 'relative',
+            backdropFilter: 'blur(5px)',
+            borderRadius: 100,
+          }}
         >
           <LoadingOverlay visible loaderProps={{ type: 'dots', color: COLORS.teal }} />
         </Card>

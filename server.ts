@@ -1,3 +1,4 @@
+import { clerkMiddleware } from '@clerk/express';
 import cors from 'cors';
 import express from 'express';
 import multer from 'multer';
@@ -10,6 +11,8 @@ const upload = multer();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+app.use(clerkMiddleware());
 
 // Route to handle FormData
 app.post('/api/create-convo/:userId', upload.single('file'), async (req, res) => {

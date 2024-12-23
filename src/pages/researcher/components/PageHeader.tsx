@@ -36,22 +36,23 @@ export const ResearcherPageHeader: React.FC = () => {
               justifyContent: 'center',
               background: `linear-gradient(to right, #ff9a9e, ${COLORS.teal})`,
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: 5,
+              borderRadius: 10,
             }}
           >
             <Button
               fullWidth
+              radius={10}
+              p="sm"
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: 'white',
-                borderRadius: 5,
                 backgroundColor: 'transparent',
                 transition: 'background 0.3s ease',
               }}
             >
-              <IconCrown size={18} style={{ marginRight: 10, color: 'white' }} />
-              Upgrade to Premium
+              <IconCrown size={14} style={{ marginRight: 10, color: 'white' }} />
+              <Text style={{ fontSize: 14 }}>Upgrade to Premium</Text>
             </Button>
           </Flex>
           <Button

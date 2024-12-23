@@ -1,10 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './layout/Layout';
+import { FAQPage } from './pages/faq/FAQPage';
 import { HomePage } from './pages/home/Home.page';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { Register } from './pages/registration/Register';
 import { Researcher } from './pages/researcher/Researcher.page';
-import { FAQPage } from './pages/faq/FAQPage';
+import SignIn from './pages/sign-in/SignIn';
 
 export interface UserDetails {
   name: string;
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
         element: <Researcher />,
       },
       {
+        path: '/sign-in',
+        element: <SignIn />,
+      },
+      {
         path: '/register',
         element: <Register />,
       },
@@ -37,8 +42,8 @@ const router = createBrowserRouter([
       },
       {
         path: '/faq',
-        element: <FAQPage/>
-      }
+        element: <FAQPage />,
+      },
     ],
   },
 ]);

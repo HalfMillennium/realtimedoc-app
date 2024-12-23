@@ -1,3 +1,4 @@
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 import { IconChevronDown, IconMoon, IconSun } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -22,18 +23,14 @@ const links = [
   {
     link: '#1',
     label: 'Learn',
-    links: [
-      { link: '/faq', label: 'FAQ' },
-    ],
+    links: [{ link: '/faq', label: 'FAQ' }],
   },
   { link: '/about', label: 'About' },
   { link: '/pricing', label: 'Pricing' },
   {
     link: '#2',
     label: 'Support',
-    links: [
-      { link: '/contact', label: 'Contact' },
-    ],
+    links: [{ link: '/contact', label: 'Contact' }],
   },
 ];
 
@@ -43,8 +40,7 @@ export function Header() {
   const [opened, { open, close }] = useDisclosure(false);
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link} onClick={() => 
-        navigate(item.link)}>
+      <Menu.Item key={item.link} onClick={() => navigate(item.link)}>
         {item.label}
       </Menu.Item>
     ));
@@ -137,6 +133,12 @@ export function Header() {
               onClick={open}
             />
             <AccountOverview open={opened} close={close} />
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </Group>
         </div>
       </Container>
