@@ -19,7 +19,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
   const availableDataSets = useSelector((state: RootState) => state.datasets.availableDataSets);
   return (
     <div style={{ width: '20%', padding: '8px' }}>
-      <Card withBorder style={{ gap: 10 }}>
+      <Card withBorder style={{ gap: 10 }} radius={10}>
         <Flex
           style={{
             flexDirection: 'column',

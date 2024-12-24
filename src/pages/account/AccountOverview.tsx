@@ -59,7 +59,7 @@ export const AccountOverview: React.FC<AccountOverviewProps> = ({ open, close })
               justifyContent: 'center',
               background: `linear-gradient(to right, ${COLORS.teal}, ${COLORS.peach})`,
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: 5,
+              borderRadius: 10,
             }}
           >
             <Button
@@ -68,7 +68,7 @@ export const AccountOverview: React.FC<AccountOverviewProps> = ({ open, close })
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: 'white',
-                borderRadius: 5,
+                borderRadius: 10,
                 backgroundColor: 'transparent',
                 width: '100%',
                 transition: 'background 0.3s ease',

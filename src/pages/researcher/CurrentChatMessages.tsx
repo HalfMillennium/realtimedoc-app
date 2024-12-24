@@ -37,6 +37,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
     <Card
       withBorder
       shadow="sm"
+      radius={12}
       className="chat-container"
       style={{
         display: 'flex',

@@ -106,10 +106,10 @@ export const Researcher: React.FC = () => {
             >
               <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
             </Flex>
-            <div style={{ position: 'relative', marginTop: '16px' }}>
+            <div style={{ position: 'relative', marginTop: 16 }}>
               <Textarea
                 placeholder="How can I help you?"
-                radius="sm"
+                radius={12}
                 size="md"
                 value={newMessage}
                 onKeyDown={handleKeyDown}
