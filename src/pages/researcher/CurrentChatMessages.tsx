@@ -53,21 +53,20 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             display: 'flex',
             flexDirection: 'row',
             gap: 10,
-            backgroundColor: COLORS.peach,
+            backgroundColor: '#212121',
             alignItems: 'center',
             marginBottom: 10,
           }}
           shadow="xs"
           radius="md"
           p="sm"
-        >
-          <Image
-            src="https://i.ibb.co/sggDxrY/cloud-network-ezgif-com-gif-maker.gif"
-            alt="GIF Icon"
-            width={20}
-            height={20}
-          />
-          <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1, color: "#212121" }}>
+        >          <Image
+        src="https://s13.gifyu.com/images/SPFxx.gif"
+        alt="GIF Icon"
+        width={20}
+        height={20}
+      />
+          <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1, color: 'white' }}>
             LIVE DATASET CONNECTED
           </Text>
         </Card>

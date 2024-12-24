@@ -118,13 +118,14 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
               alignItems: 'center',
               padding: '5px 10px',
               borderRadius: 10,
-              backgroundColor: '#FEC98F',
               width: 'auto',
             }}
+            color={colorScheme === 'dark' ? 'white' : 'black'}
+            variant="light"
             onClick={() => dispatch(deselectAllDatasets())}
           >
-            <IconX size={14} color="black" style={{ marginRight: 5 }} />
-            <Text style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}>
+            <IconX size={14} style={{ marginRight: 5 }} />
+            <Text style={{ fontSize: 12, fontWeight: 300, display: 'flex' }}>
               Reset Selection
             </Text>
           </Button>

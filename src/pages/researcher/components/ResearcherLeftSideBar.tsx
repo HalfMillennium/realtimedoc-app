@@ -33,11 +33,11 @@ export const ResearcherLeftSideBar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const handleFileUpload = async (files: File[]) => {
     const token = await getToken();
-    if(!!token) {
+    if(!!token && !!user.user?.externalId) {
       setFileSetStream((prevSets) => [...prevSets, files]);
       const formData = new FormData();
       formData.append('file', files[0]);
-      dispatch(uploadFileAndCreateConversation({ authToken: token, formData, userId: '123' }));
+      dispatch(uploadFileAndCreateConversation({ authToken: token, formData, userId: user.user.externalId }));
     }
   };
   const isLoadingNewConversation = useSelector(

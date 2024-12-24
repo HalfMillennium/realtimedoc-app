@@ -95,7 +95,7 @@ export function Header() {
               <div
                 onClick={() => setColorScheme('light')}
                 style={{
-                  padding: '10px',
+                  padding: 8,
                   cursor: 'pointer',
                   backgroundColor: '#212121',
                   borderRadius: '100%',
@@ -110,7 +110,7 @@ export function Header() {
               <div
                 onClick={() => setColorScheme('dark')}
                 style={{
-                  padding: '10px',
+                  padding: 8,
                   cursor: 'pointer',
                   backgroundColor: '#efefef',
                   borderRadius: '100%',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconCrown, IconDotsVertical, IconHelp } from '@tabler/icons-react';
+import { IconCrown, IconHelp } from '@tabler/icons-react';
 import { Button, Center, Divider, Flex, Group, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
@@ -65,15 +65,9 @@ export const ResearcherPageHeader: React.FC = () => {
             <IconHelp size={18} style={{ marginRight: 5 }} />
             Ask For Help
           </Button>
-          <IconDotsVertical
-            size={24}
-            color={colorScheme === 'dark' ? COLORS.mantineDefaultGray : COLORS.mantineDefaultBlack}
-          />
         </Group>
       </Center>
       <Divider />
     </Flex>
   );
 };
-
-export default ResearcherPageHeader;
