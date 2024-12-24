@@ -2,9 +2,12 @@ import { clerkMiddleware, requireAuth } from '@clerk/express';
 import cors from 'cors';
 import express from 'express';
 import multer from 'multer';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const port = 5050;
 
 const app = express();
-const port = 5000;
 const apiUrl = 'http://localhost:8000';
 const upload = multer();
 

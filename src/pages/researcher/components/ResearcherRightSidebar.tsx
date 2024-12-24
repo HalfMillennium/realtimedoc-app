@@ -116,7 +116,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
               flexDirection: 'row',
               alignItems: 'center',
               padding: '5px 10px',
-              borderRadius: 5,
+              borderRadius: 10,
               backgroundColor: '#FEC98F',
               width: 'auto',
             }}

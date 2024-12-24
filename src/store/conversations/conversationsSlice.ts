@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   EXAMPLE_CONVERSATIONS,
   EXAMPLE_CONVERSATIONS_MAP,
@@ -25,11 +25,15 @@ export interface ConversationMap {
 
 export const uploadFileAndCreateConversation = createAsyncThunk<
   any,
-  { formData: FormData; userId: string }
->('conversations/uploadFileAndCreateConversation', async ({ formData, userId }, thunkAPI) => {
+  { authToken: string, formData: FormData; userId: string }
+>('conversations/uploadFileAndCreateConversation', async ({ authToken, formData, userId }, thunkAPI) => {
   const response = await fetch(`/api/create-convo/${userId}`, {
     method: 'POST',
     body: formData,
+    headers: {
+      'Authorization': `Bearer ${authToken}`,
+      mode: 'cors'
+    }
   }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
   if (!!response) {
     return response.json();
@@ -38,10 +42,10 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
 
 export const getNewChatResponse = createAsyncThunk<
   any,
-  { conversationId: string; message: string; selectedDatasetName: string | undefined }
+  { authToken: string, conversationId: string; message: string; selectedDatasetName: string | undefined }
 >(
   'conversations/getNewChatResponse',
-  async ({ conversationId, message, selectedDatasetName }, thunkAPI) => {
+  async ({ authToken, conversationId, message, selectedDatasetName }, thunkAPI) => {
     const response = await fetch(`/api/new-message/${conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
@@ -50,7 +54,9 @@ export const getNewChatResponse = createAsyncThunk<
       }),
       headers: {
         'Content-Type': 'application/json',
-      },
+        'Authorization': `Bearer ${authToken}`,
+        mode: 'cors'
+      }
     }).catch((error) => console.error('Failed to getNewChatResponse:', error));
     if (!!response) {
       return response.json();

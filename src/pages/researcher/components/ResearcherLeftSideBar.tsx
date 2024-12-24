@@ -22,16 +22,21 @@ import {
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
+import { useAuth } from '@clerk/clerk-react';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
+  const { getToken } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
-  const handleFileUpload = (files: File[]) => {
-    setFileSetStream((prevSets) => [...prevSets, files]);
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    dispatch(uploadFileAndCreateConversation({ formData, userId: '123' }));
+  const handleFileUpload = async (files: File[]) => {
+    const token = await getToken();
+    if(!!token) {
+      setFileSetStream((prevSets) => [...prevSets, files]);
+      const formData = new FormData();
+      formData.append('file', files[0]);
+      dispatch(uploadFileAndCreateConversation({ authToken: token, formData, userId: '123' }));
+    }
   };
   const isLoadingNewConversation = useSelector(
     (state: RootState) => state.conversations.isLoadingNewConversation
@@ -79,7 +84,7 @@ export const ResearcherLeftSideBar = () => {
             padding: 10,
             position: 'relative',
             backdropFilter: 'blur(5px)',
-            borderRadius: 100,
+            borderRadius: 10,
           }}
         >
           <LoadingOverlay visible loaderProps={{ type: 'dots', color: COLORS.teal }} />
@@ -97,7 +102,7 @@ export const ResearcherLeftSideBar = () => {
             justifyContent: 'center',
             background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            borderRadius: 5,
+            borderRadius: 10,
           }}
         >
           <Button
@@ -106,7 +111,7 @@ export const ResearcherLeftSideBar = () => {
               justifyContent: 'center',
               alignItems: 'center',
               color: 'black',
-              borderRadius: 5,
+              borderRadius: 10,
               backgroundColor: 'transparent',
               transition: 'background 0.3s ease',
             }}

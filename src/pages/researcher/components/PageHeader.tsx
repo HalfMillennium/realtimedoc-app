@@ -55,7 +55,8 @@ export const ResearcherPageHeader: React.FC = () => {
             </Button>
           </Flex>
           <Button
-            variant="outline"
+            variant="light"
+            radius={10}
             color={colorScheme === 'dark' ? COLORS.mantineDefaultGray : COLORS.mantineDefaultBlack}
             style={{
               boxShadow: '0px 5px 5px #00000010',

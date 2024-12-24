@@ -24,7 +24,7 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
     <Flex
       mt="sm"
       style={{
-        borderRadius: 5,
+        borderRadius: 10,
         padding: 10,
         cursor: 'pointer',
         backgroundColor:

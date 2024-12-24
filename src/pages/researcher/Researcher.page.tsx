@@ -13,6 +13,8 @@ import ResearcherPageHeader from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -27,8 +29,15 @@ export const Researcher: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.user);
   const [newMessage, setNewMessage] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  const handleSendMessage = () => {
+  const navigate = useNavigate();
+  const { getToken } = useAuth();
+  const handleSendMessage = async () => {
+    const token = await getToken();
     if (newMessage.trim() === '') return;
+    if(!!!token) {
+      navigate('/');
+      return
+    }
     const newChatMessage = {
       id: crypto.randomUUID(),
       author: currentUser.name,
@@ -41,6 +50,7 @@ export const Researcher: React.FC = () => {
     dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
     dispatch(
       getNewChatResponse({
+        authToken: token,
         conversationId: currentConversation.id,
         message: newMessage,
         selectedDatasetName: 'financial',
