@@ -58,8 +58,9 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                 withBorder
                 shadow="sm"
                 style={{
-                  marginBottom: '8px',
+                  marginBottom: 10,
                   cursor: 'pointer',
+                  borderRadius: 5,
                   backgroundColor: selectedDataSetId === dataset.id ? COLORS.teal : 'transparent',
                 }}
                 onClick={() => dispatch(selectDataset({ datasetId: dataset.id }))}

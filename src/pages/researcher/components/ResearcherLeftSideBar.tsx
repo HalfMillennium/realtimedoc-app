@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconCloudUpload, IconHistory } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -22,11 +22,13 @@ import {
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
+  const user = useUser();
+  const userName = user.user?.fullName ?? 'Alex Ferguson';
   const { getToken } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const handleFileUpload = async (files: File[]) => {
@@ -50,7 +52,7 @@ export const ResearcherLeftSideBar = () => {
       <Group>
         <Avatar radius="xl" />
         <div>
-          <Text size="md">Alex Ferguson</Text>
+          <Text size="md">{userName}</Text>
           <Text size="xs">Chat User</Text>
         </div>
       </Group>

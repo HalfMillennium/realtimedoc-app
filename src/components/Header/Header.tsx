@@ -1,15 +1,15 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
-import { IconChevronDown, IconMoon, IconSun } from '@tabler/icons-react';
+import { IconChevronDown, IconMoon, IconSun, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Avatar,
+  Button,
   Center,
   Container,
+  Flex,
   Group,
   Image,
   Menu,
-  Modal,
-  Title,
+  Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -123,7 +123,19 @@ export function Header() {
               </div>
             )}
             <SignedOut>
-              <SignInButton />
+              <SignInButton>
+                <Button
+                  radius={10}
+                  style={{ paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10 }}
+                  variant="light"
+                  color={colorScheme === 'dark' ? 'orange' : 'pink'}
+                >
+                  <Flex direction="row" gap="5" style={{ alignItems: 'center' }}>
+                    <IconUser size={18} />
+                    <Text style={{ fontSize: 14, fontWeight: 500 }}>Sign In / Register</Text>
+                  </Flex>
+                </Button>
+              </SignInButton>
             </SignedOut>
             <SignedIn>
               <UserButton />

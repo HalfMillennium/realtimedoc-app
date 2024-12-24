@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
-import { IconCube } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import {
   Badge,
   Card,
   Divider,
   Flex,
+  Image,
   LoadingOverlay,
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { Message } from '@/store/conversations/conversationsSlice';
 import { RootState } from '@/store/store';
 
 export interface CurrentChatMessagesProps {
@@ -33,6 +32,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
   }, [messages]);
+
   return (
     <Card
       withBorder
@@ -53,7 +53,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             display: 'flex',
             flexDirection: 'row',
             gap: 10,
-            backgroundColor: COLORS.teal,
+            backgroundColor: COLORS.peach,
             alignItems: 'center',
             marginBottom: 10,
           }}
@@ -61,8 +61,13 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
           radius="md"
           p="sm"
         >
-          <IconCube fontSize={10} />
-          <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1 }}>
+          <Image
+            src="https://i.ibb.co/sggDxrY/cloud-network-ezgif-com-gif-maker.gif"
+            alt="GIF Icon"
+            width={20}
+            height={20}
+          />
+          <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1, color: "#212121" }}>
             LIVE DATASET CONNECTED
           </Text>
         </Card>
