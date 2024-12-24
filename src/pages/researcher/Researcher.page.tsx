@@ -56,10 +56,12 @@ export const Researcher: React.FC = () => {
         selectedDatasetName: 'financial',
       })
     );
+    setNewMessage('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && newMessage.trim() !== '') {
+      e.preventDefault();
       setNewMessage('');
       handleSendMessage();
     }
