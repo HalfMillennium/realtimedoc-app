@@ -29,15 +29,15 @@ export const ResearcherLeftSideBar = () => {
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const user = useUser();
   const userName = user.user?.fullName ?? 'Alex Ferguson';
-  const { getToken } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const handleFileUpload = async (files: File[]) => {
-    const token = await getToken();
-    if(!!token && !!user.user?.externalId) {
+    if(!!user.user?.id) {
       setFileSetStream((prevSets) => [...prevSets, files]);
       const formData = new FormData();
       formData.append('file', files[0]);
-      dispatch(uploadFileAndCreateConversation({ authToken: token, formData, userId: user.user.externalId }));
+      dispatch(uploadFileAndCreateConversation({ formData, userId: user.user.id }));
+    } else {
+      console.log('No token or user id found');
     }
   };
   const isLoadingNewConversation = useSelector(

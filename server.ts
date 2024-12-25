@@ -20,7 +20,7 @@ app.use(clerkMiddleware());
 // Route to handle FormData
 app.post(
   '/api/create-convo/:userId',
-  requireAuth({ signInUrl: '/sign-in' }),
+  requireAuth(),
   upload.single('file'),
   async (req, res) => {
     try {
@@ -69,7 +69,7 @@ app.post(
 
 app.post(
   '/api/new-message/:conversationId',
-  requireAuth({ signInUrl: '/sign-in' }),
+  requireAuth(),
   async (req, res) => {
     try {
       // Log the incoming request body for debugging
