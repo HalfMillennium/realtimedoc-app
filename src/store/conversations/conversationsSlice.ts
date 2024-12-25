@@ -1,8 +1,10 @@
-import { createAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   EXAMPLE_CONVERSATIONS,
   EXAMPLE_CONVERSATIONS_MAP,
 } from '@/pages/researcher/components/utils';
+import { useAuth } from '@clerk/clerk-react';
+import { setToken } from '../user/userSlice';
 
 export interface Message {
   id: string;
@@ -27,9 +29,19 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
   any,
   { formData: FormData; userId: string }
 >('conversations/uploadFileAndCreateConversation', async ({ formData, userId }, thunkAPI) => {
+  const { getToken } = useAuth();
+  const token = await getToken();
+
+  const dispatch = thunkAPI.dispatch;
+  dispatch(setToken({ token: token ?? '' }));
+  
   const response = await fetch(`/api/create-convo/${userId}`, {
     method: 'POST',
     body: formData,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      mode: 'cors'
+    }
   }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
   if (!!response) {
     return response.json();
@@ -41,7 +53,13 @@ export const getNewChatResponse = createAsyncThunk<
   { conversationId: string; message: string; selectedDatasetName: string | undefined }
 >(
   'conversations/getNewChatResponse',
-  async ({ conversationId, message, selectedDatasetName }, thunkAPI) => {
+  async ({conversationId, message, selectedDatasetName }, thunkAPI) => {
+    const { getToken } = useAuth();
+    const token = await getToken();
+
+    const dispatch = thunkAPI.dispatch;
+    dispatch(setToken({ token: token ?? '' }));
+
     const response = await fetch(`/api/new-message/${conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
@@ -50,7 +68,9 @@ export const getNewChatResponse = createAsyncThunk<
       }),
       headers: {
         'Content-Type': 'application/json',
-      },
+        'Authorization': `Bearer ${token}`,
+        mode: 'cors'
+      }
     }).catch((error) => console.error('Failed to getNewChatResponse:', error));
     if (!!response) {
       return response.json();

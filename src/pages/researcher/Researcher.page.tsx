@@ -1,37 +1,48 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { IconSend } from '@tabler/icons-react';
+import { useState, useEffect } from 'react';
+import { RedirectToSignIn, useAuth, useUser } from '@clerk/clerk-react';
+import { IconArrowUp } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
+import { ActionIcon, Flex, Textarea, useMantineColorScheme } from '@mantine/core';
 import {
   getNewChatResponse,
   setCurrentConversation,
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
-import ResearcherPageHeader from './components/PageHeader';
+import {ResearcherPageHeader} from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
+import { setToken } from '@/store/user/userSlice';
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
-  const availableDataSets = useSelector((state: RootState) => state.datasets.availableDataSets);
   const selectedDataSetId = useSelector((state: RootState) => state.datasets.selectedDataSetId);
+  const currentToken = useSelector((state: RootState) => state.user.token);
   const currentConversation = useSelector(
     (state: RootState) => state.conversations.currentConversation
   );
   const isLoadingNewMessage = useSelector(
     (state: RootState) => state.conversations.isLoadingNewMessage
   );
-  const currentUser = useSelector((state: RootState) => state.user);
-  const [newMessage, setNewMessage] = useState('');
+  const authToken = useSelector((state: RootState) => state.user.token);
+  const [newMessage, setNewMessage] = useState<string>('');
+  const user = useUser();
+  const userName = user.user?.fullName ?? 'Arbitrary Robert';
   const dispatch = useDispatch<AppDispatch>();
-  const handleSendMessage = () => {
+  const navigate = useNavigate();
+
+  const handleSendMessage = async () => {
     if (newMessage.trim() === '') return;
+    if (!!!authToken) {
+      navigate('/');
+      return;
+    }
     const newChatMessage = {
       id: crypto.randomUUID(),
-      author: currentUser.name,
+      author: userName,
       timestamp: new Date().toLocaleTimeString(),
       content: newMessage,
     };
@@ -43,18 +54,20 @@ export const Researcher: React.FC = () => {
       getNewChatResponse({
         conversationId: currentConversation.id,
         message: newMessage,
-        selectedDatasetName: 'financial',
+        selectedDatasetName: '',
       })
     );
+    setNewMessage('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && newMessage.trim() !== '') {
+      e.preventDefault();
       setNewMessage('');
       handleSendMessage();
     }
   };
-
+  
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 30 }}>
       <div
@@ -96,10 +109,10 @@ export const Researcher: React.FC = () => {
             >
               <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
             </Flex>
-            <div style={{ position: 'relative', marginTop: '16px' }}>
+            <div style={{ position: 'relative', marginTop: 16 }}>
               <Textarea
                 placeholder="How can I help you?"
-                radius="sm"
+                radius={12}
                 size="md"
                 value={newMessage}
                 onKeyDown={handleKeyDown}
@@ -108,24 +121,31 @@ export const Researcher: React.FC = () => {
                 }}
                 style={{ width: '100%', borderColor: colorScheme === 'light' ? 'black' : 'white' }}
               />
-              <Button
+              <div
                 style={{
                   position: 'absolute',
                   right: 20,
-                  top: '50%',
-                  backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
-                  transform: 'translateY(-50%)',
-                  borderRadius: '100%',
-                  width: 45,
-                  height: 45,
+                  top: 0,
+                  bottom: 0,
                   display: 'flex',
-                  justifyContent: 'center',
                   alignItems: 'center',
                 }}
-                onClick={handleSendMessage}
               >
-                <IconSend size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
-              </Button>
+                <ActionIcon
+                  style={{
+                    backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
+                    borderRadius: '100%',
+                    width: 45,
+                    height: 45,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onClick={handleSendMessage}
+                >
+                  <IconArrowUp size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
+                </ActionIcon>
+              </div>
             </div>
           </div>
 

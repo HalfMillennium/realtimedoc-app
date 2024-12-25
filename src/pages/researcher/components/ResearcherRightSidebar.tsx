@@ -19,7 +19,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
   const availableDataSets = useSelector((state: RootState) => state.datasets.availableDataSets);
   return (
     <div style={{ width: '20%', padding: '8px' }}>
-      <Card withBorder style={{ gap: 10 }}>
+      <Card withBorder style={{ gap: 10 }} radius={10}>
         <Flex
           style={{
             flexDirection: 'column',
@@ -58,8 +58,9 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                 withBorder
                 shadow="sm"
                 style={{
-                  marginBottom: '8px',
+                  marginBottom: 10,
                   cursor: 'pointer',
+                  borderRadius: 5,
                   backgroundColor: selectedDataSetId === dataset.id ? COLORS.teal : 'transparent',
                 }}
                 onClick={() => dispatch(selectDataset({ datasetId: dataset.id }))}
@@ -116,14 +117,15 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
               flexDirection: 'row',
               alignItems: 'center',
               padding: '5px 10px',
-              borderRadius: 5,
-              backgroundColor: '#FEC98F',
+              borderRadius: 10,
               width: 'auto',
             }}
+            color={colorScheme === 'dark' ? 'white' : 'black'}
+            variant="light"
             onClick={() => dispatch(deselectAllDatasets())}
           >
-            <IconX size={14} color="black" style={{ marginRight: 5 }} />
-            <Text style={{ fontSize: 12, fontWeight: 300, color: 'black', display: 'flex' }}>
+            <IconX size={14} style={{ marginRight: 5 }} />
+            <Text style={{ fontSize: 12, fontWeight: 300, display: 'flex' }}>
               Reset Selection
             </Text>
           </Button>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconCloudUpload, IconHistory } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -22,16 +22,23 @@ import {
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
+import { useAuth, useUser } from '@clerk/clerk-react';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
+  const user = useUser();
+  const userName = user.user?.fullName ?? 'Alex Ferguson';
   const dispatch = useDispatch<AppDispatch>();
-  const handleFileUpload = (files: File[]) => {
-    setFileSetStream((prevSets) => [...prevSets, files]);
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    dispatch(uploadFileAndCreateConversation({ formData, userId: '123' }));
+  const handleFileUpload = async (files: File[]) => {
+    if(!!user.user?.id) {
+      setFileSetStream((prevSets) => [...prevSets, files]);
+      const formData = new FormData();
+      formData.append('file', files[0]);
+      dispatch(uploadFileAndCreateConversation({ formData, userId: user.user.id }));
+    } else {
+      console.log('No token or user id found');
+    }
   };
   const isLoadingNewConversation = useSelector(
     (state: RootState) => state.conversations.isLoadingNewConversation
@@ -45,7 +52,7 @@ export const ResearcherLeftSideBar = () => {
       <Group>
         <Avatar radius="xl" />
         <div>
-          <Text size="md">Alex Ferguson</Text>
+          <Text size="md">{userName}</Text>
           <Text size="xs">Chat User</Text>
         </div>
       </Group>
@@ -75,7 +82,12 @@ export const ResearcherLeftSideBar = () => {
           shadow="xs"
           p="lg"
           mt="sm"
-          style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
+          style={{
+            padding: 10,
+            position: 'relative',
+            backdropFilter: 'blur(5px)',
+            borderRadius: 10,
+          }}
         >
           <LoadingOverlay visible loaderProps={{ type: 'dots', color: COLORS.teal }} />
         </Card>
@@ -92,7 +104,7 @@ export const ResearcherLeftSideBar = () => {
             justifyContent: 'center',
             background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            borderRadius: 5,
+            borderRadius: 10,
           }}
         >
           <Button
@@ -101,7 +113,7 @@ export const ResearcherLeftSideBar = () => {
               justifyContent: 'center',
               alignItems: 'center',
               color: 'black',
-              borderRadius: 5,
+              borderRadius: 10,
               backgroundColor: 'transparent',
               transition: 'background 0.3s ease',
             }}

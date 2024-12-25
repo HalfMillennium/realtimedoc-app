@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconCrown, IconDotsVertical, IconHelp } from '@tabler/icons-react';
+import { IconCrown, IconHelp } from '@tabler/icons-react';
 import { Button, Center, Divider, Flex, Group, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
@@ -36,26 +36,27 @@ export const ResearcherPageHeader: React.FC = () => {
               justifyContent: 'center',
               background: `linear-gradient(to right, #ff9a9e, ${COLORS.teal})`,
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: 5,
+              borderRadius: 10,
             }}
           >
             <Button
               fullWidth
+              radius={10}
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: 'white',
-                borderRadius: 5,
                 backgroundColor: 'transparent',
                 transition: 'background 0.3s ease',
               }}
             >
-              <IconCrown size={18} style={{ marginRight: 10, color: 'white' }} />
-              Upgrade to Premium
+              <IconCrown size={14} style={{ marginRight: 10, color: 'white' }} />
+              <Text style={{ fontSize: 14, fontWeight: 700 }}>Upgrade to Premium</Text>
             </Button>
           </Flex>
           <Button
-            variant="outline"
+            variant="light"
+            radius={10}
             color={colorScheme === 'dark' ? COLORS.mantineDefaultGray : COLORS.mantineDefaultBlack}
             style={{
               boxShadow: '0px 5px 5px #00000010',
@@ -64,15 +65,9 @@ export const ResearcherPageHeader: React.FC = () => {
             <IconHelp size={18} style={{ marginRight: 5 }} />
             Ask For Help
           </Button>
-          <IconDotsVertical
-            size={24}
-            color={colorScheme === 'dark' ? COLORS.mantineDefaultGray : COLORS.mantineDefaultBlack}
-          />
         </Group>
       </Center>
       <Divider />
     </Flex>
   );
 };
-
-export default ResearcherPageHeader;

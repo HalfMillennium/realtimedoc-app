@@ -1,14 +1,15 @@
-import { IconChevronDown, IconMoon, IconSun } from '@tabler/icons-react';
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { IconChevronDown, IconMoon, IconSun, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Avatar,
+  Button,
   Center,
   Container,
+  Flex,
   Group,
   Image,
   Menu,
-  Modal,
-  Title,
+  Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -22,18 +23,14 @@ const links = [
   {
     link: '#1',
     label: 'Learn',
-    links: [
-      { link: '/faq', label: 'FAQ' },
-    ],
+    links: [{ link: '/faq', label: 'FAQ' }],
   },
   { link: '/about', label: 'About' },
   { link: '/pricing', label: 'Pricing' },
   {
     link: '#2',
     label: 'Support',
-    links: [
-      { link: '/contact', label: 'Contact' },
-    ],
+    links: [{ link: '/contact', label: 'Contact' }],
   },
 ];
 
@@ -43,8 +40,7 @@ export function Header() {
   const [opened, { open, close }] = useDisclosure(false);
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link} onClick={() => 
-        navigate(item.link)}>
+      <Menu.Item key={item.link} onClick={() => navigate(item.link)}>
         {item.label}
       </Menu.Item>
     ));
@@ -99,7 +95,7 @@ export function Header() {
               <div
                 onClick={() => setColorScheme('light')}
                 style={{
-                  padding: '10px',
+                  padding: 8,
                   cursor: 'pointer',
                   backgroundColor: '#212121',
                   borderRadius: '100%',
@@ -114,7 +110,7 @@ export function Header() {
               <div
                 onClick={() => setColorScheme('dark')}
                 style={{
-                  padding: '10px',
+                  padding: 8,
                   cursor: 'pointer',
                   backgroundColor: '#efefef',
                   borderRadius: '100%',
@@ -126,17 +122,24 @@ export function Header() {
                 <IconMoon size={18} />
               </div>
             )}
-            <Avatar
-              style={{
-                cursor: 'pointer',
-                backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
-              }}
-              radius="xl"
-              size="md"
-              color={colorScheme === 'dark' ? 'orange' : 'blue'}
-              onClick={open}
-            />
-            <AccountOverview open={opened} close={close} />
+            <SignedOut>
+              <SignInButton>
+                <Button
+                  radius={10}
+                  style={{ paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10 }}
+                  variant="light"
+                  color={colorScheme === 'dark' ? 'orange' : 'pink'}
+                >
+                  <Flex direction="row" gap="5" style={{ alignItems: 'center' }}>
+                    <IconUser size={18} />
+                    <Text style={{ fontSize: 14, fontWeight: 500 }}>Sign In / Register</Text>
+                  </Flex>
+                </Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </Group>
         </div>
       </Container>

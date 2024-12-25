@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
-import { IconCube } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import {
   Badge,
   Card,
   Divider,
   Flex,
+  Image,
   LoadingOverlay,
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { Message } from '@/store/conversations/conversationsSlice';
 import { RootState } from '@/store/store';
 
 export interface CurrentChatMessagesProps {
@@ -33,10 +32,12 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
   }, [messages]);
+
   return (
     <Card
       withBorder
       shadow="sm"
+      radius={12}
       className="chat-container"
       style={{
         display: 'flex',
@@ -52,16 +53,20 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             display: 'flex',
             flexDirection: 'row',
             gap: 10,
-            backgroundColor: COLORS.teal,
+            backgroundColor: '#212121',
             alignItems: 'center',
             marginBottom: 10,
           }}
           shadow="xs"
           radius="md"
           p="sm"
-        >
-          <IconCube fontSize={10} />
-          <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1 }}>
+        >          <Image
+        src="https://s13.gifyu.com/images/SPFxx.gif"
+        alt="GIF Icon"
+        width={20}
+        height={20}
+      />
+          <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1, color: 'white' }}>
             LIVE DATASET CONNECTED
           </Text>
         </Card>
