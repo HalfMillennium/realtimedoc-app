@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { RedirectToSignIn, useAuth, useUser } from '@clerk/clerk-react';
 import { IconArrowUp } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,11 +11,12 @@ import {
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
-import {ResearcherPageHeader} from './components/PageHeader';
+import { setToken } from '@/store/user/userSlice';
+import { ResearcherPageHeader } from './components/PageHeader';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
-import { setToken } from '@/store/user/userSlice';
+import { PlaceholderChatUI } from './components/PlaceholderChatUI';
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -52,6 +53,7 @@ export const Researcher: React.FC = () => {
     dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
     dispatch(
       getNewChatResponse({
+        authToken,
         conversationId: currentConversation.id,
         message: newMessage,
         selectedDatasetName: '',
@@ -67,7 +69,7 @@ export const Researcher: React.FC = () => {
       handleSendMessage();
     }
   };
-  
+
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 30 }}>
       <div
@@ -98,55 +100,68 @@ export const Researcher: React.FC = () => {
               padding: '8px',
             }}
           >
-            <Flex
-              style={{
-                flex: 1,
-                width: '100%',
-                overflowY: 'scroll',
-                scrollbarWidth: 'none',
-                scrollBehavior: 'smooth',
-              }}
-            >
-              <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
-            </Flex>
-            <div style={{ position: 'relative', marginTop: 16 }}>
-              <Textarea
-                placeholder="How can I help you?"
-                radius={12}
-                size="md"
-                value={newMessage}
-                onKeyDown={handleKeyDown}
-                onChange={(e) => {
-                  setNewMessage(e.currentTarget.value);
-                }}
-                style={{ width: '100%', borderColor: colorScheme === 'light' ? 'black' : 'white' }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 20,
-                  top: 0,
-                  bottom: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <ActionIcon
+            {(!currentConversation?.messages || currentConversation.messages.length === 0) && (
+              <PlaceholderChatUI/>
+            )}
+            {!!currentConversation?.messages && currentConversation.messages.length > 0 && (
+              <>
+                <Flex
                   style={{
-                    backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
-                    borderRadius: '100%',
-                    width: 45,
-                    height: 45,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    flex: 1,
+                    width: '100%',
+                    overflowY: 'scroll',
+                    scrollbarWidth: 'none',
+                    scrollBehavior: 'smooth',
                   }}
-                  onClick={handleSendMessage}
                 >
-                  <IconArrowUp size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
-                </ActionIcon>
-              </div>
-            </div>
+                  <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
+                </Flex>
+                <div style={{ position: 'relative', marginTop: 16 }}>
+                  <Textarea
+                    placeholder="How can I help you?"
+                    radius={12}
+                    size="md"
+                    value={newMessage}
+                    onKeyDown={handleKeyDown}
+                    onChange={(e) => {
+                      setNewMessage(e.currentTarget.value);
+                    }}
+                    style={{
+                      width: '100%',
+                      borderColor: colorScheme === 'light' ? 'black' : 'white',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      right: 20,
+                      top: 0,
+                      bottom: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <ActionIcon
+                      style={{
+                        backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
+                        borderRadius: '100%',
+                        width: 45,
+                        height: 45,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                      onClick={handleSendMessage}
+                    >
+                      <IconArrowUp
+                        size={18}
+                        color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'}
+                      />
+                    </ActionIcon>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           <ResearcherRightSidebar selectedDataSetId={selectedDataSetId} />

@@ -60,12 +60,13 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
           shadow="xs"
           radius="md"
           p="sm"
-        >          <Image
-        src="https://s13.gifyu.com/images/SPFxx.gif"
-        alt="GIF Icon"
-        width={20}
-        height={20}
-      />
+        >
+          <Image
+            src="https://s13.gifyu.com/images/SPFxx.gif"
+            alt="GIF Icon"
+            width={20}
+            height={20}
+          />
           <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1, color: 'white' }}>
             LIVE DATASET CONNECTED
           </Text>
@@ -82,43 +83,44 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
           gap: 10,
         }}
       >
-        {messages.map((message, index) => (
-          <>
-            {!!message.tag && (
-              <>
-                <div
-                  key={index}
-                  style={{
-                    padding: 10,
-                    backgroundColor: colorScheme === 'dark' ? '#4d4c4c' : `${COLORS.teal}20`,
-                    borderRadius: 10,
-                  }}
-                >
-                  <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
-                    {message.author} - {message.timestamp}
-                  </Text>
-                  <Text size="md">{message.content}</Text>
-                  <Badge size="sm" color={COLORS.teal}>
-                    {message.tag}
-                  </Badge>
-                </div>
+        {!!messages &&
+          messages.map((message, index) => (
+            <>
+              {!!message.tag && (
+                <>
+                  <div
+                    key={index}
+                    style={{
+                      padding: 10,
+                      backgroundColor: colorScheme === 'dark' ? '#4d4c4c' : `${COLORS.teal}20`,
+                      borderRadius: 10,
+                    }}
+                  >
+                    <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
+                      {message.author} - {message.timestamp}
+                    </Text>
+                    <Text size="md">{message.content}</Text>
+                    <Badge size="sm" color={COLORS.teal}>
+                      {message.tag}
+                    </Badge>
+                  </div>
 
-                {index < messages.length - 1 && <Divider my="sm" />}
-              </>
-            )}
-            {!!!message.tag && (
-              <>
-                <div key={index}>
-                  <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
-                    {message.author} - {message.timestamp}
-                  </Text>
-                  <Text size="md">{message.content}</Text>
-                </div>
-                {index < messages.length - 1 && <Divider my="sm" />}
-              </>
-            )}
-          </>
-        ))}
+                  {index < messages.length - 1 && <Divider my="sm" />}
+                </>
+              )}
+              {!!!message.tag && (
+                <>
+                  <div key={index}>
+                    <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
+                      {message.author} - {message.timestamp}
+                    </Text>
+                    <Text size="md">{message.content}</Text>
+                  </div>
+                  {index < messages.length - 1 && <Divider my="sm" />}
+                </>
+              )}
+            </>
+          ))}
         {isLoadingNewMessage && (
           <Card
             withBorder

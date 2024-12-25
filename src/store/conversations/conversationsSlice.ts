@@ -27,19 +27,13 @@ export interface ConversationMap {
 
 export const uploadFileAndCreateConversation = createAsyncThunk<
   any,
-  { formData: FormData; userId: string }
->('conversations/uploadFileAndCreateConversation', async ({ formData, userId }, thunkAPI) => {
-  const { getToken } = useAuth();
-  const token = await getToken();
-
-  const dispatch = thunkAPI.dispatch;
-  dispatch(setToken({ token: token ?? '' }));
-  
+  { authToken: string, formData: FormData; userId: string }
+>('conversations/uploadFileAndCreateConversation', async ({ authToken, formData, userId }, thunkAPI) => {
   const response = await fetch(`/api/create-convo/${userId}`, {
     method: 'POST',
     body: formData,
     headers: {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${authToken}`,
       mode: 'cors'
     }
   }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
@@ -50,16 +44,10 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
 
 export const getNewChatResponse = createAsyncThunk<
   any,
-  { conversationId: string; message: string; selectedDatasetName: string | undefined }
+  { authToken: string, conversationId: string; message: string; selectedDatasetName: string | undefined }
 >(
   'conversations/getNewChatResponse',
-  async ({conversationId, message, selectedDatasetName }, thunkAPI) => {
-    const { getToken } = useAuth();
-    const token = await getToken();
-
-    const dispatch = thunkAPI.dispatch;
-    dispatch(setToken({ token: token ?? '' }));
-
+  async ({authToken, conversationId, message, selectedDatasetName }, thunkAPI) => {
     const response = await fetch(`/api/new-message/${conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
@@ -68,7 +56,7 @@ export const getNewChatResponse = createAsyncThunk<
       }),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${authToken}`,
         mode: 'cors'
       }
     }).catch((error) => console.error('Failed to getNewChatResponse:', error));
@@ -81,8 +69,8 @@ export const getNewChatResponse = createAsyncThunk<
 export const conversationsSlice = createSlice({
   name: 'conversations',
   initialState: {
-    conversations: EXAMPLE_CONVERSATIONS_MAP,
-    currentConversation: EXAMPLE_CONVERSATIONS[0],
+    conversations: {} as ConversationMap,
+    currentConversation: {} as Conversation,
     isLoadingNewMessage: false,
     isLoadingNewConversation: false,
   },

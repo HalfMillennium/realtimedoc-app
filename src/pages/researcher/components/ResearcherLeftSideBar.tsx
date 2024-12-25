@@ -1,5 +1,11 @@
-import { useEffect, useState } from 'react';
-import { IconCloudUpload, IconHistory } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useUser } from '@clerk/clerk-react';
+import {
+  IconCloudUpload,
+  IconEyeQuestion,
+  IconHistory,
+  IconQuestionMark,
+} from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Avatar,
@@ -15,27 +21,30 @@ import {
 import { Dropzone } from '@mantine/dropzone';
 import { COLORS } from '@/common/colors';
 import {
-  Conversation,
-  Message,
   setCurrentConversation,
   uploadFileAndCreateConversation,
 } from '@/store/conversations/conversationsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
-import { useAuth, useUser } from '@clerk/clerk-react';
+import { UploadDocumentButtonContent } from './UploadDocumentButtonContent';
+import { setToken } from '@/store/user/userSlice';
+import { useAuth } from '@clerk/clerk-react';
 
 export const ResearcherLeftSideBar = () => {
   const [fileSetStream, setFileSetStream] = useState<File[][]>([]);
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const user = useUser();
+  const { getToken } = useAuth();
   const userName = user.user?.fullName ?? 'Alex Ferguson';
   const dispatch = useDispatch<AppDispatch>();
   const handleFileUpload = async (files: File[]) => {
-    if(!!user.user?.id) {
+    const token = await getToken();
+    dispatch(setToken({ token: token ?? '' }));
+    if (!!user.user?.id && !!token) {
       setFileSetStream((prevSets) => [...prevSets, files]);
       const formData = new FormData();
       formData.append('file', files[0]);
-      dispatch(uploadFileAndCreateConversation({ formData, userId: user.user.id }));
+      dispatch(uploadFileAndCreateConversation({ authToken: token, formData, userId: user.user.id }));
     } else {
       console.log('No token or user id found');
     }
@@ -48,7 +57,7 @@ export const ResearcherLeftSideBar = () => {
   const { colorScheme } = useMantineColorScheme();
 
   return (
-    <div style={{ width: '20%' }}>
+    <div style={{ width: '20%', display: 'flex', flexDirection: 'column' }}>
       <Group>
         <Avatar radius="xl" />
         <div>
@@ -76,12 +85,36 @@ export const ResearcherLeftSideBar = () => {
           <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
         </div>
       ))}
-      {isLoadingNewConversation && (
+      {((!!!allConversations || Object.values(allConversations).length === 0) && !isLoadingNewConversation) && (
         <Card
           withBorder
           shadow="xs"
           p="lg"
           mt="sm"
+          style={{
+            opacity: 0.4,
+            display: 'flex',
+            alignItems: 'center',
+            padding: 10,
+            position: 'relative',
+            backdropFilter: 'blur(5px)',
+            borderRadius: 10,
+          }}
+        >
+          <Flex direction="row" gap="10">
+            <IconEyeQuestion size={14} />
+            <Text size="xs" style={{ fontWeight: 300 }}>
+              No chat history found
+            </Text>
+          </Flex>
+        </Card>
+      )}
+      {isLoadingNewConversation && (
+        <Card
+          withBorder
+          mt="sm"
+          shadow="xs"
+          p="lg"
           style={{
             padding: 10,
             position: 'relative',
@@ -107,20 +140,8 @@ export const ResearcherLeftSideBar = () => {
             borderRadius: 10,
           }}
         >
-          <Button
-            fullWidth
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              color: 'black',
-              borderRadius: 10,
-              backgroundColor: 'transparent',
-              transition: 'background 0.3s ease',
-            }}
-          >
-            <IconCloudUpload size={18} style={{ paddingRight: 5, color: 'black' }} />
-            Upload Document & Start Chat
-          </Button>
+          {/* The UploadDocumentButtonContent hasChatMessages field is for conditionally rendering "shimmer" effect, but isn't being used at the moment */}
+          <UploadDocumentButtonContent hasChatMessages={true} />
         </Dropzone>
         <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
           To start a new chat with realtimedoc, simply upload a new PDF document.
