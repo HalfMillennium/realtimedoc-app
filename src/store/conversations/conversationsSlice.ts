@@ -1,9 +1,9 @@
+import { useAuth } from '@clerk/clerk-react';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   EXAMPLE_CONVERSATIONS,
   EXAMPLE_CONVERSATIONS_MAP,
 } from '@/pages/researcher/components/utils';
-import { useAuth } from '@clerk/clerk-react';
 import { setToken } from '../user/userSlice';
 
 export interface Message {
@@ -27,27 +27,35 @@ export interface ConversationMap {
 
 export const uploadFileAndCreateConversation = createAsyncThunk<
   any,
-  { authToken: string, formData: FormData; userId: string }
->('conversations/uploadFileAndCreateConversation', async ({ authToken, formData, userId }, thunkAPI) => {
-  const response = await fetch(`/api/create-convo/${userId}`, {
-    method: 'POST',
-    body: formData,
-    headers: {
-      'Authorization': `Bearer ${authToken}`,
-      mode: 'cors'
+  { authToken: string; formData: FormData; userId: string }
+>(
+  'conversations/uploadFileAndCreateConversation',
+  async ({ authToken, formData, userId }, thunkAPI) => {
+    const response = await fetch(`/api/create-convo/${userId}`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        mode: 'cors',
+      },
+    }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
+    if (!!response) {
+      return response.json();
     }
-  }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
-  if (!!response) {
-    return response.json();
   }
-});
+);
 
 export const getNewChatResponse = createAsyncThunk<
   any,
-  { authToken: string, conversationId: string; message: string; selectedDatasetName: string | undefined }
+  {
+    authToken: string;
+    conversationId: string;
+    message: string;
+    selectedDatasetName: string | undefined;
+  }
 >(
   'conversations/getNewChatResponse',
-  async ({authToken, conversationId, message, selectedDatasetName }, thunkAPI) => {
+  async ({ authToken, conversationId, message, selectedDatasetName }, thunkAPI) => {
     const response = await fetch(`/api/new-message/${conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
@@ -56,9 +64,9 @@ export const getNewChatResponse = createAsyncThunk<
       }),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-        mode: 'cors'
-      }
+        Authorization: `Bearer ${authToken}`,
+        mode: 'cors',
+      },
     }).catch((error) => console.error('Failed to getNewChatResponse:', error));
     if (!!response) {
       return response.json();
@@ -81,7 +89,11 @@ export const conversationsSlice = createSlice({
     ) => {
       const conversation = state.conversations[action.payload.conversationId];
       if (conversation) {
-        conversation.messages.push(action.payload.message);
+        if (!!conversation.messages) {
+          conversation.messages.push(action.payload.message);
+          return;
+        }
+        conversation['messages'] = [action.payload.message];
       }
     },
     setCurrentConversation: (state, action: PayloadAction<{ conversationId: string }>) => {

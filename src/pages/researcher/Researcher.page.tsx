@@ -13,10 +13,10 @@ import {
 import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ResearcherPageHeader } from './components/PageHeader';
+import { PlaceholderChatUI } from './components/PlaceholderChatUI';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
-import { PlaceholderChatUI } from './components/PlaceholderChatUI';
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -101,7 +101,7 @@ export const Researcher: React.FC = () => {
             }}
           >
             {(!currentConversation?.messages || currentConversation.messages.length === 0) && (
-              <PlaceholderChatUI/>
+              <PlaceholderChatUI />
             )}
             {!!currentConversation?.messages && currentConversation.messages.length > 0 && (
               <>
