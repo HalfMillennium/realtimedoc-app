@@ -11,7 +11,7 @@ export const ResearcherPageHeader: React.FC = () => {
     <Flex>
       <Center style={{ marginBottom: '1rem', justifyContent: 'space-between', width: '100%' }}>
         {/* Title and Description */}
-        <div>
+        <Flex direction="column">
           <Text style={{ fontWeight: 700, fontSize: 36 }} size="xl">
             Research Suite
           </Text>
@@ -19,7 +19,7 @@ export const ResearcherPageHeader: React.FC = () => {
             Upload your files to generate actionable insights, or connect live external databases
             for real-time data updates and insights.
           </Text>
-        </div>
+        </Flex>
         <Group
           style={{
             display: 'flex',

@@ -40,18 +40,7 @@ export const ResearcherLeftSideBar = () => {
     try {
       const token = await getToken();
       if (!token) throw new Error('No token found');
-
-      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-      const isTokenExpired = tokenPayload.exp * 1000 < Date.now();
-
-      if (isTokenExpired) {
-        console.info('Token is expired, redirecting to sign-in');
-        setRedirectToSignIn(true);
-        return;
-      }
-
       dispatch(setToken({ token }));
-
       if (user.user?.id) {
         const formData = new FormData();
         formData.append('file', files[0]);
@@ -72,102 +61,98 @@ export const ResearcherLeftSideBar = () => {
   const allConversations = conversationsSelector.conversations;
   const { colorScheme } = useMantineColorScheme();
 
-  if (!redirectToSignIn) {
-    return (
-      <div style={{ width: '20%', display: 'flex', flexDirection: 'column' }}>
-        <Group>
-          <Avatar radius="xl" />
-          <div>
-            <Text size="md">{userName}</Text>
-            <Text size="xs">Chat User</Text>
-          </div>
-        </Group>
-        <Divider my="sm" />
-        <div style={{ display: 'flex', flexDirection: 'row', gap: 5, opacity: 0.5 }}>
-          <IconHistory size={16} />
-          <Text size="xs" style={{ fontWeight: 300 }}>
-            Chat History
-          </Text>
+  return (
+    <div style={{ width: '20%', display: 'flex', flexDirection: 'column' }}>
+      <Group>
+        <Avatar radius="xl" />
+        <div>
+          <Text size="md">{userName}</Text>
+          <Text size="xs">Chat User</Text>
         </div>
-        {Object.values(allConversations).map((conversation) => (
-          <div
-            key={conversation.id}
-            style={{
-              transition: 'background-color 0.3s ease',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onClick={() => dispatch(setCurrentConversation({ conversationId: conversation.id }))}
-          >
-            <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
-          </div>
-        ))}
-        {(!!!allConversations || Object.values(allConversations).length === 0) &&
-          !isLoadingNewConversation && (
-            <Card
-              withBorder
-              shadow="xs"
-              p="lg"
-              mt="sm"
-              style={{
-                opacity: 0.4,
-                display: 'flex',
-                alignItems: 'center',
-                padding: 10,
-                position: 'relative',
-                backdropFilter: 'blur(5px)',
-                borderRadius: 10,
-              }}
-            >
-              <Flex direction="row" gap="10">
-                <IconEyeQuestion size={14} />
-                <Text size="xs" style={{ fontWeight: 300 }}>
-                  No chat history found
-                </Text>
-              </Flex>
-            </Card>
-          )}
-        {isLoadingNewConversation && (
+      </Group>
+      <Divider my="sm" />
+      <div style={{ display: 'flex', flexDirection: 'row', gap: 5, opacity: 0.5 }}>
+        <IconHistory size={16} />
+        <Text size="xs" style={{ fontWeight: 300 }}>
+          Chat History
+        </Text>
+      </div>
+      {Object.values(allConversations).map((conversation) => (
+        <div
+          key={conversation.id}
+          style={{
+            transition: 'background-color 0.3s ease',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          onClick={() => dispatch(setCurrentConversation({ conversationId: conversation.id }))}
+        >
+          <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
+        </div>
+      ))}
+      {(!!!allConversations || Object.values(allConversations).length === 0) &&
+        !isLoadingNewConversation && (
           <Card
             withBorder
-            mt="sm"
             shadow="xs"
             p="lg"
+            mt="sm"
             style={{
+              opacity: 0.4,
+              display: 'flex',
+              alignItems: 'center',
               padding: 10,
               position: 'relative',
               backdropFilter: 'blur(5px)',
               borderRadius: 10,
             }}
           >
-            <LoadingOverlay visible loaderProps={{ type: 'dots', color: COLORS.teal }} />
+            <Flex direction="row" gap="10">
+              <IconEyeQuestion size={14} />
+              <Text size="xs" style={{ fontWeight: 300 }}>
+                No chat history found
+              </Text>
+            </Flex>
           </Card>
         )}
-        <Divider my="sm" />
-        <Flex style={{ flexDirection: 'column', gap: 10 }}>
-          <Dropzone
-            onDrop={handleFileUpload}
-            maxSize={30 * 1024 ** 2}
-            style={{
-              display: 'flex',
-              flex: 1,
-              marginTop: 16,
-              justifyContent: 'center',
-              background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: 10,
-            }}
-          >
-            {/* The UploadDocumentButtonContent hasChatMessages field is for conditionally rendering "shimmer" effect, but isn't being used at the moment */}
-            <UploadDocumentButtonContent hasChatMessages={true} />
-          </Dropzone>
-          <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
-            To start a new chat with realtimedoc, simply upload a new PDF document.
-          </Text>
-        </Flex>
-      </div>
-    );
-  } else {
-    return <RedirectToSignIn />;
-  }
+      {isLoadingNewConversation && (
+        <Card
+          withBorder
+          mt="sm"
+          shadow="xs"
+          p="lg"
+          style={{
+            padding: 10,
+            position: 'relative',
+            backdropFilter: 'blur(5px)',
+            borderRadius: 10,
+          }}
+        >
+          <LoadingOverlay visible loaderProps={{ type: 'dots', color: COLORS.teal }} />
+        </Card>
+      )}
+      <Divider my="sm" />
+      <Flex style={{ flexDirection: 'column', gap: 10 }}>
+        <Dropzone
+          onDrop={handleFileUpload}
+          maxSize={30 * 1024 ** 2}
+          style={{
+            display: 'flex',
+            flex: 1,
+            marginTop: 16,
+            justifyContent: 'center',
+            background: 'linear-gradient(to right, #ff9a9e, #fad0c4)',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            borderRadius: 10,
+          }}
+        >
+          {/* The UploadDocumentButtonContent hasChatMessages field is for conditionally rendering "shimmer" effect, but isn't being used at the moment */}
+          <UploadDocumentButtonContent hasChatMessages={true} />
+        </Dropzone>
+        <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
+          To start a new chat with realtimedoc, simply upload a new PDF document.
+        </Text>
+      </Flex>
+    </div>
+  );
 };

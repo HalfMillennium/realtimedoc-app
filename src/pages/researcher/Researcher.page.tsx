@@ -21,13 +21,13 @@ import { CurrentChatMessages } from './CurrentChatMessages';
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const selectedDataSetId = useSelector((state: RootState) => state.datasets.selectedDataSetId);
-  const currentToken = useSelector((state: RootState) => state.user.token);
   const currentConversation = useSelector(
     (state: RootState) => state.conversations.currentConversation
   );
   const isLoadingNewMessage = useSelector(
     (state: RootState) => state.conversations.isLoadingNewMessage
   );
+  const { getToken } = useAuth();
   const authToken = useSelector((state: RootState) => state.user.token);
   const [newMessage, setNewMessage] = useState<string>('');
   const user = useUser();
@@ -41,25 +41,37 @@ export const Researcher: React.FC = () => {
       navigate('/');
       return;
     }
-    const newChatMessage = {
-      id: crypto.randomUUID(),
-      author: userName,
-      timestamp: new Date().toLocaleTimeString(),
-      content: newMessage,
-    };
-    dispatch(
-      updateConversation({ message: newChatMessage, conversationId: currentConversation.id })
-    );
-    dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
-    dispatch(
-      getNewChatResponse({
-        authToken,
-        conversationId: currentConversation.id,
-        message: newMessage,
-        selectedDatasetName: '',
-      })
-    );
-    setNewMessage('');
+
+    try {
+      const token = await getToken();
+      if (!token) throw new Error('No token found');
+      dispatch(setToken({ token }));
+      if (user.user?.id) {
+        const newChatMessage = {
+          id: crypto.randomUUID(),
+          author: userName,
+          timestamp: new Date().toLocaleTimeString(),
+          content: newMessage,
+        };
+        dispatch(
+          updateConversation({ message: newChatMessage, conversationId: currentConversation.id })
+        );
+        dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
+        dispatch(
+          getNewChatResponse({
+            authToken,
+            conversationId: currentConversation.id,
+            message: newMessage,
+            selectedDatasetName: '',
+          })
+        );
+        setNewMessage('');
+      } else {
+        console.error('No user id found');
+      }
+    } catch (error) {
+      console.error(`Could not update conversation: ${error}`);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

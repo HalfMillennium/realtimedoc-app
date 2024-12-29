@@ -1,3 +1,4 @@
+import { RedirectToSignIn, useAuth } from '@clerk/clerk-react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './layout/Layout';
 import { FAQPage } from './pages/faq/FAQPage';
@@ -6,7 +7,6 @@ import { PricingPage } from './pages/pricing/PricingPage';
 import { Register } from './pages/registration/Register';
 import { Researcher } from './pages/researcher/Researcher.page';
 import SignIn from './pages/sign-in/SignIn';
-import { RedirectToSignIn, useAuth } from '@clerk/clerk-react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <Researcher />
           </ProtectedRoute>
-        )
+        ),
       },
       {
         path: '/sign-in',
