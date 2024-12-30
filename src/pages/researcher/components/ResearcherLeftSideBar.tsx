@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { RedirectToSignIn, useAuth, useUser } from '@clerk/clerk-react';
 import {
-  IconCloudUpload,
   IconEyeQuestion,
   IconHistory,
-  IconQuestionMark,
 } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Avatar,
-  Button,
   Card,
   Divider,
   Flex,
@@ -30,7 +27,6 @@ import { ChatHistoryListItem } from './ChatHistoryListItem';
 import { UploadDocumentButtonContent } from './UploadDocumentButtonContent';
 
 export const ResearcherLeftSideBar = () => {
-  const [redirectToSignIn, setRedirectToSignIn] = useState(false);
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const user = useUser();
   const { getToken } = useAuth();

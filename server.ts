@@ -82,9 +82,9 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    console.log('Response body:', response.body);
-    const data = await response.json();
-    res.status(200).json(data);
+    const responseBody = await response.text();
+    console.log('Response body:', responseBody);
+    res.status(200).json(responseBody);
   } catch (error) {
     console.error('Failed to process new-message request:', error);
     res.status(500).json({
