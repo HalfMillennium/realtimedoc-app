@@ -9,11 +9,6 @@ export function HomePage() {
   const handleTryItNowClick = () => {
     navigate('/researcher');
   };
-  useEffect(() => {
-    fetch('/api/hello')
-      .then((res) => res.json())
-      .then((data) => console.log('Message from server:', data));
-  }, []);
   return (
     <div
       style={{
