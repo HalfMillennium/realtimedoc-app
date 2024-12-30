@@ -132,16 +132,18 @@ export const conversationsSlice = createSlice({
         state.isLoadingNewMessage = true;
       }),
       builder.addCase(getNewChatResponse.fulfilled, (state, action) => {
+        const payloadResponse = JSON.parse(action.payload);
         const newMessage: Message = {
           id: Math.random().toString(16).slice(2),
           author: 'RealTimeDoc AI',
-          content: action.payload.message,
+          content: payloadResponse.message,
           timestamp: new Date().toLocaleTimeString(),
           tag: 'Doc Bot Message',
         };
         state.isLoadingNewMessage = false;
-        state.conversations[action.payload.conversationId].messages.push(newMessage);
-        state.currentConversation = state.conversations[action.payload.conversationId];
+        console.log('Currenct conversationId:', payloadResponse.conversationId);
+        state.conversations[payloadResponse.conversationId].messages.push(newMessage);
+        state.currentConversation = state.conversations[payloadResponse.conversationId];
       });
   },
 });

@@ -53,6 +53,7 @@ export const Researcher: React.FC = () => {
           timestamp: new Date().toLocaleTimeString(),
           content: newMessage,
         };
+        console.log('Updating current conversation: ', currentConversation.id);
         dispatch(
           updateConversation({ message: newChatMessage, conversationId: currentConversation.id })
         );
