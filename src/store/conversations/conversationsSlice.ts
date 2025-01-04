@@ -143,7 +143,6 @@ export const conversationsSlice = createSlice({
     }),
       builder.addCase(uploadFileAndCreateConversation.fulfilled, (state, action) => {
         const payloadResponse = JSON.parse(JSON.parse(JSON.parse(action.payload)));
-        console.log('payloadResponse:', payloadResponse);
         if (payloadResponse.message.includes("'daily_limit_remaining': 'None'")) {
           state.isLoadingNewConversation = false;
           state.isDailyLimitExceeded = true;
