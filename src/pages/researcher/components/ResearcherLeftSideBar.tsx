@@ -11,6 +11,7 @@ import {
   Flex,
   Group,
   LoadingOverlay,
+  Button,
   Text,
 } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
@@ -22,7 +23,8 @@ import {
 import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
-import { UploadDocumentButtonContent } from './UploadDocumentButtonContent';
+import { IconCloudUpload } from '@tabler/icons-react';
+import { GradientButton } from '@/components/GradientButton';
 
 export const ResearcherLeftSideBar = () => {
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
@@ -138,8 +140,20 @@ export const ResearcherLeftSideBar = () => {
             borderRadius: 10,
           }}
         >
-          {/* The UploadDocumentButtonContent hasChatMessages field is for conditionally rendering "shimmer" effect, but isn't being used at the moment */}
-          <UploadDocumentButtonContent hasChatMessages={true} />
+          <Button
+        fullWidth
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: 'black',
+          borderRadius: 10,
+          backgroundColor: 'transparent',
+          transition: 'background 0.3s ease',
+        }}
+      >
+        <IconCloudUpload size={18} style={{ paddingRight: 5, color: 'black' }} />
+        Upload Document & Start Chat
+      </Button>
         </Dropzone>
         <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
           To start a new chat with realtimedoc, simply upload a new PDF document.

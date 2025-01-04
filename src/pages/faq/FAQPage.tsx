@@ -82,11 +82,11 @@ export const FAQPage: React.FC = () => {
             These are the most commonly asked questions about RealTimeDoc.
           </Text>
 
-          <Accordion>
+          <Accordion style={{borderRadius: 10, gap: 10}}>
             {faqData[activeCategory].map((faq, index) => (
-              <Accordion.Item key={index} value={faq.question}>
-                <Accordion.Control icon={faq.icon}>{faq.question}</Accordion.Control>
-                <Accordion.Panel>{faq.answer}</Accordion.Panel>
+              <Accordion.Item style={{borderRadius: 10}}key={index} value={faq.question}>
+                <Accordion.Control icon={faq.icon} style={{borderRadius: 10}}>{faq.question}</Accordion.Control>
+                <Accordion.Panel style={{borderRadius: 10}}>{faq.answer}</Accordion.Panel>
               </Accordion.Item>
             ))}
           </Accordion>
