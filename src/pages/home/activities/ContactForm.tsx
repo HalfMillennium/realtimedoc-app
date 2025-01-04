@@ -4,7 +4,10 @@ import {
   Textarea,
   TextInput,
   useMantineColorScheme,
+  Flex,
+  Text
 } from '@mantine/core';
+import { COLORS } from '@/common/colors';
 
 export const ContactForm: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -29,9 +32,28 @@ export const ContactForm: React.FC = () => {
         borderTopLeftRadius: '2rem',
         alignItems: 'center',
         flexDirection: 'column',
-        gap: '1rem',
+        gap: 50,
       }}
     >
+      <Flex direction="column" align="center" justify="center" style={{width: '100%'}}>
+        <Text
+          style={{
+            fontSize: 36,
+            fontWeight: 200,
+            textAlign: 'center',
+          }}
+        >
+          Have any <span style={{color: COLORS.peach}}>questions?</span>
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: 300,
+            textAlign: 'center',
+          }}>
+          Leave us a note by filling out the form below and we will get back to you.
+        </Text>
+      </Flex>
       <div style={{ width: '300px', display: 'flex', flexDirection: 'column', gap: 10 }}>
         <TextInput
           label="Name"

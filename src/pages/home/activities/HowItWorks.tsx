@@ -1,14 +1,18 @@
 import React from 'react';
-import { IconCheck } from '@tabler/icons-react';
+import { IconChartDots3, IconCheck } from '@tabler/icons-react';
 import { Flex, List, Text, ThemeIcon, Title } from '@mantine/core';
+import { COLORS } from '@/common/colors';
 
 export const HowItWorks: React.FC = () => {
   return (
     <Flex direction="column" style={styles.container} flex="1">
-      <Title order={1}>
-        PDF Insights with Live Data
+      <Flex direction="row" gap="10" align="center" justify="start">
+        <IconChartDots3 color={COLORS.peach}/>
+      <Title order={1} style={{fontWeight: 100}}>
+        PDF Insights with Live Datasets
       </Title>
-      <Text style={styles.subtitle} color="dimmed">
+      </Flex>
+      <Text style={styles.subtitle}>
         Transform your documents into a searchable, interactive knowledge hub.
       </Text>
 
@@ -20,7 +24,7 @@ export const HowItWorks: React.FC = () => {
         style={styles.list}
         spacing="sm"
         icon={
-          <ThemeIcon color="blue" style={styles.icon}>
+          <ThemeIcon color={COLORS.teal} style={styles.icon}>
             <IconCheck size={18} />
           </ThemeIcon>
         }
@@ -44,7 +48,7 @@ export const HowItWorks: React.FC = () => {
         style={styles.list}
         spacing="sm"
         icon={
-          <ThemeIcon color="orange" style={styles.icon}>
+          <ThemeIcon color={COLORS.pink} style={styles.icon}>
             <IconCheck size={18} />
           </ThemeIcon>
         }
@@ -68,6 +72,7 @@ const styles = {
   },
   subtitle: {
     marginTop: '0.5rem',
+    color: COLORS.peach
   },
   sectionTitle: {
     marginTop: '2rem',
