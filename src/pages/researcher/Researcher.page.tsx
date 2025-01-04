@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import { IconArrowUp, IconMoodWrrrFilled } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +18,7 @@ import {
   setCurrentConversation,
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
+import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ResearcherPageHeader } from './components/PageHeader';
@@ -25,7 +26,6 @@ import { PlaceholderChatUI } from './components/PlaceholderChatUI';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
-import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
 
 export const Researcher: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -47,7 +47,6 @@ export const Researcher: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [errorModalOpen, setErrorModalOpen] = useState(hasExceededDailyLimit);
-
 
   useEffect(() => {
     dispatch(deselectAllDataSets());
@@ -241,7 +240,9 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
       <Flex direction="column" gap={15} flex="1" style={{ alignItems: 'center' }}>
         <IconMoodWrrrFilled size={72} color="#f54266" />
         <Text style={{ fontSize: 24, fontWeight: 400, textAlign: 'center' }}>{errorTitle}</Text>
-        <Text style={{ fontSize: 14, fontWeight: 200 , textAlign: 'center'}}>{errorDescription}</Text>
+        <Text style={{ fontSize: 14, fontWeight: 200, textAlign: 'center' }}>
+          {errorDescription}
+        </Text>
         <Button variant="light" onClick={handleCloseErrorModal} color="gray" mt="md">
           Close
         </Button>

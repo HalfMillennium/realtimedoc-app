@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { IconFlag } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Radio, RadioGroup, Text } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { SupportedDataSet, selectDataSet } from '@/store/dataSets/dataSetsSlice';
+import { selectDataSet, SupportedDataSet } from '@/store/dataSets/dataSetsSlice';
 import { RootState } from '@/store/store';
-import { IconFlag } from '@tabler/icons-react';
 
 interface DataSetOptionsPanelProps {
   options: SupportedDataSet[];
@@ -13,7 +13,7 @@ export const DataSetOptionsPanel: React.FC<DataSetOptionsPanelProps> = ({ option
   const selectedDataSetId = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const dispatch = useDispatch();
   const handleDataSetChange = (value: string) => {
-    dispatch(selectDataSet({dataSetId: value}));
+    dispatch(selectDataSet({ dataSetId: value }));
   };
 
   return (
@@ -26,7 +26,13 @@ export const DataSetOptionsPanel: React.FC<DataSetOptionsPanelProps> = ({ option
           <IconFlag size={14} color={COLORS.teal} />
           <Text
             size="sm"
-            style={{ marginBottom: 10, fontWeight: 600, letterSpacing: 1, color: COLORS.teal, lineHeight: 1 }}
+            style={{
+              marginBottom: 10,
+              fontWeight: 600,
+              letterSpacing: 1,
+              color: COLORS.teal,
+              lineHeight: 1,
+            }}
           >
             SELECTION REQUIRED
           </Text>
