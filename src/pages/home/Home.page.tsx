@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Text, Title, useMantineColorScheme } from '@mantine/core';
+import { Image, Button, Text, Title, useMantineColorScheme } from '@mantine/core';
 import { CurrentActivity } from './activities/CurrentActivity';
+import darkModeLogo from '../../assets/logo_dark_mode.png';
+import lightModeLogo from '../../assets/logo_light_mode.png';
+import { useAuth } from '@clerk/clerk-react';
 
 export function HomePage() {
   const { colorScheme } = useMantineColorScheme();
@@ -9,6 +11,7 @@ export function HomePage() {
   const handleTryItNowClick = () => {
     navigate('/researcher');
   };
+  const { isSignedIn} = useAuth();
   return (
     <div
       style={{
@@ -27,6 +30,7 @@ export function HomePage() {
           display: 'flex',
           width: '100%',
           flexDirection: 'row',
+          alignContent: 'flex-start',
           height: '100%',
         }}
       >
@@ -34,41 +38,31 @@ export function HomePage() {
           style={{
             display: 'flex',
             flex: 1,
-            height: '50rem',
+            height: '100%',
             alignItems: 'center',
             flexDirection: 'column',
-            gap: 10,
+            gap: 40,
           }}
         >
-          <Title
-            order={1}
+          <Text
             style={{
-              fontSize: '3rem',
-              fontWeight: 200,
+              fontSize: 28,
+              fontWeight: 100,
               textAlign: 'center',
             }}
           >
             Welcome to
-          </Title>
-          <Text
-            style={{
-              fontSize: '7rem',
-              fontWeight: 700,
-              color: 'pink',
-              textAlign: 'center',
-            }}
-            inherit
-            variant="gradient"
-            component="span"
-            gradient={{ from: 'pink', to: 'yellow' }}
-          >
-            realtimedoc
           </Text>
+          <Image
+            src={colorScheme === 'dark' ? darkModeLogo : lightModeLogo}
+            style={{ width: 'auto', height: 85, cursor: 'pointer' }}
+            onClick={() => navigate('/')}
+          />
           <div style={{ display: 'flex', width: 500, textAlign: 'center' }}>
             <Text
               style={{
-                fontSize: 20,
-                fontWeight: 400,
+                fontSize: 24,
+                fontWeight: 200,
               }}
             >
               Upload PDFs. Ask anything. Find everything—powered by AI.
@@ -77,10 +71,11 @@ export function HomePage() {
           <div style={{ display: 'flex', marginTop: 20 }}>
             <Button
               variant="light"
+              radius={10}
               color={colorScheme === 'dark' ? 'orange' : 'pink'}
               onClick={handleTryItNowClick}
             >
-              Try It Now
+              {!isSignedIn ? 'Try It Now' : 'Enter the Research Suite'}
             </Button>
           </div>
         </div>

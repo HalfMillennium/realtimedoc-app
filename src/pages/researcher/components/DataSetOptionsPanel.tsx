@@ -1,20 +1,25 @@
-import React from 'react';
-import { Flex, Radio, RadioGroup, Text, useMantineColorScheme } from '@mantine/core';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Flex, Radio, RadioGroup, Text } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { DataSetOption } from '@/store/datasets/datasetsSlice';
+import { SupportedDataSet, selectDataSet } from '@/store/dataSets/dataSetsSlice';
+import { RootState } from '@/store/store';
 
 interface DataSetOptionsPanelProps {
-  options: DataSetOption[];
+  options: SupportedDataSet[];
 }
 export const DataSetOptionsPanel: React.FC<DataSetOptionsPanelProps> = ({ options }) => {
-  const { colorScheme } = useMantineColorScheme();
-  const [value, setValue] = React.useState<string>(options[0].id);
+  const selectedDataSetId = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
+  const dispatch = useDispatch();
+  const handleDataSetChange = (value: string) => {
+    dispatch(selectDataSet({dataSetId: value}));
+  };
 
   return (
     <RadioGroup
       style={{ padding: 10, paddingBottom: 20 }}
-      value={value}
-      onChange={setValue}
+      value={selectedDataSetId}
+      onChange={handleDataSetChange}
       label={
         <Text
           size="sm"

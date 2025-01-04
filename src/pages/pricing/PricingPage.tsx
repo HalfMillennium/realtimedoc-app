@@ -36,7 +36,7 @@ export const PricingPage: React.FC = () => {
       features: [
         'Analyze up to 250 documents per month',
         'Detailed insights, including trends and relationships',
-        'Integration with live datasets for real-time updates',
+        'Integration with live dataSets for real-time updates',
         'Access to economic data for data-driven decisions',
         'Shared team workspaces for collaboration',
         'Priority support to resolve issues quickly',
@@ -52,7 +52,7 @@ export const PricingPage: React.FC = () => {
       features: [
         'Unlimited document uploads and advanced analysis',
         'All Standard features included',
-        'Deeper insights with advanced live datasets',
+        'Deeper insights with advanced live dataSets',
         'Custom API integration with existing tools',
         'Enterprise-grade security and compliance',
         'Dedicated insights specialist for tailored solutions',

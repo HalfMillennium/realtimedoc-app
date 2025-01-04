@@ -1,3 +1,4 @@
+import React, { lazy, Suspense } from 'react';
 import { RedirectToSignIn, useAuth } from '@clerk/clerk-react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './layout/Layout';
@@ -5,7 +6,6 @@ import { FAQPage } from './pages/faq/FAQPage';
 import { HomePage } from './pages/home/Home.page';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { Register } from './pages/registration/Register';
-import { Researcher } from './pages/researcher/Researcher.page';
 import SignIn from './pages/sign-in/SignIn';
 
 interface ProtectedRouteProps {
@@ -22,6 +22,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   return <>{children}</>;
 };
 
+const Researcher = lazy(() => import('./pages/researcher/Researcher.page'));
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -35,7 +37,9 @@ const router = createBrowserRouter([
         path: '/researcher',
         element: (
           <ProtectedRoute>
-            <Researcher />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Researcher />
+            </Suspense>
           </ProtectedRoute>
         ),
       },

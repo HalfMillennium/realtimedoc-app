@@ -1,7 +1,7 @@
 RealTimeDoc App
 ===============
 
-RealTimeDoc App is the UI frontend for a web application that enables users to upload PDF documents, query their content, and integrate the data with live datasets for enhanced insights. Built with a modern technology stack, the app delivers a seamless, intuitive, and efficient user experience.
+RealTimeDoc App is the UI frontend for a web application that enables users to upload PDF documents, query their content, and integrate the data with live dataSets for enhanced insights. Built with a modern technology stack, the app delivers a seamless, intuitive, and efficient user experience.
 
 * * *
 
@@ -10,7 +10,7 @@ Features
 
 *   **PDF Uploading:** Upload PDF documents effortlessly.
 *   **Data Querying:** Extract meaningful insights from uploaded PDFs.
-*   **Live Dataset Integration:** Combine PDF data with live datasets for deeper analysis.
+*   **Live DataSet Integration:** Combine PDF data with live dataSets for deeper analysis.
 *   **Intuitive UI:** Powered by the Mantine UI library for a sleek and user-friendly interface.
 *   **State Management:** Uses React Redux and Redux Toolkit for efficient state handling.
 

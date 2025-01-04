@@ -12,10 +12,10 @@ export const ResearcherPageHeader: React.FC = () => {
       <Center style={{ marginBottom: '1rem', justifyContent: 'space-between', width: '100%' }}>
         {/* Title and Description */}
         <Flex direction="column">
-          <Text style={{ fontWeight: 700, fontSize: 36 }} size="xl">
+          <Text style={{ fontWeight: 200, fontSize: 36 }} size="xl">
             Research Suite
           </Text>
-          <Text size="sm" color="dimmed">
+          <Text style={{fontWeight: 300, opacity: 0.75, fontSize: 14, width: '66%'}}>
             Upload your files to generate actionable insights, or connect live external databases
             for real-time data updates and insights.
           </Text>

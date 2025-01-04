@@ -48,7 +48,7 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
     });
 
     if (response.ok) {
-      const responseData = await response.json();
+      const responseData = await response.text();
       res.status(200).json(responseData);
     } else {
       const errorData = await response.text();
@@ -66,12 +66,11 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
 app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => {
   try {
     console.log('Request body:', req.body);
-
     const response = await fetch(`${apiUrl}/new-message/${req.params.conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
         queryText: req.body.queryText,
-        datasetName: req.body.datasetName,
+        dataSetId: req.body.dataSetId,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -82,9 +81,9 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const responseBody = await response.text();
-    console.log('Response body:', responseBody);
-    res.status(200).json(responseBody);
+    const responseText = await response.text();
+    console.log('Response body:', responseText);
+    res.status(200).json(responseText);
   } catch (error) {
     console.error('Failed to process new-message request:', error);
     res.status(500).json({

@@ -1,18 +1,18 @@
 import React from 'react';
 import { IconCheck } from '@tabler/icons-react';
-import { Container, List, Text, ThemeIcon, Title } from '@mantine/core';
+import { Flex, List, Text, ThemeIcon, Title } from '@mantine/core';
 
 export const HowItWorks: React.FC = () => {
   return (
-    <Container size="md" py="xl" style={styles.container}>
-      <Title order={1} style={styles.title}>
-        AI-Powered PDF Insights
+    <Flex direction="column" style={styles.container} flex="1">
+      <Title order={1}>
+        PDF Insights with Live Data
       </Title>
       <Text style={styles.subtitle} color="dimmed">
         Transform your documents into a searchable, interactive knowledge hub.
       </Text>
 
-      <Title order={2} style={styles.sectionTitle}>
+      <Title order={3} style={styles.sectionTitle}>
         How It Works
       </Title>
       <Text style={styles.text}>Getting started is simple:</Text>
@@ -26,11 +26,15 @@ export const HowItWorks: React.FC = () => {
         }
       >
         <List.Item>Upload your PDF documents through our intuitive web app.</List.Item>
+        <List.Item>
+          Integrate live datasets, such as financial reports or economic spending data, to enhance
+          document insights.
+        </List.Item>
         <List.Item>Ask questions or search specific content using natural language.</List.Item>
         <List.Item>Receive instant, accurate results powered by advanced AI.</List.Item>
       </List>
 
-      <Title order={2} style={styles.sectionTitle}>
+      <Title order={3} style={styles.sectionTitle}>
         Who Is This For?
       </Title>
       <Text style={styles.text}>
@@ -46,20 +50,21 @@ export const HowItWorks: React.FC = () => {
         }
       >
         <List.Item>Save time by automating document searches and analyses.</List.Item>
+        <List.Item>
+          Gain deeper insights by combining static documents with dynamic data sources.
+        </List.Item>
         <List.Item>Enable deeper insights without manual effort.</List.Item>
-        <List.Item>Provide a seamless way to interact with critical information.</List.Item>
+        <List.Item>
+          Make better decisions with enhanced, context-rich information at your fingertips.
+        </List.Item>{' '}
       </List>
-    </Container>
+    </Flex>
   );
 };
 
 const styles = {
   container: {
-    paddingTop: '2rem',
-    paddingBottom: '2rem',
-  },
-  title: {
-    marginTop: '1rem',
+    width: '75%',
   },
   subtitle: {
     marginTop: '0.5rem',

@@ -3,20 +3,39 @@ import { IconBooks, IconCircleDashed, IconCircleDashedCheck, IconX } from '@tabl
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Divider, Flex, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { deselectAllDatasets, selectDataset } from '@/store/datasets/datasetsSlice';
+import {
+  deselectAllDataSets,
+  selectDataSet,
+  SupportedDataSet,
+} from '@/store/dataSets/dataSetsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { DataSetOptionsPanel } from './DataSetOptionsPanel';
 
-interface ResearcherRightSidebarProps {
-  selectedDataSetId: string | undefined;
-}
-
-export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
-  selectedDataSetId,
-}) => {
+export const ResearcherRightSidebar: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
+  const selectedDataSetId = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const dispatch = useDispatch<AppDispatch>();
-  const availableDataSets = useSelector((state: RootState) => state.datasets.availableDataSets);
+  const dataSetOptions: SupportedDataSet[] = [];
+  const availableDataSets = useSelector((state: RootState) =>
+    state.dataSets.availableDataSets.filter((dataSet) => {
+      if (dataSet.isDataSetOption) {
+        dataSetOptions.push(dataSet);
+        return false;
+      }
+      return true;
+    })
+  );
+
+  React.useEffect(() => {
+    console.log('selectedDataSetId change:', selectedDataSetId);
+  }, [selectedDataSetId]);
+
+  const isDataSetSelected = (dataSet: SupportedDataSet) => {
+    return (
+      !!selectedDataSetId &&
+      (selectedDataSetId === dataSet.id || dataSet.children?.includes(selectedDataSetId))
+    );
+  };
   return (
     <div style={{ width: '20%', padding: '8px' }}>
       <Card withBorder style={{ gap: 10 }} radius={10}>
@@ -39,7 +58,7 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
           >
             <div style={{ display: 'flex', gap: 5, alignItems: 'center', paddingBottom: '5px' }}>
               <IconBooks size={18} color={COLORS.peach} />
-              <Text style={{ fontSize: 16, fontWeight: 300 }}>Live Datasets</Text>
+              <Text style={{ fontSize: 16, fontWeight: 300 }}>Live DataSets</Text>
             </div>
           </Flex>
           <Flex>
@@ -50,20 +69,20 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
           </Flex>
         </Flex>
         <Divider my="sm" />
-        <div>
-          {availableDataSets.map((dataset) => (
+        <Flex direction="column" gap="10">
+          {availableDataSets.map((dataSet) => (
             <>
               <Card
-                key={dataset.id}
+                key={dataSet.id}
                 withBorder
                 shadow="sm"
                 style={{
                   marginBottom: 10,
                   cursor: 'pointer',
                   borderRadius: 5,
-                  backgroundColor: selectedDataSetId === dataset.id ? COLORS.teal : 'transparent',
+                  backgroundColor: isDataSetSelected(dataSet) ? COLORS.teal : 'transparent',
                 }}
-                onClick={() => dispatch(selectDataset({ datasetId: dataset.id }))}
+                onClick={() => dispatch(selectDataSet({ dataSetId: dataSet.id }))}
               >
                 <div
                   style={{
@@ -74,42 +93,42 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
                     alignItems: 'center',
                   }}
                 >
-                  {selectedDataSetId !== dataset.id && <IconCircleDashed size={16} />}
-                  {selectedDataSetId === dataset.id && (
-                    <IconCircleDashedCheck size={16} color="white" />
-                  )}
+                  {!isDataSetSelected(dataSet) && <IconCircleDashed size={16} />}
+                  {isDataSetSelected(dataSet) && <IconCircleDashedCheck size={16} color="white" />}
                   <div>
                     <input
                       type="radio"
-                      name="dataset"
-                      id={`dataset:${dataset.id}`}
+                      name="dataSet"
+                      id={`dataSet:${dataSet.id}`}
                       style={{ display: 'none' }}
                     />
-                    <label htmlFor={`dataset:${dataset.id}`} style={{ cursor: 'pointer' }}>
+                    <label htmlFor={`dataSet:${dataSet.id}`} style={{ cursor: 'pointer' }}>
                       <Text
                         size="sm"
                         style={{
                           fontWeight: 300,
-                          color:
-                            !!selectedDataSetId && selectedDataSetId === dataset.id
-                              ? 'white'
-                              : colorScheme === 'dark'
-                                ? '#f1f1f1'
-                                : 'black',
+                          color: isDataSetSelected(dataSet)
+                            ? 'white'
+                            : colorScheme === 'dark'
+                              ? '#f1f1f1'
+                              : 'black',
                         }}
                       >
-                        {dataset.label}
+                        {dataSet.label}
                       </Text>
                     </label>
                   </div>
                 </div>
               </Card>
-              {!!dataset.options && !!selectedDataSetId && selectedDataSetId === dataset.id && (
-                <DataSetOptionsPanel options={dataset.options} />
-              )}
+              {!!dataSet.children &&
+                !!selectedDataSetId &&
+                (selectedDataSetId === dataSet.id ||
+                  dataSet.children.includes(selectedDataSetId)) && (
+                  <DataSetOptionsPanel options={dataSetOptions} />
+                )}
             </>
           ))}
-        </div>
+        </Flex>
         <Flex style={{ justifyContent: 'flex-end' }}>
           <Button
             style={{
@@ -122,12 +141,10 @@ export const ResearcherRightSidebar: React.FC<ResearcherRightSidebarProps> = ({
             }}
             color={colorScheme === 'dark' ? 'white' : 'black'}
             variant="light"
-            onClick={() => dispatch(deselectAllDatasets())}
+            onClick={() => dispatch(deselectAllDataSets())}
           >
             <IconX size={14} style={{ marginRight: 5 }} />
-            <Text style={{ fontSize: 12, fontWeight: 300, display: 'flex' }}>
-              Reset Selection
-            </Text>
+            <Text style={{ fontSize: 12, fontWeight: 300, display: 'flex' }}>Reset Selection</Text>
           </Button>
         </Flex>
       </Card>

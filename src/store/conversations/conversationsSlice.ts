@@ -40,7 +40,7 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
       },
     }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
     if (!!response) {
-      return response.json();
+      return await response.text();
     }
   }
 );
@@ -51,16 +51,17 @@ export const getNewChatResponse = createAsyncThunk<
     authToken: string;
     conversationId: string;
     message: string;
-    selectedDatasetName: string | undefined;
+    selectedDataSetId: string | undefined;
   }
 >(
   'conversations/getNewChatResponse',
-  async ({ authToken, conversationId, message, selectedDatasetName }, thunkAPI) => {
+  async ({ authToken, conversationId, message, selectedDataSetId }, thunkAPI) => {
+    console.log('selectedDataSetId passed to API:', selectedDataSetId);
     const response = await fetch(`/api/new-message/${conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
         queryText: message,
-        datasetName: selectedDatasetName,
+        dataSetId: selectedDataSetId,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -69,7 +70,36 @@ export const getNewChatResponse = createAsyncThunk<
       },
     }).catch((error) => console.error('Failed to getNewChatResponse:', error));
     if (!!response) {
-      return response.json();
+      return await response.text();
+    }
+  }
+);
+
+export const loadUserConversations = createAsyncThunk<
+  any,
+  {
+    authToken: string;
+    conversationId: string;
+    message: string;
+    selectedDataSetId: string | undefined;
+  }
+>(
+  'conversations/loadUserConversations',
+  async ({ authToken, conversationId, message, selectedDataSetId }, thunkAPI) => {
+    const response = await fetch(`/api/new-message/${conversationId}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        queryText: message,
+        dataSetId: selectedDataSetId,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+        mode: 'cors',
+      },
+    }).catch((error) => console.error('Failed to getNewChatResponse:', error));
+    if (!!response) {
+      return response.text();
     }
   }
 );
@@ -81,6 +111,7 @@ export const conversationsSlice = createSlice({
     currentConversation: {} as Conversation,
     isLoadingNewMessage: false,
     isLoadingNewConversation: false,
+    isDailyLimitExceeded: false,
   },
   reducers: {
     updateConversation: (
@@ -111,28 +142,36 @@ export const conversationsSlice = createSlice({
       state.isLoadingNewConversation = true;
     }),
       builder.addCase(uploadFileAndCreateConversation.fulfilled, (state, action) => {
-        // Add user to the state array
-        state.conversations[action.payload.conversationId] = {
-          id: action.payload.conversationId,
-          title: action.payload.conversationTitle,
-          embeddingId: action.payload.embeddingId,
+        console.log('full result:', JSON.stringify(action.payload));
+        const payloadResponse = JSON.parse(action.payload);
+        if(payloadResponse.message.includes("'daily_limit_remaining': 'None'")) {
+          state.isLoadingNewConversation = false;
+          state.isDailyLimitExceeded = true;
+          return;
+        }
+        state.isDailyLimitExceeded = false;
+        state.conversations[payloadResponse.conversationId] = {
+          id: payloadResponse.conversationId,
+          title: payloadResponse.conversationTitle,
+          embeddingId: payloadResponse.embeddingId,
           messages: [
             {
               id: Math.random().toString(16).slice(2),
               author: 'RealTimeDoc AI',
-              content: action.payload.message,
+              content: payloadResponse.message,
               timestamp: new Date().toLocaleTimeString(),
             },
           ],
         };
         state.isLoadingNewConversation = false;
-        state.currentConversation = state.conversations[action.payload.conversationId];
+        state.currentConversation = state.conversations[payloadResponse.conversationId];
       }),
       builder.addCase(getNewChatResponse.pending, (state) => {
         state.isLoadingNewMessage = true;
       }),
       builder.addCase(getNewChatResponse.fulfilled, (state, action) => {
-        const payloadResponse = JSON.parse(action.payload);
+        console.log('Raw payload:', action.payload, typeof action.payload);
+        const payloadResponse = JSON.parse(JSON.parse(JSON.parse(action.payload)));
         const newMessage: Message = {
           id: Math.random().toString(16).slice(2),
           author: 'RealTimeDoc AI',
@@ -141,7 +180,7 @@ export const conversationsSlice = createSlice({
           tag: 'Doc Bot Message',
         };
         state.isLoadingNewMessage = false;
-        console.log('Currenct conversationId:', payloadResponse.conversationId);
+        console.log('Current conversation:', state.conversations[payloadResponse.conversationId]);
         state.conversations[payloadResponse.conversationId].messages.push(newMessage);
         state.currentConversation = state.conversations[payloadResponse.conversationId];
       });

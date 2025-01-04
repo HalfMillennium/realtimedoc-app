@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { RedirectToSignIn, useAuth, useUser } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 import {
   IconEyeQuestion,
   IconHistory,
@@ -13,7 +12,6 @@ import {
   Group,
   LoadingOverlay,
   Text,
-  useMantineColorScheme,
 } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { COLORS } from '@/common/colors';
@@ -55,7 +53,6 @@ export const ResearcherLeftSideBar = () => {
   );
   // Access the user state from the Redux store
   const allConversations = conversationsSelector.conversations;
-  const { colorScheme } = useMantineColorScheme();
 
   return (
     <div style={{ width: '20%', display: 'flex', flexDirection: 'column' }}>
@@ -127,7 +124,6 @@ export const ResearcherLeftSideBar = () => {
           <LoadingOverlay visible loaderProps={{ type: 'dots', color: COLORS.teal }} />
         </Card>
       )}
-      <Divider my="sm" />
       <Flex style={{ flexDirection: 'column', gap: 10 }}>
         <Dropzone
           onDrop={handleFileUpload}

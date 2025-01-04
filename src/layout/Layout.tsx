@@ -7,7 +7,14 @@ import './Layout.css';
 
 const Layout = () => {
   return (
-    <div className="layout">
+    <div
+      className="layout"
+      style={{
+        backgroundImage: `url(${'../assets/texture_background_50.jpg'})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <Header />
       <main className="main-content">
         <Outlet />

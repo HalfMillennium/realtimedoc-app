@@ -1,54 +1,54 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface DataSetOption {
-  id: string;
-  title: string;
-  subtitle: string;
-}
-
 export interface SupportedDataSet {
-  label: string;
+  /** Required for parent dataSet options */
+  label?: string;
   id: string;
-  options?: DataSetOption[];
+  /** Whether this is a child dataSet option or parent, independent dataSet option */ 
+  isDataSetOption?: boolean;
+  children?: string[];
+  title?: string;
+  subtitle?: string;
 }
 
 const availableDataSets: SupportedDataSet[] = [
-  { label: 'Financial Market News', id: 'financial' },
+  { label: 'Financial Market News', id: 'financial_news' },
   {
     label: 'Economic Spending Data',
     id: 'spending',
-    options: [
-      {
-        id: 'usaConsumerSpending',
-        title: 'US Consumers',
-        subtitle: 'Latest available macro-economic data for US-based consumers.',
-      },
-      {
-        id: 'usaGovernmentSpending',
-        title: 'US Government',
-        subtitle: 'Latest available macro-economic data for the US government.',
-      },
-    ],
+    children: ['us_consumer_spending', 'us_national_spending'],
+  },
+  {
+    id: 'us_consumer_spending',
+    title: 'US Consumers',
+    subtitle: 'Latest available macro-economic data for US-based consumers.',
+    isDataSetOption: true,
+  },
+  {
+    id: 'us_national_spending',
+    title: 'US Government',
+    subtitle: 'Latest available macro-economic data for the US government.',
+    isDataSetOption: true,
   },
 ];
 
-export const datasetsSlice = createSlice({
-  name: 'datasets',
+export const dataSetsSlice = createSlice({
+  name: 'dataSets',
   initialState: {
     availableDataSets: availableDataSets,
     selectedDataSetId: undefined,
   },
   reducers: {
-    selectDataset: (state, action) => {
-      state.selectedDataSetId = action.payload.datasetId;
+    selectDataSet: (state, action) => {
+      state.selectedDataSetId = action.payload.dataSetId;
     },
-    deselectAllDatasets: (state) => {
+    deselectAllDataSets: (state) => {
       state.selectedDataSetId = undefined;
     },
   },
 });
 
-export const { selectDataset, deselectAllDatasets } = datasetsSlice.actions;
+export const { selectDataSet, deselectAllDataSets } = dataSetsSlice.actions;
 
 // Action creators are generated for each case reducer function
-export const datasetsReducer = datasetsSlice.reducer;
+export const dataSetsReducer = dataSetsSlice.reducer;

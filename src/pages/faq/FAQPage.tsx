@@ -29,7 +29,7 @@ export const FAQPage: React.FC = () => {
       {
         question: 'What are live data libraries, and how are they used?',
         answer:
-          'Live data libraries are constantly updated datasets that RealTimeDoc integrates with your uploaded PDFs. This allows the AI to enrich its responses with up-to-date and contextually relevant information.',
+          'Live data libraries are constantly updated dataSets that RealTimeDoc integrates with your uploaded PDFs. This allows the AI to enrich its responses with up-to-date and contextually relevant information.',
         icon: <IconCirclePlus size={20} />,
       },
       {

@@ -15,7 +15,6 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
-import { AccountOverview } from '../../pages/account/AccountOverview';
 import classes from './Header.module.css';
 
 const links = [

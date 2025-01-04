@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SegmentedControl, useMantineColorScheme } from '@mantine/core';
+import { Flex, SegmentedControl, useMantineColorScheme } from '@mantine/core';
 import { allSegmentMenuOptions, SegmentMenuOptions } from '../menus/segment_menu';
 import { ContactForm } from './ContactForm';
 import { HowItWorks } from './HowItWorks';
@@ -15,32 +15,30 @@ export const CurrentActivity = () => {
         display: 'flex',
         flex: 1,
         position: 'relative',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
         borderTopLeftRadius: '2rem',
         borderBottomLeftRadius: '2rem',
         alignItems: 'center',
         flexDirection: 'column',
-        gap: '1rem',
+        gap: 30
       }}
     >
-      <SegmentedControl
-        withItemsBorders={false}
-        style={{
-          position: 'absolute',
-          top: 20,
-          left: 20,
-          backgroundColor: 'transparent',
-        }}
-        value={segmentMenuOption}
-        onChange={(option: string) => setSegmentMenuOption(option as SegmentMenuOptions)}
-        data={allSegmentMenuOptions}
-      />
+      <Flex p="lg" style={{width: '100%', justifyContent: 'flex-start'}}>
+        <SegmentedControl
+          withItemsBorders={false}
+          style={{
+            backgroundColor: 'transparent',
+          }}
+          radius={10}
+          value={segmentMenuOption}
+          onChange={(option: string) => setSegmentMenuOption(option as SegmentMenuOptions)}
+          data={allSegmentMenuOptions}
+        />
+      </Flex>
       {segmentMenuOption === SegmentMenuOptions.HowItWorks && <HowItWorks />}
       {segmentMenuOption === SegmentMenuOptions.AnyQuestions && (
         <ContactForm
-          segmentMenuOption={segmentMenuOption}
-          setSegmentMenuOption={setSegmentMenuOption}
         />
       )}
     </div>

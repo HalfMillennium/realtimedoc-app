@@ -23,7 +23,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   const messages = useSelector(
     (state: RootState) => state.conversations.currentConversation.messages
   );
-  const selectedDataSet = useSelector((state: RootState) => state.datasets.selectedDataSetId);
+  const selectedDataSet = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const { colorScheme } = useMantineColorScheme();
   useEffect(() => {
     // Scroll to the bottom when new messages are added

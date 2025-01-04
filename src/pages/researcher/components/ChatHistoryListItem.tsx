@@ -44,7 +44,7 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
         }
       }}
     >
-      <Text size="sm">{title}</Text>
+      <Text size="sm" flex={1}>{title}</Text>
       {conversation.messages.length === 1 && (
         <Badge size="sm" color="green">
           Ready

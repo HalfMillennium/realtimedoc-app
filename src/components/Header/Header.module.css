@@ -1,6 +1,5 @@
 .header {
     height: rem(56px);
-    background-color: var(--mantine-color-body);
   }
   
   .inner {
