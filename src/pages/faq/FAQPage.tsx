@@ -93,8 +93,8 @@ export const FAQPage: React.FC = () => {
         </Flex>
       </Flex>
       <Flex style={{ alignItems: 'center', justifyContent: 'center' }} gap={20}>
-        <Text color="dimmed">Can’t find what you’re looking for?</Text>
-        <Button variant="light" color={COLORS.pink}>
+        <Text style={{ opacity: 0.5 }}>Can’t find what you’re looking for?</Text>
+        <Button radius={10} variant="light" color={COLORS.pink}>
           <Flex gap={5} direction="row" style={{ alignItems: 'center', width: 'auto' }}>
             <IconMessage />
             <Text>Reach Out</Text>

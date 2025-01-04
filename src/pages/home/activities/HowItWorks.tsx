@@ -19,7 +19,7 @@ export const HowItWorks: React.FC = () => {
       <Title order={3} style={styles.sectionTitle}>
         How It Works
       </Title>
-      <Text style={styles.text}>Getting started is simple:</Text>
+      <Text style={styles.text}>Getting started is simple.</Text>
       <List
         style={styles.list}
         spacing="sm"

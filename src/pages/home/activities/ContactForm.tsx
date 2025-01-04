@@ -43,7 +43,7 @@ export const ContactForm: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          Have any <span style={{color: COLORS.peach}}>questions?</span>
+          Have any <span style={{color: COLORS.peach, fontWeight: 300}}>questions?</span>
         </Text>
         <Text
           style={{
