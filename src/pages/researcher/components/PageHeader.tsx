@@ -15,7 +15,7 @@ export const ResearcherPageHeader: React.FC = () => {
           <Text style={{ fontWeight: 200, fontSize: 36 }} size="xl">
             Research Suite
           </Text>
-          <Text style={{fontWeight: 300, opacity: 0.75, fontSize: 14, width: '66%'}}>
+          <Text style={{ fontWeight: 300, opacity: 0.75, fontSize: 14, width: '66%' }}>
             Upload your files to generate actionable insights, or connect live external databases
             for real-time data updates and insights.
           </Text>

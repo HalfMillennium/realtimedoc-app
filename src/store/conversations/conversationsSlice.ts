@@ -107,8 +107,8 @@ export const loadUserConversations = createAsyncThunk<
 export const conversationsSlice = createSlice({
   name: 'conversations',
   initialState: {
-    conversations: {} as ConversationMap,
-    currentConversation: {} as Conversation,
+    conversations: EXAMPLE_CONVERSATIONS_MAP,
+    currentConversation: EXAMPLE_CONVERSATIONS[0],
     isLoadingNewMessage: false,
     isLoadingNewConversation: false,
     isDailyLimitExceeded: false,

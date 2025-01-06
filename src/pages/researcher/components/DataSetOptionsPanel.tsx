@@ -40,8 +40,9 @@ export const DataSetOptionsPanel: React.FC<DataSetOptionsPanelProps> = ({ option
       }
     >
       <Flex style={{ flexDirection: 'column', gap: 10 }}>
-        {options.map((option) => (
+        {options.map((option, i) => (
           <Radio
+            key={i}
             color={COLORS.teal}
             value={option.id}
             label={<Text style={{ cursor: 'pointer', lineHeight: 1 }}>{option.title}</Text>}

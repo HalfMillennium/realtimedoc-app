@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
+// Create selectors using reselect for memoized state selection
+import { createSelector } from '@reduxjs/toolkit';
 import { IconArrowUp, IconMoodWrrrFilled } from '@tabler/icons-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   ActionIcon,
@@ -24,81 +26,238 @@ import { setToken } from '@/store/user/userSlice';
 import { ResearcherPageHeader } from './components/PageHeader';
 import { PlaceholderChatUI } from './components/PlaceholderChatUI';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
-import { ResearcherRightSidebar } from './components/ResearcherRightSidebar';
+import { ResearcherRightSideBar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
 
+const selectConversations = (state: RootState) => state.conversations;
+const selectDataSets = (state: RootState) => state.dataSets;
+const selectUser = (state: RootState) => state.user;
+
+// Memoized selectors that only update when their specific slice of state changes
+const selectCurrentConversation = createSelector(
+  [selectConversations],
+  (conversations) => conversations.currentConversation
+);
+
+const selectIsLoadingMessage = createSelector(
+  [selectConversations],
+  (conversations) => conversations.isLoadingNewMessage
+);
+
+const selectDailyLimitExceeded = createSelector(
+  [selectConversations],
+  (conversations) => conversations.isDailyLimitExceeded
+);
+
+// Separate, memoized message input component to prevent unnecessary re-renders
+interface MessageInputProps {
+  onSend: (message: string) => void;
+  colorScheme: string;
+  disabled?: boolean;
+}
+
+const MessageInput = React.memo(({ onSend, colorScheme, disabled }: MessageInputProps) => {
+  const [newMessage, setNewMessage] = useState('');
+
+  // Memoize handlers to prevent recreating on every render
+  const handleTextAreaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewMessage(e.currentTarget.value);
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === 'Enter' && !e.shiftKey && newMessage.trim() !== '') {
+        e.preventDefault();
+        onSend(newMessage);
+        setNewMessage('');
+      }
+    },
+    [newMessage, onSend]
+  );
+
+  const handleSendClick = useCallback(() => {
+    if (newMessage.trim() !== '') {
+      onSend(newMessage);
+      setNewMessage('');
+    }
+  }, [newMessage, onSend]);
+
+  return (
+    <div style={{ position: 'relative', marginTop: 16 }}>
+      <Textarea
+        placeholder="How can I help you?"
+        radius={12}
+        size="md"
+        value={newMessage}
+        onKeyDown={handleKeyDown}
+        onChange={handleTextAreaChange}
+        disabled={disabled}
+        style={{
+          width: '100%',
+          borderColor: colorScheme === 'light' ? 'black' : 'white',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          right: 20,
+          top: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <ActionIcon
+          style={{
+            backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
+            borderRadius: '100%',
+            width: 45,
+            height: 45,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onClick={handleSendClick}
+          disabled={disabled}
+        >
+          <IconArrowUp size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
+        </ActionIcon>
+      </div>
+    </div>
+  );
+});
+
+// Separate error modal component to isolate modal-related re-renders
+interface ErrorModalProps {
+  errorTitle: string;
+  errorDescription: string;
+  errorModalOpen: boolean;
+  setErrorModalOpen: (open: boolean) => void;
+}
+
+const ErrorModal = React.memo<ErrorModalProps>(
+  ({ errorTitle, errorDescription, errorModalOpen, setErrorModalOpen }) => {
+    const handleCloseErrorModal = useCallback(() => {
+      setErrorModalOpen(false);
+    }, [setErrorModalOpen]);
+
+    return (
+      <Modal
+        opened={errorModalOpen}
+        onClose={handleCloseErrorModal}
+        size="md"
+        centered
+        withCloseButton={false}
+        radius={20}
+      >
+        <Flex direction="column" gap={15} flex="1" style={{ alignItems: 'center' }}>
+          <IconMoodWrrrFilled size={72} color="#f54266" />
+          <Text style={{ fontSize: 24, fontWeight: 400, textAlign: 'center' }}>{errorTitle}</Text>
+          <Text style={{ fontSize: 14, fontWeight: 200, textAlign: 'center' }}>
+            {errorDescription}
+          </Text>
+          <Button variant="light" onClick={handleCloseErrorModal} color="gray" mt="md">
+            Close
+          </Button>
+        </Flex>
+      </Modal>
+    );
+  }
+);
+
+// Main Researcher component
 export const Researcher: React.FC = () => {
+  // Use memoized selectors with shallowEqual comparison - H
+  const currentConversation = useSelector(selectCurrentConversation, shallowEqual);
+  const isLoadingNewMessage = useSelector(selectIsLoadingMessage);
+  const hasExceededDailyLimit = useSelector(selectDailyLimitExceeded);
+  const selectedDataSetId = useSelector(
+    (state: RootState) => selectDataSets(state).selectedDataSetId
+  );
+  const authToken = useSelector((state: RootState) => selectUser(state).token);
+
   const { colorScheme } = useMantineColorScheme();
-  const selectedDataSetId = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
-  const currentConversation = useSelector(
-    (state: RootState) => state.conversations.currentConversation
-  );
-  const isLoadingNewMessage = useSelector(
-    (state: RootState) => state.conversations.isLoadingNewMessage
-  );
-  const hasExceededDailyLimit = useSelector(
-    (state: RootState) => state.conversations.isDailyLimitExceeded
-  );
   const { getToken } = useAuth();
-  const authToken = useSelector((state: RootState) => state.user.token);
-  const [newMessage, setNewMessage] = useState<string>('');
   const user = useUser();
   const userName = user.user?.fullName ?? 'Arbitrary Robert';
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
   const [errorModalOpen, setErrorModalOpen] = useState(hasExceededDailyLimit);
 
+  // Cleanup effect
   useEffect(() => {
     dispatch(deselectAllDataSets());
-  }, []);
+    return () => {
+      // Any cleanup code here
+    };
+  }, [dispatch]);
 
-  const handleSendMessage = async () => {
-    if (newMessage.trim() === '') return;
-    if (!!!authToken) {
-      navigate('/');
-      return;
-    }
-
-    try {
-      const token = await getToken();
-      if (!token) throw new Error('No token found');
-      dispatch(setToken({ token }));
-      if (user.user?.id) {
-        const newChatMessage = {
-          id: crypto.randomUUID(),
-          author: userName,
-          timestamp: new Date().toLocaleTimeString(),
-          content: newMessage,
-        };
-        console.log('Updating current conversation: ', currentConversation.id);
-        dispatch(
-          updateConversation({ message: newChatMessage, conversationId: currentConversation.id })
-        );
-        dispatch(setCurrentConversation({ conversationId: currentConversation.id }));
-        dispatch(
-          getNewChatResponse({
-            authToken,
-            conversationId: currentConversation.id,
-            message: newMessage,
-            selectedDataSetId,
-          })
-        );
-        setNewMessage('');
-      } else {
-        console.error('No user id found');
+  // Memoize the message sending logic
+  const handleSendMessage = useCallback(
+    async (message: string) => {
+      if (!!!authToken) {
+        navigate('/');
+        return;
       }
-    } catch (error) {
-      console.error(`Could not update conversation: ${error}`);
-    }
-  };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && newMessage.trim() !== '') {
-      e.preventDefault();
-      setNewMessage('');
-      handleSendMessage();
-    }
-  };
+      try {
+        const token = await getToken();
+        if (!token) throw new Error('No token found');
+
+        dispatch(setToken({ token }));
+
+        if (user.user?.id) {
+          const newChatMessage = {
+            id: crypto.randomUUID(),
+            author: userName,
+            timestamp: new Date().toLocaleTimeString(),
+            content: message,
+          };
+
+          dispatch(
+            updateConversation({
+              message: newChatMessage,
+              conversationId: currentConversation.id,
+            })
+          );
+
+          dispatch(
+            setCurrentConversation({
+              conversationId: currentConversation.id,
+            })
+          );
+
+          dispatch(
+            getNewChatResponse({
+              authToken,
+              conversationId: currentConversation.id,
+              message,
+              selectedDataSetId,
+            })
+          );
+        }
+      } catch (error) {
+        console.error(`Could not update conversation: ${error}`);
+        setErrorModalOpen(true);
+      }
+    },
+    [
+      authToken,
+      navigate,
+      getToken,
+      user.user?.id,
+      userName,
+      currentConversation?.id,
+      selectedDataSetId,
+      dispatch,
+    ]
+  );
+
+  // Memoize the conversation state check
+  const hasActiveConversation = useMemo(() => {
+    return !!currentConversation?.messages && currentConversation.messages.length > 0;
+  }, [currentConversation?.messages]);
 
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 30 }}>
@@ -114,6 +273,7 @@ export const Researcher: React.FC = () => {
         errorModalOpen={errorModalOpen}
         setErrorModalOpen={setErrorModalOpen}
       />
+
       <div
         style={{
           display: 'flex',
@@ -130,10 +290,10 @@ export const Researcher: React.FC = () => {
         <div
           style={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row', gap: 20 }}
         >
-          {/* Left Sidebar */}
-          <ResearcherLeftSideBar />
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <ResearcherLeftSideBar />
+          </React.Suspense>
 
-          {/* Chat Area */}
           <div
             style={{
               display: 'flex',
@@ -142,10 +302,8 @@ export const Researcher: React.FC = () => {
               padding: '8px',
             }}
           >
-            {(!currentConversation?.messages || currentConversation.messages.length === 0) && (
-              <PlaceholderChatUI />
-            )}
-            {!!currentConversation?.messages && currentConversation.messages.length > 0 && (
+            {!hasActiveConversation && <PlaceholderChatUI />}
+            {hasActiveConversation && (
               <>
                 <Flex
                   style={{
@@ -158,96 +316,18 @@ export const Researcher: React.FC = () => {
                 >
                   <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
                 </Flex>
-                <div style={{ position: 'relative', marginTop: 16 }}>
-                  <Textarea
-                    placeholder="How can I help you?"
-                    radius={12}
-                    size="md"
-                    value={newMessage}
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => {
-                      setNewMessage(e.currentTarget.value);
-                    }}
-                    style={{
-                      width: '100%',
-                      borderColor: colorScheme === 'light' ? 'black' : 'white',
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      right: 20,
-                      top: 0,
-                      bottom: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <ActionIcon
-                      style={{
-                        backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
-                        borderRadius: '100%',
-                        width: 45,
-                        height: 45,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                      onClick={handleSendMessage}
-                    >
-                      <IconArrowUp
-                        size={18}
-                        color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'}
-                      />
-                    </ActionIcon>
-                  </div>
-                </div>
+                <MessageInput
+                  onSend={handleSendMessage}
+                  colorScheme={colorScheme}
+                  disabled={isLoadingNewMessage || hasExceededDailyLimit}
+                />
               </>
             )}
           </div>
-          <ResearcherRightSidebar />
+          <ResearcherRightSideBar />
         </div>
       </div>
     </div>
-  );
-};
-
-interface ErrorModalProps {
-  errorTitle: string;
-  errorDescription: string;
-  errorModalOpen: boolean;
-  setErrorModalOpen: (open: boolean) => void;
-}
-
-const ErrorModal: React.FC<ErrorModalProps> = ({
-  errorTitle,
-  errorDescription,
-  errorModalOpen,
-  setErrorModalOpen,
-}) => {
-  const handleCloseErrorModal = () => {
-    setErrorModalOpen(false);
-  };
-  return (
-    <Modal
-      opened={errorModalOpen}
-      onClose={handleCloseErrorModal}
-      size="md"
-      centered
-      withCloseButton={false}
-      radius={20}
-    >
-      <Flex direction="column" gap={15} flex="1" style={{ alignItems: 'center' }}>
-        <IconMoodWrrrFilled size={72} color="#f54266" />
-        <Text style={{ fontSize: 24, fontWeight: 400, textAlign: 'center' }}>{errorTitle}</Text>
-        <Text style={{ fontSize: 14, fontWeight: 200, textAlign: 'center' }}>
-          {errorDescription}
-        </Text>
-        <Button variant="light" onClick={handleCloseErrorModal} color="gray" mt="md">
-          Close
-        </Button>
-      </Flex>
-    </Modal>
   );
 };
 

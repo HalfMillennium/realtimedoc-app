@@ -20,11 +20,10 @@ import classes from './Header.module.css';
 const links = [
   { link: '/about', label: 'Features' },
   {
-    link: '#1',
-    label: 'Learn',
-    links: [{ link: '/faq', label: 'FAQ' }],
+    link: '/faq',
+    label: 'FAQ',
   },
-  { link: '/about', label: 'About' },
+  { link: '/about', label: 'How It Works' },
   { link: '/pricing', label: 'Pricing' },
   {
     link: '#2',
@@ -36,41 +35,16 @@ const links = [
 export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
-  const [opened, { open, close }] = useDisclosure(false);
   const items = links.map((link) => {
-    const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link} onClick={() => navigate(item.link)}>
-        {item.label}
-      </Menu.Item>
-    ));
-
-    if (menuItems) {
-      return (
-        <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
-          <Menu.Target>
-            <a
-              className={classes.link}
-              onClick={(event) => {
-                event.preventDefault();
-              }}
-            >
-              <Center>
-                <span className={classes.linkLabel}>{link.label}</span>
-                <IconChevronDown size="0.9rem" stroke={1.5} />
-              </Center>
-            </a>
-          </Menu.Target>
-          <Menu.Dropdown>{menuItems}</Menu.Dropdown>
-        </Menu>
-      );
-    }
-
     return (
       <a
         key={link.label}
         href={link.link}
         className={classes.link}
-        onClick={(event) => event.preventDefault()}
+        onClick={(event) => {
+          event.preventDefault();
+          navigate(link.link);
+        }}
       >
         {link.label}
       </a>

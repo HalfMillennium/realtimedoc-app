@@ -1,21 +1,10 @@
 import { useAuth, useUser } from '@clerk/clerk-react';
-import {
-  IconEyeQuestion,
-  IconHistory,
-} from '@tabler/icons-react';
+import { IconCloudUpload, IconEyeQuestion, IconHistory } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Avatar,
-  Card,
-  Divider,
-  Flex,
-  Group,
-  LoadingOverlay,
-  Button,
-  Text,
-} from '@mantine/core';
+import { Avatar, Button, Card, Divider, Flex, Group, LoadingOverlay, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { COLORS } from '@/common/colors';
+import { GradientButton } from '@/components/GradientButton';
 import {
   setCurrentConversation,
   uploadFileAndCreateConversation,
@@ -23,8 +12,6 @@ import {
 import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
-import { IconCloudUpload } from '@tabler/icons-react';
-import { GradientButton } from '@/components/GradientButton';
 
 export const ResearcherLeftSideBar = () => {
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
@@ -141,19 +128,19 @@ export const ResearcherLeftSideBar = () => {
           }}
         >
           <Button
-        fullWidth
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: 'black',
-          borderRadius: 10,
-          backgroundColor: 'transparent',
-          transition: 'background 0.3s ease',
-        }}
-      >
-        <IconCloudUpload size={18} style={{ paddingRight: 5, color: 'black' }} />
-        Upload Document & Start Chat
-      </Button>
+            fullWidth
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: 'black',
+              borderRadius: 10,
+              backgroundColor: 'transparent',
+              transition: 'background 0.3s ease',
+            }}
+          >
+            <IconCloudUpload size={18} style={{ paddingRight: 5, color: 'black' }} />
+            Upload Document & Start Chat
+          </Button>
         </Dropzone>
         <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
           To start a new chat with realtimedoc, simply upload a new PDF document.

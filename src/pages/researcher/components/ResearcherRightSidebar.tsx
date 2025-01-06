@@ -11,7 +11,7 @@ import {
 import { AppDispatch, RootState } from '@/store/store';
 import { DataSetOptionsPanel } from './DataSetOptionsPanel';
 
-export const ResearcherRightSidebar: React.FC = () => {
+export const ResearcherRightSideBar: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const selectedDataSetId = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const dispatch = useDispatch<AppDispatch>();

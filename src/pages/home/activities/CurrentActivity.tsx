@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Flex, SegmentedControl, useMantineColorScheme } from '@mantine/core';
+import { COLORS } from '@/common/colors';
 import { allSegmentMenuOptions, SegmentMenuOptions } from '../menus/segment_menu';
 import { ContactForm } from './ContactForm';
 import { HowItWorks } from './HowItWorks';
@@ -21,10 +22,10 @@ export const CurrentActivity = () => {
         borderBottomLeftRadius: '2rem',
         alignItems: 'center',
         flexDirection: 'column',
-        gap: 30
+        gap: 30,
       }}
     >
-      <Flex p="lg" style={{width: '100%', justifyContent: 'flex-start'}}>
+      <Flex p="lg" style={{ width: '100%', justifyContent: 'flex-start' }}>
         <SegmentedControl
           withItemsBorders={false}
           style={{
@@ -37,10 +38,7 @@ export const CurrentActivity = () => {
         />
       </Flex>
       {segmentMenuOption === SegmentMenuOptions.HowItWorks && <HowItWorks />}
-      {segmentMenuOption === SegmentMenuOptions.AnyQuestions && (
-        <ContactForm
-        />
-      )}
+      {segmentMenuOption === SegmentMenuOptions.AnyQuestions && <ContactForm />}
     </div>
   );
 };

@@ -1,9 +1,9 @@
+import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-import { Image, Button, Text, Title, useMantineColorScheme } from '@mantine/core';
-import { CurrentActivity } from './activities/CurrentActivity';
+import { Button, Flex, Image, Text, useMantineColorScheme } from '@mantine/core';
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
-import { useAuth } from '@clerk/clerk-react';
+import { CurrentActivity } from './activities/CurrentActivity';
 
 export function HomePage() {
   const { colorScheme } = useMantineColorScheme();
@@ -11,7 +11,7 @@ export function HomePage() {
   const handleTryItNowClick = () => {
     navigate('/researcher');
   };
-  const { isSignedIn} = useAuth();
+  const { isSignedIn } = useAuth();
   return (
     <div
       style={{
@@ -25,11 +25,10 @@ export function HomePage() {
         alignItems: 'center',
       }}
     >
-      <div
+      <Flex
+        direction="row"
         style={{
-          display: 'flex',
           width: '100%',
-          flexDirection: 'row',
           alignContent: 'flex-start',
           height: '100%',
         }}
@@ -80,7 +79,7 @@ export function HomePage() {
           </div>
         </div>
         <CurrentActivity />
-      </div>
+      </Flex>
     </div>
   );
 }

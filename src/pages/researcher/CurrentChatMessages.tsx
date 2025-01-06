@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useSelector } from 'react-redux';
 import {
   Badge,
@@ -52,7 +53,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
           style={{
             display: 'flex',
             flexDirection: 'row',
-            gap: 10,
+            gap: 5,
             backgroundColor: '#212121',
             alignItems: 'center',
             marginBottom: 10,
@@ -61,13 +62,25 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
           radius="md"
           p="sm"
         >
-          <Image
-            src="https://s13.gifyu.com/images/SPFxx.gif"
-            alt="GIF Icon"
-            width={20}
-            height={20}
-          />
-          <Text size="xs" style={{ fontWeight: 500, letterSpacing: 1, color: 'white' }}>
+          <Flex>
+            <DotLottieReact
+              src="https://lottie.host/d11a40ce-5dec-4622-af88-a55765ab41db/tbCmYNgfhu.lottie"
+              loop
+              autoplay
+              style={{ width: 30 }}
+              color={COLORS.teal}
+            />
+          </Flex>
+          <Text
+            size="xs"
+            style={{
+              display: 'flex',
+              fontWeight: 500,
+              letterSpacing: 1,
+              color: 'white',
+              marginTop: 2,
+            }}
+          >
             LIVE DATASET CONNECTED
           </Text>
         </Card>

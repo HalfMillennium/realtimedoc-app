@@ -1,18 +1,27 @@
 import React from 'react';
 import { IconChartDots3, IconCheck } from '@tabler/icons-react';
-import { Flex, List, Text, ThemeIcon, Title } from '@mantine/core';
+import { Flex, List, Text, ThemeIcon, Title, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
 export const HowItWorks: React.FC = () => {
+  const { colorScheme } = useMantineColorScheme();
   return (
     <Flex direction="column" style={styles.container} flex="1">
       <Flex direction="row" gap="10" align="center" justify="start">
-        <IconChartDots3 color={COLORS.peach}/>
-      <Title order={1} style={{fontWeight: 100}}>
-        PDF Insights with Live Datasets
-      </Title>
+        <IconChartDots3
+          color={colorScheme === 'dark' ? COLORS.peach : COLORS.mantineDefaultBlack}
+        />
+        <Title order={1} style={{ fontWeight: 500 }}>
+          PDF Insights with Live Datasets
+        </Title>
       </Flex>
-      <Text style={styles.subtitle}>
+      <Text
+        style={{
+          marginTop: '0.5rem',
+          color: colorScheme === 'dark' ? COLORS.peach : COLORS.mantineDefaultBlack,
+          fontWeight: 400,
+        }}
+      >
         Transform your documents into a searchable, interactive knowledge hub.
       </Text>
 
@@ -70,15 +79,14 @@ const styles = {
   container: {
     width: '75%',
   },
-  subtitle: {
-    marginTop: '0.5rem',
-    color: COLORS.peach
-  },
   sectionTitle: {
     marginTop: '2rem',
+    fontWeight: 400,
   },
   text: {
     marginTop: '0.5rem',
+    fontWeight: 200,
+    fontSize: 14,
   },
   list: {
     marginTop: '1rem',
