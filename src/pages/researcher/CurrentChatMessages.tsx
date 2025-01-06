@@ -1,17 +1,19 @@
 import { useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { useSelector } from 'react-redux';
+import { IconX } from '@tabler/icons-react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Badge,
+  Button,
   Card,
   Divider,
   Flex,
-  Image,
   LoadingOverlay,
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { COLORS } from '@/common/colors';
+import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
 import { RootState } from '@/store/store';
 
 export interface CurrentChatMessagesProps {
@@ -25,6 +27,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
     (state: RootState) => state.conversations.currentConversation.messages
   );
   const selectedDataSet = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
+  const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
   useEffect(() => {
     // Scroll to the bottom when new messages are added
@@ -57,12 +60,14 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             backgroundColor: '#212121',
             alignItems: 'center',
             marginBottom: 10,
+            width: '100%',
+            justifyContent: 'space-between',
           }}
           shadow="xs"
           radius="md"
           p="sm"
         >
-          <Flex>
+          <Flex align="center" gap="5">
             <DotLottieReact
               src="https://lottie.host/d11a40ce-5dec-4622-af88-a55765ab41db/tbCmYNgfhu.lottie"
               loop
@@ -70,19 +75,37 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
               style={{ width: 30 }}
               color={COLORS.teal}
             />
+            <Text
+              size="xs"
+              style={{
+                display: 'flex',
+                fontWeight: 500,
+                letterSpacing: 1,
+                color: 'white',
+                marginTop: 2,
+              }}
+            >
+              LIVE DATASET CONNECTED
+            </Text>
           </Flex>
-          <Text
-            size="xs"
-            style={{
-              display: 'flex',
-              fontWeight: 500,
-              letterSpacing: 1,
-              color: 'white',
-              marginTop: 2,
-            }}
-          >
-            LIVE DATASET CONNECTED
-          </Text>
+          <Flex>
+            <Button
+              radius={100}
+              color="gray"
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                padding: '5px 10px',
+                width: 'auto',
+              }}
+              variant="light"
+              onClick={() => dispatch(deselectAllDataSets())}
+            >
+              <IconX size={14} style={{ marginRight: 5 }} />
+              <Text style={{ fontSize: 12, fontWeight: 300, display: 'flex' }}>Remove</Text>
+            </Button>
+          </Flex>
         </Card>
       )}
       <Flex

@@ -1,8 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 import { RedirectToSignIn, useAuth } from '@clerk/clerk-react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { LoadingOverlay } from '@mantine/core';
 import Layout from './layout/Layout';
 import { FAQPage } from './pages/faq/FAQPage';
+import { FeaturesPage } from './pages/features/FeaturesPage';
 import { HomePage } from './pages/home/Home.page';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { Register } from './pages/registration/Register';
@@ -37,7 +39,7 @@ const router = createBrowserRouter([
         path: '/researcher',
         element: (
           <ProtectedRoute>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<LoadingOverlay />}>
               <Researcher />
             </Suspense>
           </ProtectedRoute>
@@ -58,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: '/faq',
         element: <FAQPage />,
+      },
+      {
+        path: '/features',
+        element: <FeaturesPage />,
       },
     ],
   },

@@ -13,12 +13,13 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { COLORS } from '@/common/colors';
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
 import classes from './Header.module.css';
 
 const links = [
-  { link: '/about', label: 'Features' },
+  { link: '/features', label: 'Features' },
   {
     link: '/faq',
     label: 'FAQ',
@@ -52,8 +53,13 @@ export function Header() {
   });
 
   return (
-    <div className={classes.header}>
-      <Container size="md">
+    <div
+      style={{
+        height: 'rem(56px)',
+        backgroundColor: colorScheme === 'dark' ? '#00000040' : '#ffffff',
+      }}
+    >
+      <Container>
         <div className={classes.inner}>
           <Image
             src={colorScheme === 'dark' ? darkModeLogo : lightModeLogo}

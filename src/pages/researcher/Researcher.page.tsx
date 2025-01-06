@@ -10,6 +10,7 @@ import {
   ActionIcon,
   Button,
   Flex,
+  LoadingOverlay,
   Modal,
   Text,
   Textarea,
@@ -290,7 +291,9 @@ export const Researcher: React.FC = () => {
         <div
           style={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row', gap: 20 }}
         >
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense
+            fallback={<LoadingOverlay zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />}
+          >
             <ResearcherLeftSideBar />
           </React.Suspense>
 

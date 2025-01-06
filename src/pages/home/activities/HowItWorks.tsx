@@ -11,7 +11,7 @@ export const HowItWorks: React.FC = () => {
         <IconChartDots3
           color={colorScheme === 'dark' ? COLORS.peach : COLORS.mantineDefaultBlack}
         />
-        <Title order={1} style={{ fontWeight: 500 }}>
+        <Title order={1} style={{ fontWeight: 200 }}>
           PDF Insights with Live Datasets
         </Title>
       </Flex>
