@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { LoadingOverlay } from '@mantine/core';
 import Layout from './layout/Layout';
 import { FAQPage } from './pages/faq/FAQPage';
+import { FeaturesPageAlt } from './pages/features-alt/FeaturesPageAlt';
 import { FeaturesPage } from './pages/features/FeaturesPage';
 import { HomePage } from './pages/home/Home.page';
 import { PricingPage } from './pages/pricing/PricingPage';
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: '/features',
         element: <FeaturesPage />,
+      },
+      {
+        path: '/features-alt',
+        element: <FeaturesPageAlt />,
       },
     ],
   },
