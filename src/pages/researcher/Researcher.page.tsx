@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
-// Create selectors using reselect for memoized state selection
 import { createSelector } from '@reduxjs/toolkit';
 import { IconArrowUp, IconMoodWrrrFilled } from '@tabler/icons-react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -34,7 +33,6 @@ const selectConversations = (state: RootState) => state.conversations;
 const selectDataSets = (state: RootState) => state.dataSets;
 const selectUser = (state: RootState) => state.user;
 
-// Memoized selectors that only update when their specific slice of state changes
 const selectCurrentConversation = createSelector(
   [selectConversations],
   (conversations) => conversations.currentConversation
@@ -189,9 +187,6 @@ export const Researcher: React.FC = () => {
   // Cleanup effect
   useEffect(() => {
     dispatch(deselectAllDataSets());
-    return () => {
-      // Any cleanup code here
-    };
   }, [dispatch]);
 
   // Memoize the message sending logic

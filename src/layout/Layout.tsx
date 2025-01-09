@@ -17,6 +17,7 @@ const Layout = () => {
         backgroundImage: `url(${colorScheme === 'dark' ? darkModeImage : lightModeImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        backgroundColor: colorScheme !== 'dark' ? 'white' : undefined,
       }}
     >
       <Header />

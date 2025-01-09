@@ -1,19 +1,15 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
-import { IconChevronDown, IconMoon, IconSun, IconUser } from '@tabler/icons-react';
+import { IconMoon, IconSun, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
-  Center,
   Container,
   Flex,
   Group,
   Image,
-  Menu,
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { COLORS } from '@/common/colors';
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
 import classes from './Header.module.css';
@@ -56,7 +52,8 @@ export function Header() {
     <div
       style={{
         height: 'rem(56px)',
-        backgroundColor: colorScheme === 'dark' ? '#00000040' : '#ffffff',
+        background: `linear-gradient(to right, ${colorScheme === 'dark' ? '#00000040' : '#ffffff'} 0%, ${colorScheme === 'dark' ? '#00000020' : '#ffffff'} 100%)`,
+        boxShadow: colorScheme !== 'dark' ? '0 4px 6px #00000010' : '',
       }}
     >
       <Container>

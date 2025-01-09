@@ -81,7 +81,6 @@ export const FAQPage: React.FC = () => {
           <Text style={{ textAlign: 'center', fontSize: 18, opacity: 0.5 }}>
             These are the most commonly asked questions about RealTimeDoc.
           </Text>
-
           <Accordion style={{borderRadius: 10, gap: 10}}>
             {faqData[activeCategory].map((faq, index) => (
               <Accordion.Item style={{borderRadius: 10}}key={index} value={faq.question}>

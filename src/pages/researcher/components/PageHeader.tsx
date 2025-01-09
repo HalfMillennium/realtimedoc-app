@@ -10,9 +10,8 @@ export const ResearcherPageHeader: React.FC = () => {
   return (
     <Flex>
       <Center style={{ marginBottom: '1rem', justifyContent: 'space-between', width: '100%' }}>
-        {/* Title and Description */}
         <Flex direction="column">
-          <Text style={{ fontWeight: 400, fontSize: 22 }} size="xl">
+          <Text style={{ fontWeight: 300, fontSize: 24 }} size="xl">
             Research Suite
           </Text>
           <Text style={{ fontWeight: 300, opacity: 0.75, fontSize: 14, width: '66%' }}>
