@@ -9,7 +9,6 @@ import { HomePage } from './pages/home/Home.page';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { Register } from './pages/registration/Register';
 import SignIn from './pages/sign-in/SignIn';
-import { AltFeaturesPage } from './pages/features-alt/AltFeaturesPage';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -64,7 +63,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/features',
-        element: <AltFeaturesPage />,
+        element: <FeaturesPage />,
       },
     ],
   },

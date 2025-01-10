@@ -37,7 +37,7 @@ export const ResearcherRightSideBar: React.FC = () => {
     );
   };
   return (
-    <div style={{ width: '20%', padding: '8px' }}>
+    <div style={{ width: '20%', paddingTop: '8px' }}>
       <Card withBorder style={{ gap: 10 }} radius={10}>
         <Flex
           style={{

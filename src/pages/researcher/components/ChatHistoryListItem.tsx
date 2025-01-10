@@ -50,7 +50,7 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
         setDeleteButtonIsVisible(false);
       }}
     >
-      <Text size="sm" flex={1}>
+      <Text size="sm" flex={1} style={{wordBreak: 'break-word'}}>
         {title}
       </Text>
       <Flex direction="row" align="center" gap="10">

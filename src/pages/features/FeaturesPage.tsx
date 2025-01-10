@@ -1,109 +1,147 @@
 import React from 'react';
-import { IconCheck } from '@tabler/icons-react';
-import {
-  Button,
-  Card,
-  Center,
-  Container,
-  List,
-  Stack,
-  Text,
-  ThemeIcon,
-  Title,
-} from '@mantine/core';
+import { useAuth } from '@clerk/clerk-react';
+import { IconChartInfographic, IconDatabase, IconFileUpload, IconRobot } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Card, Center, Container, Flex, SimpleGrid, Text, Title } from '@mantine/core';
+import coolFox from '@/assets/cool_fox.png';
+import { COLORS } from '@/common/colors';
 
 export const FeaturesPage: React.FC = () => {
+  const { isSignedIn } = useAuth();
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate('/researcher');
+  };
   return (
-    <Container size="md" py="xl">
-      <Stack gap="xl">
-        {/* Header Section */}
-        <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 56 }}>
-          PDF Insights with Live Datasets
-        </Title>
-        <Text style={{ textAlign: 'center' }} size="lg" color="dimmed">
-          Transform your documents into a searchable, interactive knowledge hub.
-        </Text>
-
-        {/* How It Works Section */}
-        <Title order={2} mt="xl">
-          How It Works
-        </Title>
-        <List
-          spacing="sm"
-          icon={
-            <ThemeIcon color="teal" size={24} radius="xl">
-              <IconCheck size={16} />
-            </ThemeIcon>
-          }
-        >
-          <List.Item>Upload your PDF documents through our intuitive web app.</List.Item>
-          <List.Item>
-            Integrate live datasets, such as financial reports or economic spending data, to enhance
-            document insights.
-          </List.Item>
-          <List.Item>Ask questions or search specific content using natural language.</List.Item>
-          <List.Item>Receive instant, accurate results powered by advanced AI.</List.Item>
-        </List>
-
-        {/* Who Is This For Section */}
-        <Title order={2} mt="xl">
-          Who Is This For?
-        </Title>
-        <Text size="md">
-          Whether you're a researcher, analyst, or business professional, our tool is designed to:
-        </Text>
-        <List
-          spacing="sm"
-          icon={
-            <ThemeIcon color="blue" size={24} radius="xl">
-              <IconCheck size={16} />
-            </ThemeIcon>
-          }
-        >
-          <List.Item>Save time by automating document searches and analyses.</List.Item>
-          <List.Item>
-            Gain deeper insights by combining static documents with dynamic data sources.
-          </List.Item>
-          <List.Item>Enable deeper insights without manual effort.</List.Item>
-          <List.Item>
-            Make better decisions with enhanced, context-rich information at your fingertips.
-          </List.Item>
-        </List>
-
-        {/* Pricing Section */}
-        <Title order={2} mt="xl" style={{ textAlign: 'center' }}>
-          Pricing Plans
-        </Title>
-        <Center style={{ display: 'flex', flexWrap: 'wrap', gap: 20 }}>
-          {/* Basic Plan */}
-          <Card shadow="sm" padding="lg" radius="md" style={{ flex: '1 1 300px', margin: '10px' }}>
-            <Title order={3}>Basic Tier</Title>
-            <Text size="sm" color="dimmed" mt="xs">
-              10 uploads/conversations per day
+    <Container size="lg" p={50} style={{ display: 'flex', flexDirection: 'column', gap: 100 }}>
+      <section style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 36 }}>Features</Title>
+        <Flex direction="row" gap="lg">
+          <Card shadow="sm" padding="lg" radius={20}>
+            <Center>
+              <IconFileUpload size={48} color={COLORS.teal} />
+            </Center>
+            <Text style={{ textAlign: 'center', fontWeight: 500 }} mt="md">
+              Upload PDFs
             </Text>
-            <Text mt="md" size="lg" style={{ fontWeight: 500 }}>
-              Free
+            <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
+              Upload one or more PDF documents and interact with them through an AI chat interface.
             </Text>
-            <Button fullWidth variant="outline" mt="md" radius="md">
-              Get Started
-            </Button>
           </Card>
 
-          {/* Advanced Plan */}
-          <Card shadow="sm" padding="lg" radius="md" style={{ flex: '1 1 300px', margin: '10px' }}>
-            <Title order={3}>Advanced Tier</Title>
-            <Text size="sm" color="dimmed" mt="xs">
-              Unlimited uploads/conversations
+          <Card shadow="sm" padding="lg" radius={20}>
+            <Center>
+              <IconRobot size={48} color={COLORS.teal} />
+            </Center>
+            <Text style={{ textAlign: 'center', fontWeight: 600 }} mt="md">
+              AI Chatbot
             </Text>
-            <Text mt="md" size="lg" style={{ fontWeight: 500 }}>
-              $49/month
+            <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
+              Ask the AI questions about your uploaded documents and gain deep insights instantly.
             </Text>
-            <Button fullWidth variant="filled" color="blue" mt="md" radius="md">
-              Upgrade Now
-            </Button>
           </Card>
-        </Center>
-      </Stack>
+          <Card shadow="sm" padding="lg" radius={20}>
+            <Center>
+              <IconDatabase size={48} color={COLORS.teal} />
+            </Center>
+            <Text style={{ textAlign: 'center', fontWeight: 600 }} mt="md">
+              Dynamic Data
+            </Text>
+            <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
+              Link your documents to live datasets and enrich static data with real-time insights.
+            </Text>
+          </Card>
+
+          <Card shadow="sm" padding="lg" radius={20}>
+            <Center>
+              <IconChartInfographic size={48} color={COLORS.teal} />
+            </Center>
+            <Text style={{ textAlign: 'center', fontWeight: 600 }} mt="md">
+              Enhanced Analytics
+            </Text>
+            <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
+              Infuse static data with dynamic sources for enhanced and actionable analytics.
+            </Text>
+          </Card>
+        </Flex>
+      </section>
+
+      {/* About Us Section */}
+      <section style={{ marginTop: '4rem' }}>
+        <Flex direction="row" gap={100} align="center" justify="center">
+          <Flex
+            style={{ backgroundColor: COLORS.peach, borderRadius: 10, flex: 1 }}
+            justify="center"
+          >
+            <img src={coolFox} alt="About Us" style={{ borderRadius: '8px', height: 350 }} />
+          </Flex>
+          <Flex direction="column" style={{ flex: 1 }} gap={30}>
+            <Flex direction="column" gap="10">
+              <Text style={{ fontWeight: 400, fontSize: 28 }}>About us</Text>
+              <Text color="dimmed">
+                Our platform enables users to transform static documents into dynamic resources,
+                powered by AI and live datasets.
+              </Text>
+            </Flex>
+            <Flex direction="column">
+              <Text style={{ fontWeight: 500 }}>Why Choose Us?</Text>
+              <ul style={{ paddingLeft: '1.5rem' }}>
+                <li>Interact with your documents like never before.</li>
+                <li>Infuse static PDFs with real-time data sources.</li>
+                <li>Generate powerful insights through AI.</li>
+                <li>Seamlessly link data for dynamic exploration.</li>
+              </ul>
+              <Button w={'auto'} variant="light" radius={10} onClick={handleButtonClick}>
+                {!isSignedIn ? 'Try It Now' : 'Enter the Research Suite'}
+              </Button>
+            </Flex>
+          </Flex>
+        </Flex>
+      </section>
+
+      {/* Our Services Section */}
+      <section style={{ marginTop: '4rem', padding: '2rem 0' }}>
+        <Flex direction="column" gap="20">
+          <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 32 }}>Our services</Title>
+          <SimpleGrid cols={3} spacing="lg">
+            <Card shadow="sm" padding="lg" radius={20}>
+              <Center>
+                <IconFileUpload size={48} color={COLORS.peach} />
+              </Center>
+              <Text style={{ textAlign: 'center', fontWeight: 600 }} mt="md">
+                Document Uploads
+              </Text>
+              <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
+                Seamless document upload process.
+              </Text>
+            </Card>
+
+            <Card shadow="sm" padding="lg" radius={20}>
+              <Center>
+                <IconRobot size={48} color={COLORS.peach} />
+              </Center>
+              <Text style={{ textAlign: 'center', fontWeight: 600 }} mt="md">
+                AI-Powered Insights
+              </Text>
+              <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
+                Transform your documents into actionable data.
+              </Text>
+            </Card>
+
+            <Card shadow="sm" padding="lg" radius={20}>
+              <Center>
+                <IconDatabase size={48} color={COLORS.peach} />
+              </Center>
+              <Text style={{ textAlign: 'center', fontWeight: 600 }} mt="md">
+                Live Data Integration
+              </Text>
+              <Text style={{ textAlign: 'center' }} size="sm" color="dimmed">
+                Combine your documents with live datasets.
+              </Text>
+            </Card>
+          </SimpleGrid>
+        </Flex>
+      </section>
     </Container>
   );
 };
