@@ -1,14 +1,22 @@
 import React from 'react';
 import { IconChartInfographic, IconDatabase, IconFileUpload, IconRobot } from '@tabler/icons-react';
-import { Box, Card, Center, Container, Group, SimpleGrid, Text, Title } from '@mantine/core';
+import { Button, Card, Center, Container, Flex, SimpleGrid, Text, Title } from '@mantine/core';
+import coolFox from '@/assets/cool_fox.png';
 import { COLORS } from '@/common/colors';
+import { useAuth } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 
 export const AltFeaturesPage: React.FC = () => {
+  const { isSignedIn } = useAuth();
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate('/researcher');
+  }
   return (
     <Container size="lg" p={50}>
       <section style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <Title style={{ textAlign: 'center', fontWeight: 300, fontSize: 36 }}>Features</Title>
-        <SimpleGrid cols={4} spacing="lg">
+        <Flex direction="row" gap="lg">
           <Card shadow="sm" padding="lg" radius={20}>
             <Center>
               <IconFileUpload size={48} color={COLORS.teal} />
@@ -55,48 +63,53 @@ export const AltFeaturesPage: React.FC = () => {
               Infuse static data with dynamic sources for enhanced and actionable analytics.
             </Text>
           </Card>
-        </SimpleGrid>
+        </Flex>
       </section>
 
       {/* About Us Section */}
       <section style={{ marginTop: '4rem' }}>
-        <SimpleGrid cols={2} spacing="lg">
-          <Box>
-            <img
-              src="https://via.placeholder.com/600x400" // Replace with a relevant image URL
-              alt="About Us"
-              style={{ borderRadius: '8px', width: '100%' }}
-            />
-          </Box>
-          <Box>
-            <Title order={3} mb="md">
-              ABOUT US
-            </Title>
-            <Text color="dimmed" mb="md">
-              Our platform enables users to transform static documents into dynamic resources,
-              powered by AI and live datasets.
-            </Text>
-            <Text style={{ fontWeight: 500 }} mb="xs">
-              Why Choose Us?
-            </Text>
-            <ul style={{ paddingLeft: '1.5rem' }}>
-              <li>Interact with your documents like never before.</li>
-              <li>Infuse static PDFs with real-time data sources.</li>
-              <li>Generate powerful insights through AI.</li>
-              <li>Seamlessly link data for dynamic exploration.</li>
-            </ul>
-          </Box>
-        </SimpleGrid>
+        <Flex direction="row" gap="lg" align="center" justify="center">
+          <Flex
+            style={{ backgroundColor: COLORS.peach, borderRadius: 10, flex: 1 }}
+            justify="center"
+          >
+            <img src={coolFox} alt="About Us" style={{ borderRadius: '8px', height: 350 }} />
+          </Flex>
+          <Flex direction="column" style={{ flex: 1 }} gap="10">
+            <Flex direction="column" gap="10">
+              <Title style={{ fontWeight: 300, fontSize: 28 }}>About us</Title>
+              <Text color="dimmed">
+                Our platform enables users to transform static documents into dynamic resources,
+                powered by AI and live datasets.
+              </Text>
+            </Flex>
+            <Flex direction="column">
+              <Text style={{ fontWeight: 500 }}>Why Choose Us?</Text>
+              <ul style={{ paddingLeft: '1.5rem' }}>
+                <li>Interact with your documents like never before.</li>
+                <li>Infuse static PDFs with real-time data sources.</li>
+                <li>Generate powerful insights through AI.</li>
+                <li>Seamlessly link data for dynamic exploration.</li>
+              </ul>
+              <Button
+                w={'auto'}
+                variant="light"
+                radius={10}
+                onClick={handleButtonClick}
+              >
+                {!isSignedIn ? 'Try It Now' : 'Enter the Research Suite'}
+              </Button>
+            </Flex>
+          </Flex>
+        </Flex>
       </section>
 
       {/* Our Services Section */}
       <section style={{ marginTop: '4rem', padding: '2rem 0' }}>
-        <Container size="lg">
-          <Title order={2} style={{ textAlign: 'center' }} mb="lg">
-            OUR SERVICES
-          </Title>
+        <Flex direction="column" gap="20">
+          <Title style={{ textAlign: 'center', fontWeight: 300, fontSize: 32 }}>Our Services</Title>
           <SimpleGrid cols={3} spacing="lg">
-            <Card shadow="sm" padding="lg" radius="md">
+            <Card shadow="sm" padding="lg" radius={20}>
               <Center>
                 <IconFileUpload size={48} color={COLORS.peach} />
               </Center>
@@ -108,7 +121,7 @@ export const AltFeaturesPage: React.FC = () => {
               </Text>
             </Card>
 
-            <Card shadow="sm" padding="lg" radius="md">
+            <Card shadow="sm" padding="lg" radius={20}>
               <Center>
                 <IconRobot size={48} color={COLORS.peach} />
               </Center>
@@ -120,7 +133,7 @@ export const AltFeaturesPage: React.FC = () => {
               </Text>
             </Card>
 
-            <Card shadow="sm" padding="lg" radius="md">
+            <Card shadow="sm" padding="lg" radius={20}>
               <Center>
                 <IconDatabase size={48} color={COLORS.peach} />
               </Center>
@@ -132,7 +145,7 @@ export const AltFeaturesPage: React.FC = () => {
               </Text>
             </Card>
           </SimpleGrid>
-        </Container>
+        </Flex>
       </section>
     </Container>
   );
