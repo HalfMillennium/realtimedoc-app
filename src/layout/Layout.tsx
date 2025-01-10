@@ -7,6 +7,7 @@ import lightModeImage from '../assets/svgs/grid_background_light_mode.svg';
 import darkModeImage from '../assets/svgs/grid_background_dark_mode.svg';
 
 import './Layout.css';
+import Footer from '@/components/Footer/Footer';
 
 const Layout = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -24,6 +25,7 @@ const Layout = () => {
       <main className="main-content">
         <Outlet />
       </main>
+      <Footer/>
     </div>
   );
 };

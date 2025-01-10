@@ -95,7 +95,7 @@ export const ResearcherRightSideBar: React.FC = () => {
                 >
                   {!isDataSetSelected(dataSet) && <IconCircleDashed size={16} />}
                   {isDataSetSelected(dataSet) && <IconCircleDashedCheck size={16} color="white" />}
-                  <div>
+                  <div style={{cursor: 'pointer'}}>
                     <input
                       type="radio"
                       name="dataSet"
