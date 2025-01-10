@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  Button,
-  Textarea,
-  TextInput,
-  useMantineColorScheme,
-  Flex,
-  Text
-} from '@mantine/core';
+import { Button, Flex, Text, Textarea, TextInput, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
 export const ContactForm: React.FC = () => {
@@ -35,22 +28,23 @@ export const ContactForm: React.FC = () => {
         gap: 50,
       }}
     >
-      <Flex direction="column" align="center" justify="center" style={{width: '100%'}}>
+      <Flex direction="column" align="center" justify="center" style={{ width: '100%' }}>
         <Text
           style={{
             fontSize: 36,
-            fontWeight: 200,
+            fontWeight: 400,
             textAlign: 'center',
           }}
         >
-          Have any <span style={{color: COLORS.peach, fontWeight: 300}}>questions?</span>
+          Have any <span style={{ color: COLORS.peach, fontWeight: 400 }}>questions?</span>
         </Text>
         <Text
           style={{
             fontSize: 14,
-            fontWeight: 300,
+            fontWeight: 400,
             textAlign: 'center',
-          }}>
+          }}
+        >
           Leave us a note by filling out the form below and we will get back to you.
         </Text>
       </Flex>

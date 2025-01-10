@@ -1,21 +1,21 @@
 import React from 'react';
+import { useAuth } from '@clerk/clerk-react';
 import { IconChartInfographic, IconDatabase, IconFileUpload, IconRobot } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Card, Center, Container, Flex, SimpleGrid, Text, Title } from '@mantine/core';
 import coolFox from '@/assets/cool_fox.png';
 import { COLORS } from '@/common/colors';
-import { useAuth } from '@clerk/clerk-react';
-import { useNavigate } from 'react-router-dom';
 
 export const AltFeaturesPage: React.FC = () => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
   const handleButtonClick = () => {
     navigate('/researcher');
-  }
+  };
   return (
-    <Container size="lg" p={50}>
+    <Container size="lg" p={50} style={{ display: 'flex', flexDirection: 'column', gap: 100 }}>
       <section style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <Title style={{ textAlign: 'center', fontWeight: 300, fontSize: 36 }}>Features</Title>
+        <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 36 }}>Features</Title>
         <Flex direction="row" gap="lg">
           <Card shadow="sm" padding="lg" radius={20}>
             <Center>
@@ -68,16 +68,16 @@ export const AltFeaturesPage: React.FC = () => {
 
       {/* About Us Section */}
       <section style={{ marginTop: '4rem' }}>
-        <Flex direction="row" gap="lg" align="center" justify="center">
+        <Flex direction="row" gap={100} align="center" justify="center">
           <Flex
             style={{ backgroundColor: COLORS.peach, borderRadius: 10, flex: 1 }}
             justify="center"
           >
             <img src={coolFox} alt="About Us" style={{ borderRadius: '8px', height: 350 }} />
           </Flex>
-          <Flex direction="column" style={{ flex: 1 }} gap="10">
+          <Flex direction="column" style={{ flex: 1 }} gap={30}>
             <Flex direction="column" gap="10">
-              <Title style={{ fontWeight: 300, fontSize: 28 }}>About us</Title>
+              <Title style={{ fontWeight: 400, fontSize: 28 }}>About us</Title>
               <Text color="dimmed">
                 Our platform enables users to transform static documents into dynamic resources,
                 powered by AI and live datasets.
@@ -91,12 +91,7 @@ export const AltFeaturesPage: React.FC = () => {
                 <li>Generate powerful insights through AI.</li>
                 <li>Seamlessly link data for dynamic exploration.</li>
               </ul>
-              <Button
-                w={'auto'}
-                variant="light"
-                radius={10}
-                onClick={handleButtonClick}
-              >
+              <Button w={'auto'} variant="light" radius={10} onClick={handleButtonClick}>
                 {!isSignedIn ? 'Try It Now' : 'Enter the Research Suite'}
               </Button>
             </Flex>
@@ -107,7 +102,7 @@ export const AltFeaturesPage: React.FC = () => {
       {/* Our Services Section */}
       <section style={{ marginTop: '4rem', padding: '2rem 0' }}>
         <Flex direction="column" gap="20">
-          <Title style={{ textAlign: 'center', fontWeight: 300, fontSize: 32 }}>Our Services</Title>
+          <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 32 }}>Our services</Title>
           <SimpleGrid cols={3} spacing="lg">
             <Card shadow="sm" padding="lg" radius={20}>
               <Center>

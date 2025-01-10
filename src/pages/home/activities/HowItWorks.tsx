@@ -11,7 +11,7 @@ export const HowItWorks: React.FC = () => {
         <IconChartDots3
           color={colorScheme === 'dark' ? COLORS.peach : COLORS.mantineDefaultBlack}
         />
-        <Title order={1} style={{ fontWeight: 200 }}>
+        <Title order={1} style={{ fontWeight: 400 }}>
           PDF Insights with Live Datasets
         </Title>
       </Flex>
@@ -85,7 +85,7 @@ const styles = {
   },
   text: {
     marginTop: '0.5rem',
-    fontWeight: 200,
+    fontWeight: 400,
     fontSize: 14,
   },
   list: {

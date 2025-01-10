@@ -152,7 +152,7 @@ const ErrorModal = React.memo<ErrorModalProps>(
         <Flex direction="column" gap={15} flex="1" style={{ alignItems: 'center' }}>
           <IconMoodWrrrFilled size={72} color="#f54266" />
           <Text style={{ fontSize: 24, fontWeight: 400, textAlign: 'center' }}>{errorTitle}</Text>
-          <Text style={{ fontSize: 14, fontWeight: 200, textAlign: 'center' }}>
+          <Text style={{ fontSize: 14, fontWeight: 400, textAlign: 'center' }}>
             {errorDescription}
           </Text>
           <Button variant="light" onClick={handleCloseErrorModal} color="gray" mt="md">

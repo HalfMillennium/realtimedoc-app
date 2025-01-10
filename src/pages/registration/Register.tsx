@@ -60,7 +60,7 @@ export const Register: React.FC<RegisterProps> = () => {
                 width: '100%',
               }}
             >
-              <Title order={3} style={{ fontWeight: 300 }}>
+              <Title order={3} style={{ fontWeight: 400 }}>
                 Join
               </Title>
               <Text
@@ -95,15 +95,22 @@ export const Register: React.FC<RegisterProps> = () => {
                   gap: 20,
                 }}
               >
-                <TextInput style={{display: 'flex', flex: 1, flexDirection: 'column' }} label="First name" placeholder="First name" size="md" required />
-                <TextInput style={{display: 'flex', flex: 1, flexDirection: 'column' }} label="Last name" placeholder="Last name" size="md" required />
+                <TextInput
+                  style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
+                  label="First name"
+                  placeholder="First name"
+                  size="md"
+                  required
+                />
+                <TextInput
+                  style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
+                  label="Last name"
+                  placeholder="Last name"
+                  size="md"
+                  required
+                />
               </div>
-              <TextInput
-                label="Email address"
-                placeholder="Enter your email"
-                size="md"
-                required
-              />
+              <TextInput label="Email address" placeholder="Enter your email" size="md" required />
               <PasswordInput label="Password" placeholder="Choose a good one" size="md" required />
               <Button fullWidth size="md" color="teal">
                 Continue

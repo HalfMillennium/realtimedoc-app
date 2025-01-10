@@ -103,7 +103,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
               onClick={() => dispatch(deselectAllDataSets())}
             >
               <IconX size={14} style={{ marginRight: 5 }} />
-              <Text style={{ fontSize: 12, fontWeight: 300, display: 'flex' }}>Remove</Text>
+              <Text style={{ fontSize: 12, fontWeight: 400, display: 'flex' }}>Remove</Text>
             </Button>
           </Flex>
         </Card>

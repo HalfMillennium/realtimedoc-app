@@ -1,16 +1,26 @@
 import '@mantine/core/styles.css';
 
 import React, { createContext, ReactNode, useContext, useState } from 'react';
+import { createGlobalStyle } from 'styled-components';
 import { MantineProvider } from '@mantine/core';
 import { Header } from './components/Header/Header';
 import { Router } from './Router';
 import { theme } from './theme';
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'DM Sans', sans-serif;
+  }
+`;
+
 export default function App() {
   return (
-    <MantineProvider theme={theme}>
-      <Router />
-    </MantineProvider>
+    <>
+      <GlobalStyle />
+      <MantineProvider theme={theme}>
+        <Router />
+      </MantineProvider>
+    </>
   );
 }
 

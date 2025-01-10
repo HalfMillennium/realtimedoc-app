@@ -46,7 +46,7 @@ export function HomePage() {
           <Text
             style={{
               fontSize: 28,
-              fontWeight: 100,
+              fontWeight: 400,
               textAlign: 'center',
             }}
           >
@@ -61,7 +61,7 @@ export function HomePage() {
             <Text
               style={{
                 fontSize: 24,
-                fontWeight: 200,
+                fontWeight: 400,
               }}
             >
               Upload PDFs. Ask anything. Find everything—powered by AI.

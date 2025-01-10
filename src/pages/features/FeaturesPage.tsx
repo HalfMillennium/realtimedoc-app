@@ -17,7 +17,7 @@ export const FeaturesPage: React.FC = () => {
     <Container size="md" py="xl">
       <Stack gap="xl">
         {/* Header Section */}
-        <Title style={{ textAlign: 'center', fontWeight: 300, fontSize: 56 }}>
+        <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 56 }}>
           PDF Insights with Live Datasets
         </Title>
         <Text style={{ textAlign: 'center' }} size="lg" color="dimmed">

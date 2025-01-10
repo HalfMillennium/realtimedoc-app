@@ -58,11 +58,11 @@ export const ResearcherRightSideBar: React.FC = () => {
           >
             <div style={{ display: 'flex', gap: 5, alignItems: 'center', paddingBottom: '5px' }}>
               <IconBooks size={18} color={COLORS.peach} />
-              <Text style={{ fontSize: 16, fontWeight: 300 }}>Live DataSets</Text>
+              <Text style={{ fontSize: 18, fontWeight: 400 }}>Live Datasets</Text>
             </div>
           </Flex>
           <Flex>
-            <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
+            <Text style={{ fontSize: 12, fontWeight: 500, opacity: 0.7 }}>
               Combine the information in your uploaded documents with Prisma's up-to-date data
               libraries to further enhance generated insights.
             </Text>
@@ -106,7 +106,7 @@ export const ResearcherRightSideBar: React.FC = () => {
                       <Text
                         size="sm"
                         style={{
-                          fontWeight: 300,
+                          fontWeight: 400,
                           color: isDataSetSelected(dataSet)
                             ? 'white'
                             : colorScheme === 'dark'
@@ -144,7 +144,7 @@ export const ResearcherRightSideBar: React.FC = () => {
             onClick={() => dispatch(deselectAllDataSets())}
           >
             <IconX size={14} style={{ marginRight: 5 }} />
-            <Text style={{ fontSize: 12, fontWeight: 300, display: 'flex' }}>Reset Selection</Text>
+            <Text style={{ fontSize: 12, fontWeight: 400, display: 'flex' }}>Reset Selection</Text>
           </Button>
         </Flex>
       </Card>

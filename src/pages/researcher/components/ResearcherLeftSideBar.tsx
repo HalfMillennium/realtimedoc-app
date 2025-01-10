@@ -55,7 +55,7 @@ export const ResearcherLeftSideBar = () => {
       <Divider my="sm" />
       <div style={{ display: 'flex', flexDirection: 'row', gap: 5, opacity: 0.5 }}>
         <IconHistory size={16} />
-        <Text size="xs" style={{ fontWeight: 300 }}>
+        <Text size="xs" style={{ fontWeight: 400 }}>
           Chat History
         </Text>
       </div>
@@ -91,7 +91,7 @@ export const ResearcherLeftSideBar = () => {
           >
             <Flex direction="row" gap="10">
               <IconEyeQuestion size={14} />
-              <Text size="xs" style={{ fontWeight: 300 }}>
+              <Text size="xs" style={{ fontWeight: 400 }}>
                 No chat history found
               </Text>
             </Flex>
@@ -142,7 +142,7 @@ export const ResearcherLeftSideBar = () => {
             Upload Document & Start Chat
           </Button>
         </Dropzone>
-        <Text style={{ fontSize: 12, fontWeight: 300, opacity: 0.7 }}>
+        <Text style={{ fontSize: 12, fontWeight: 400, opacity: 0.7 }}>
           To start a new chat with realtimedoc, simply upload a new PDF document.
         </Text>
       </Flex>

@@ -75,17 +75,19 @@ export const FAQPage: React.FC = () => {
     <Flex direction="column" gap={15} style={{ width: '100%' }} py="xl">
       <Flex direction="row" style={{ flex: 1, justifyContent: 'center' }}>
         <Flex direction="column" style={{ width: '50%' }} py={20} gap={20}>
-          <Title style={{ textAlign: 'center', fontWeight: 300, fontSize: 56 }}>
+          <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 56 }}>
             Frequently asked questions
           </Title>
           <Text style={{ textAlign: 'center', fontSize: 18, opacity: 0.5 }}>
             These are the most commonly asked questions about RealTimeDoc.
           </Text>
-          <Accordion style={{borderRadius: 10, gap: 10}}>
+          <Accordion style={{ borderRadius: 10, gap: 10 }}>
             {faqData[activeCategory].map((faq, index) => (
-              <Accordion.Item style={{borderRadius: 10}}key={index} value={faq.question}>
-                <Accordion.Control icon={faq.icon} style={{borderRadius: 10}}>{faq.question}</Accordion.Control>
-                <Accordion.Panel style={{borderRadius: 10}}>{faq.answer}</Accordion.Panel>
+              <Accordion.Item style={{ borderRadius: 10 }} key={index} value={faq.question}>
+                <Accordion.Control icon={faq.icon} style={{ borderRadius: 10 }}>
+                  {faq.question}
+                </Accordion.Control>
+                <Accordion.Panel style={{ borderRadius: 10 }}>{faq.answer}</Accordion.Panel>
               </Accordion.Item>
             ))}
           </Accordion>
