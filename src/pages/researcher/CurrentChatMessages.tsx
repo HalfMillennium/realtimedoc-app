@@ -24,7 +24,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   isLoadingNewMessage,
 }) => {
   const messages = useSelector(
-    (state: RootState) => state.conversations.currentConversation.messages
+    (state: RootState) => state.conversations.currentConversation?.messages
   );
   const selectedDataSet = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const dispatch = useDispatch();
@@ -133,7 +133,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
                     }}
                   >
                     <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
-                      {message.author} - {message.timestamp}
+                      {message.userName} - {message.timestamp}
                     </Text>
                     <Text size="md">{message.content}</Text>
                     <Badge size="sm" color={COLORS.teal}>
@@ -148,7 +148,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
                 <>
                   <div key={index}>
                     <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
-                      {message.author} - {message.timestamp}
+                      {message.userName} - {message.timestamp}
                     </Text>
                     <Text size="md">{message.content}</Text>
                   </div>

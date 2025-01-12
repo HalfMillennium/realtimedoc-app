@@ -14,6 +14,8 @@ declare global {
 
 export const StripePricingTable = () => {
   const { colorScheme } = useMantineColorScheme();
+  const embedStyle = { width: 100 }; // Add this line
+
   if (colorScheme === 'dark') {
     return (
       <stripe-pricing-table
@@ -26,6 +28,7 @@ export const StripePricingTable = () => {
     <stripe-pricing-table
       pricing-table-id="prctbl_1QfpRFGIOCXPZaJUdB0nQrnC"
       publishable-key="pk_test_51QMHMqGIOCXPZaJUv0yl1ontnNPbdie2PISoQxQI03u2C8THXP4dYrMRVnM149a7pJsigtKsQv21hAW2ofllbWn100jrB5v76J"
+      style={embedStyle} // Add this line
     ></stripe-pricing-table>
   );
 };

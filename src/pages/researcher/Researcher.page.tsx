@@ -90,7 +90,6 @@ const MessageInput = React.memo(({ onSend, colorScheme, disabled }: MessageInput
         value={newMessage}
         onKeyDown={handleKeyDown}
         onChange={handleTextAreaChange}
-        disabled={disabled}
         style={{
           width: '100%',
           borderColor: colorScheme === 'light' ? 'black' : 'white',
@@ -206,7 +205,7 @@ export const Researcher: React.FC = () => {
         if (user.user?.id) {
           const newChatMessage = {
             id: crypto.randomUUID(),
-            author: userName,
+            userName: userName,
             timestamp: new Date().toLocaleTimeString(),
             content: message,
           };
@@ -214,20 +213,20 @@ export const Researcher: React.FC = () => {
           dispatch(
             updateConversation({
               message: newChatMessage,
-              conversationId: currentConversation.id,
+              conversationId: currentConversation?.id ?? '',
             })
           );
 
           dispatch(
             setCurrentConversation({
-              conversationId: currentConversation.id,
+              conversationId: currentConversation?.id ??  '',
             })
           );
 
           dispatch(
             getNewChatResponse({
               authToken,
-              conversationId: currentConversation.id,
+              conversationId: currentConversation?.id ?? '',
               message,
               selectedDataSetId,
             })
@@ -291,7 +290,6 @@ export const Researcher: React.FC = () => {
           >
             <ResearcherLeftSideBar />
           </React.Suspense>
-
           <div
             style={{
               display: 'flex',

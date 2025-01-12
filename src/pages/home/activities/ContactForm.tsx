@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import { Button, Flex, Text, Textarea, TextInput, useMantineColorScheme } from '@mantine/core';
+import { Button, Flex, Text, Textarea, TextInput } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
 export const ContactForm: React.FC = () => {
-  const { colorScheme } = useMantineColorScheme();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = () => {
-    // Handle form submission logic here
     console.log({ name, email, subject, message });
   };
 
@@ -19,10 +17,7 @@ export const ContactForm: React.FC = () => {
       style={{
         display: 'flex',
         flex: 1,
-        position: 'relative',
-        justifyContent: 'center',
-        backgroundColor: colorScheme === 'dark' ? '#212121' : '#efefef',
-        borderTopLeftRadius: '2rem',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         flexDirection: 'column',
         gap: 50,

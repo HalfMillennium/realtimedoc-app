@@ -13,6 +13,9 @@ import {
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
 import classes from './Header.module.css';
+import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
+import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
+import { useDispatch } from 'react-redux';
 
 const links = [
   { link: '/features', label: 'Features' },
@@ -20,18 +23,19 @@ const links = [
     link: '/faq',
     label: 'FAQ',
   },
-  { link: '/about', label: 'How It Works' },
+  { link: '/', label: 'How It Works', action: setCurrentSegmentMenuOption({menuOption: SegmentMenuOptions.HowItWorks}) },
   { link: '/pricing', label: 'Pricing' },
   {
-    link: '#2',
-    label: 'Support',
-    links: [{ link: '/contact', label: 'Contact' }],
+    link: '/',
+    label: 'Contact',
+    action: setCurrentSegmentMenuOption({menuOption: SegmentMenuOptions.AnyQuestions})
   },
 ];
 
 export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const items = links.map((link) => {
     return (
       <a
@@ -41,6 +45,9 @@ export function Header() {
         onClick={(event) => {
           event.preventDefault();
           navigate(link.link);
+          if(!!link.action) {
+            dispatch(link.action);
+          }
         }}
       >
         {link.label}

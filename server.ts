@@ -80,7 +80,7 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
+    console.log('here')
     const responseText = await response.text();
     console.log('Response body:', responseText);
     res.status(200).json(responseText);

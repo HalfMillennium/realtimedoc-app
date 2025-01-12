@@ -95,14 +95,14 @@ export const ResearcherRightSideBar: React.FC = () => {
                 >
                   {!isDataSetSelected(dataSet) && <IconCircleDashed size={16} />}
                   {isDataSetSelected(dataSet) && <IconCircleDashedCheck size={16} color="white" />}
-                  <div style={{cursor: 'pointer'}}>
-                    <input
-                      type="radio"
-                      name="dataSet"
-                      id={`dataSet:${dataSet.id}`}
-                      style={{ display: 'none' }}
-                    />
+                  <div>
                     <label htmlFor={`dataSet:${dataSet.id}`} style={{ cursor: 'pointer' }}>
+                      <input
+                        type="radio"
+                        name="dataSet"
+                        id={`dataSet:${dataSet.id}`}
+                        style={{ display: 'none' }}
+                      />
                       <Text
                         size="sm"
                         style={{

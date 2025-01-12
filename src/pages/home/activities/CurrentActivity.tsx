@@ -1,14 +1,18 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Flex, SegmentedControl, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
+import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
+import { RootState } from '@/store/store';
 import { allSegmentMenuOptions, SegmentMenuOptions } from '../menus/segment_menu';
 import { ContactForm } from './ContactForm';
 import { HowItWorks } from './HowItWorks';
 
 export const CurrentActivity = () => {
   const { colorScheme } = useMantineColorScheme();
-  const [segmentMenuOption, setSegmentMenuOption] = useState<SegmentMenuOptions>(
-    SegmentMenuOptions.HowItWorks
+  const dispatch = useDispatch();
+  const segmentMenuOption = useSelector(
+    (state: RootState) => state.homePageActivity.currentSegmentMenuOption
   );
   return (
     <div
@@ -33,7 +37,9 @@ export const CurrentActivity = () => {
           }}
           radius={10}
           value={segmentMenuOption}
-          onChange={(option: string) => setSegmentMenuOption(option as SegmentMenuOptions)}
+          onChange={(option: string) =>
+            dispatch(setCurrentSegmentMenuOption({menuOption: option as SegmentMenuOptions}))
+          }
           data={allSegmentMenuOptions}
         />
       </Flex>

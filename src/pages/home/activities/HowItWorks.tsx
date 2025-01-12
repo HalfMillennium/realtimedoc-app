@@ -24,53 +24,49 @@ export const HowItWorks: React.FC = () => {
       >
         Transform your documents into a searchable, interactive knowledge hub.
       </Text>
-
-      <Title order={3} style={styles.sectionTitle}>
-        How It Works
-      </Title>
-      <Text style={styles.text}>Getting started is simple.</Text>
-      <List
-        style={styles.list}
-        spacing="sm"
-        icon={
-          <ThemeIcon color={COLORS.teal} style={styles.icon}>
-            <IconCheck size={18} />
-          </ThemeIcon>
-        }
-      >
-        <List.Item>Upload your PDF documents through our intuitive web app.</List.Item>
-        <List.Item>
-          Integrate live datasets, such as financial reports or economic spending data, to enhance
-          document insights.
-        </List.Item>
-        <List.Item>Ask questions or search specific content using natural language.</List.Item>
-        <List.Item>Receive instant, accurate results powered by advanced AI.</List.Item>
-      </List>
-
-      <Title order={3} style={styles.sectionTitle}>
-        Who Is This For?
-      </Title>
-      <Text style={styles.text}>
-        Whether you're a researcher, analyst, or business professional, our tool is designed to:
-      </Text>
-      <List
-        style={styles.list}
-        spacing="sm"
-        icon={
-          <ThemeIcon color={COLORS.pink} style={styles.icon}>
-            <IconCheck size={18} />
-          </ThemeIcon>
-        }
-      >
-        <List.Item>Save time by automating document searches and analyses.</List.Item>
-        <List.Item>
-          Gain deeper insights by combining static documents with dynamic data sources.
-        </List.Item>
-        <List.Item>Enable deeper insights without manual effort.</List.Item>
-        <List.Item>
-          Make better decisions with enhanced, context-rich information at your fingertips.
-        </List.Item>{' '}
-      </List>
+      <Flex direction="column" justify="space-between">
+        <Text style={styles.sectionTitle}>How It Works</Text>
+        <Text style={styles.text}>Getting started is simple.</Text>
+        <List
+          style={styles.list}
+          spacing="sm"
+          icon={
+            <ThemeIcon color={COLORS.teal} style={styles.icon}>
+              <IconCheck size={18} />
+            </ThemeIcon>
+          }
+        >
+          <List.Item>Upload your PDF documents through our intuitive web app.</List.Item>
+          <List.Item>
+            Integrate live datasets, such as financial reports or economic spending data, to enhance
+            document insights.
+          </List.Item>
+          <List.Item>Ask questions or search specific content using natural language.</List.Item>
+          <List.Item>Receive instant, accurate results powered by advanced AI.</List.Item>
+        </List>
+        <Text style={styles.sectionTitle}>Who is this for?</Text>
+        <Text style={styles.text}>
+          Whether you're a researcher, analyst, or business professional, our tool is designed to:
+        </Text>
+        <List
+          style={styles.list}
+          spacing="sm"
+          icon={
+            <ThemeIcon color={COLORS.pink} style={styles.icon}>
+              <IconCheck size={18} />
+            </ThemeIcon>
+          }
+        >
+          <List.Item>Save time by automating document searches and analyses.</List.Item>
+          <List.Item>
+            Gain deeper insights by combining static documents with dynamic data sources.
+          </List.Item>
+          <List.Item>Enable deeper insights without manual effort.</List.Item>
+          <List.Item>
+            Make better decisions with enhanced, context-rich information at your fingertips.
+          </List.Item>{' '}
+        </List>
+      </Flex>
     </Flex>
   );
 };
@@ -80,8 +76,9 @@ const styles = {
     width: '75%',
   },
   sectionTitle: {
-    marginTop: '2rem',
-    fontWeight: 400,
+    marginTop: 30,
+    fontWeight: 500,
+    fontSize: 20,
   },
   text: {
     marginTop: '0.5rem',

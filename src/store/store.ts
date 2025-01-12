@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { Conversation, conversationsReducer } from './conversations/conversationsSlice';
 import { dataSetsReducer } from './dataSets/dataSetsSlice';
+import { homePageActivityReducer } from './homePageActivity/homePageActivitySlice';
 import { membershipReducer } from './membership/membershipSlice';
 import { userReducer } from './user/userSlice';
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     membership: membershipReducer,
     user: userReducer,
     dataSets: dataSetsReducer,
+    homePageActivity: homePageActivityReducer,
   },
 });
 

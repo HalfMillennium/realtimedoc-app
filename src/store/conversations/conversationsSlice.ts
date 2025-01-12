@@ -8,7 +8,7 @@ import { setToken } from '../user/userSlice';
 
 export interface Message {
   id: string;
-  author: string;
+  userName: string;
   content: string;
   timestamp: string;
   tag?: string;
@@ -107,8 +107,8 @@ export const loadUserConversations = createAsyncThunk<
 export const conversationsSlice = createSlice({
   name: 'conversations',
   initialState: {
-    conversations: EXAMPLE_CONVERSATIONS_MAP,
-    currentConversation: EXAMPLE_CONVERSATIONS[0],
+    conversations: {} as ConversationMap,
+    currentConversation: null as Conversation | null,
     isLoadingNewMessage: false,
     isLoadingNewConversation: false,
     isDailyLimitExceeded: false,
@@ -118,23 +118,33 @@ export const conversationsSlice = createSlice({
       state,
       action: PayloadAction<{ conversationId: string; message: Message }>
     ) => {
-      const conversation = state.conversations[action.payload.conversationId];
-      if (conversation) {
-        if (!!conversation.messages) {
+      if (!!state.conversations) {
+        const conversation: Conversation = state.conversations[action.payload.conversationId];
+        if (conversation?.messages) {
           conversation.messages.push(action.payload.message);
           return;
         }
-        conversation['messages'] = [action.payload.message];
+        conversation.messages = [action.payload.message];
+      } else {
+        console.error('Could not update conversation - No conversations found');
       }
     },
     setCurrentConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
-      const conversation = state.conversations[action.payload.conversationId];
-      if (conversation) {
-        state.currentConversation = conversation;
+      if (!!state.conversations) {
+        const conversation = state.conversations[action.payload.conversationId];
+        if (conversation) {
+          state.currentConversation = conversation;
+        }
+      } else {
+        console.error('Could not set current conversation - No conversations found');
       }
     },
     deleteConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
-      delete state.conversations[action.payload.conversationId];
+      if (!!state.conversations) {
+        delete state.conversations[action.payload.conversationId];
+      } else {
+        console.error('Could not delete conversation - No conversations found');
+      }
     },
   },
   extraReducers: (builder) => {
@@ -149,31 +159,39 @@ export const conversationsSlice = createSlice({
           return;
         }
         state.isDailyLimitExceeded = false;
-        state.conversations[payloadResponse.conversationId] = {
-          id: payloadResponse.conversationId,
-          title: payloadResponse.conversationTitle,
-          embeddingId: payloadResponse.embeddingId,
-          messages: [
-            {
-              id: Math.random().toString(16).slice(2),
-              author: 'RealTimeDoc AI',
-              content: payloadResponse.message,
-              timestamp: new Date().toLocaleTimeString(),
-            },
-          ],
-        };
-        state.isLoadingNewConversation = false;
-        state.currentConversation = state.conversations[payloadResponse.conversationId];
+        if(!!state.conversations && state.conversations !== undefined) {
+          state.conversations[payloadResponse.conversationId] = {
+            id: payloadResponse.conversationId,
+            title: payloadResponse.conversationTitle,
+            embeddingId: payloadResponse.embeddingId,
+            messages: [
+              {
+                id: Math.random().toString(16).slice(2),
+                userName: 'RealTimeDoc AI',
+                content: payloadResponse.message,
+                timestamp: new Date().toLocaleTimeString(),
+              },
+            ],
+          };
+          state.isLoadingNewConversation = false;
+          state.currentConversation = state.conversations[payloadResponse.conversationId];
+        }
       }),
       builder.addCase(getNewChatResponse.pending, (state) => {
         state.isLoadingNewMessage = true;
       }),
       builder.addCase(getNewChatResponse.fulfilled, (state, action) => {
-        console.log('Raw payload:', action.payload, typeof action.payload);
+        if (typeof action.payload === 'string' && action.payload.charAt(0) === '<') {
+          // Token may have expired, so we need to refresh it
+          getNewChatResponse(action.meta.arg);
+          return;
+        } else {
+          console.log(`PAYLOAD PRECISE: ||${action.payload}`);
+        }
         const payloadResponse = JSON.parse(JSON.parse(JSON.parse(action.payload)));
         const newMessage: Message = {
           id: Math.random().toString(16).slice(2),
-          author: 'RealTimeDoc AI',
+          userName: 'RealTimeDoc AI',
           content: payloadResponse.message,
           timestamp: new Date().toLocaleTimeString(),
           tag: 'Doc Bot Message',

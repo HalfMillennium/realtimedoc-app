@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Text, useMantineColorScheme } from '@mantine/core';
+import { Container, Flex,  Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
 const Footer: React.FC = () => {
@@ -13,11 +13,17 @@ const Footer: React.FC = () => {
         marginTop: 'auto',
       }}
     >
-      <Container size="lg" style={{ textAlign: 'center' }}>
-        <Text size="sm" style={{ color: COLORS.mantineDefaultGray }}>
+      <Flex direction="row" gap="50" justify="center" align="center">
+        <Text size="xs" style={{ color: COLORS.mantineDefaultGray, textDecoration: 'underline' }}>
           &copy; {currentYear} RealTimeDoc. All rights reserved.
         </Text>
-      </Container>
+        <Text size="xs" style={{ color: COLORS.mantineDefaultGray, textDecoration: 'underline' }}>
+          &copy; Privacy Policy
+        </Text>
+        <Text size="xs" style={{ color: COLORS.mantineDefaultGray, textDecoration: 'underline' }}>
+          &copy; Terms of Service
+        </Text>
+      </Flex>
     </footer>
   );
 };
