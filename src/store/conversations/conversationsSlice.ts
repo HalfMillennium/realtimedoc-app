@@ -1,8 +1,7 @@
 import { useAuth } from '@clerk/clerk-react';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  EXAMPLE_CONVERSATIONS,
-  EXAMPLE_CONVERSATIONS_MAP,
+  conversationsMapFromArray
 } from '@/pages/researcher/components/utils';
 import { setToken } from '../user/userSlice';
 
@@ -17,7 +16,6 @@ export interface Message {
 export interface Conversation {
   id: string;
   title: string;
-  embeddingId: string;
   messages: Message[];
 }
 
@@ -79,25 +77,20 @@ export const loadUserConversations = createAsyncThunk<
   any,
   {
     authToken: string;
-    conversationId: string;
-    message: string;
-    selectedDataSetId: string | undefined;
+    userId: string;
   }
 >(
   'conversations/loadUserConversations',
-  async ({ authToken, conversationId, message, selectedDataSetId }, thunkAPI) => {
-    const response = await fetch(`/api/new-message/${conversationId}`, {
+  async ({ authToken, userId }, thunkAPI) => {
+    const response = await fetch(`/api/conversations`, {
       method: 'POST',
-      body: JSON.stringify({
-        queryText: message,
-        dataSetId: selectedDataSetId,
-      }),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${authToken}`,
         mode: 'cors',
       },
-    }).catch((error) => console.error('Failed to getNewChatResponse:', error));
+      body: JSON.stringify({userId}),
+    }).catch((error) => console.error('Failed to load user conversations:', error));
     if (!!response) {
       return response.text();
     }
@@ -160,10 +153,9 @@ export const conversationsSlice = createSlice({
         }
         state.isDailyLimitExceeded = false;
         if(!!state.conversations && state.conversations !== undefined) {
-          state.conversations[payloadResponse.conversationId] = {
-            id: payloadResponse.conversationId,
-            title: payloadResponse.conversationTitle,
-            embeddingId: payloadResponse.embeddingId,
+          state.conversations[payloadResponse.conversation_id] = {
+            id: payloadResponse.conversation_id,
+            title: payloadResponse.conversation_title,
             messages: [
               {
                 id: Math.random().toString(16).slice(2),
@@ -174,7 +166,7 @@ export const conversationsSlice = createSlice({
             ],
           };
           state.isLoadingNewConversation = false;
-          state.currentConversation = state.conversations[payloadResponse.conversationId];
+          state.currentConversation = state.conversations[payloadResponse.conversation_id];
         }
       }),
       builder.addCase(getNewChatResponse.pending, (state) => {
@@ -185,8 +177,6 @@ export const conversationsSlice = createSlice({
           // Token may have expired, so we need to refresh it
           getNewChatResponse(action.meta.arg);
           return;
-        } else {
-          console.log(`PAYLOAD PRECISE: ||${action.payload}`);
         }
         const payloadResponse = JSON.parse(JSON.parse(JSON.parse(action.payload)));
         const newMessage: Message = {
@@ -197,12 +187,52 @@ export const conversationsSlice = createSlice({
           tag: 'Doc Bot Message',
         };
         state.isLoadingNewMessage = false;
-        console.log('Current conversation:', state.conversations[payloadResponse.conversationId]);
-        state.conversations[payloadResponse.conversationId].messages.push(newMessage);
-        state.currentConversation = state.conversations[payloadResponse.conversationId];
+        console.log('Current conversation:', state.conversations[payloadResponse.conversation_id]);
+        state.conversations[payloadResponse.conversation_id].messages.push(newMessage);
+        state.currentConversation = state.conversations[payloadResponse.conversation_id];
+      }),
+      builder.addCase(loadUserConversations.fulfilled, (state, action) => {
+        const payloadResponse = JSON.parse(JSON.parse(action.payload));
+        state.isDailyLimitExceeded = false;
+        if (!!payloadResponse && typeof payloadResponse !== 'string') {
+          let camelCasedPayload = toCamelCase(payloadResponse);
+          console.log('camelCasedPayload:', camelCasedPayload);
+          let cleanedConversations = []
+          for(const convo of camelCasedPayload) {
+            cleanedConversations.push({
+              ...convo,
+              messages: convo.messages.map((msg: any[]) => {
+                return {
+                  id: msg[0],
+                  content: msg[1],
+                  userId: msg[2],
+                  userName: msg[3],
+                  timestamp: msg[4],
+                  metadata: msg[msg.length - 1],
+                  tag: msg[3] === 'RealTimeDoc AI' ? 'Doc Bot Message' : undefined,
+                }
+              })
+            })
+          }
+          state.conversations = conversationsMapFromArray(cleanedConversations);
+          state.currentConversation = cleanedConversations[0];
+        }
       });
   },
 });
+
+function toCamelCase(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(v => toCamelCase(v));
+  } else if (obj !== null && obj.constructor === Object) {
+    return Object.keys(obj).reduce((result, key) => {
+      const camelKey = key.replace(/_([a-z])/g, g => g[1].toUpperCase());
+      result[camelKey] = toCamelCase(obj[key]);
+      return result;
+    }, {} as any);
+  }
+  return obj;
+}
 
 // Action creators are generated for each case reducer function
 export const { updateConversation, setCurrentConversation, deleteConversation } =

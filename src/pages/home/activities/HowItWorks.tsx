@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconChartDots3, IconCheck } from '@tabler/icons-react';
-import { Flex, List, Text, ThemeIcon, Title, useMantineColorScheme } from '@mantine/core';
+import { Flex, List, Text, ThemeIcon, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 
 export const HowItWorks: React.FC = () => {
@@ -11,9 +11,9 @@ export const HowItWorks: React.FC = () => {
         <IconChartDots3
           color={colorScheme === 'dark' ? COLORS.peach : COLORS.mantineDefaultBlack}
         />
-        <Title order={1} style={{ fontWeight: 400 }}>
+        <Text style={{ fontWeight: 400, fontSize: 32 }}>
           PDF Insights with Live Datasets
-        </Title>
+        </Text>
       </Flex>
       <Text
         style={{
@@ -42,7 +42,6 @@ export const HowItWorks: React.FC = () => {
             document insights.
           </List.Item>
           <List.Item>Ask questions or search specific content using natural language.</List.Item>
-          <List.Item>Receive instant, accurate results powered by advanced AI.</List.Item>
         </List>
         <Text style={styles.sectionTitle}>Who is this for?</Text>
         <Text style={styles.text}>
@@ -61,7 +60,6 @@ export const HowItWorks: React.FC = () => {
           <List.Item>
             Gain deeper insights by combining static documents with dynamic data sources.
           </List.Item>
-          <List.Item>Enable deeper insights without manual effort.</List.Item>
           <List.Item>
             Make better decisions with enhanced, context-rich information at your fingertips.
           </List.Item>{' '}

@@ -17,6 +17,7 @@ import {
 } from '@mantine/core';
 import {
   getNewChatResponse,
+  loadUserConversations,
   setCurrentConversation,
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
@@ -183,10 +184,22 @@ export const Researcher: React.FC = () => {
 
   const [errorModalOpen, setErrorModalOpen] = useState(hasExceededDailyLimit);
 
-  // Cleanup effect
   useEffect(() => {
     dispatch(deselectAllDataSets());
   }, [dispatch]);
+
+  useEffect(() => {
+    getToken()
+    .then((token) => {
+      if (token) {
+        dispatch(setToken({ token }));
+        dispatch(loadUserConversations({ authToken: token, userId: user.user?.id ?? '' }));
+      } else {
+        console.error('Token fetched, but undefined.');
+      }
+    })
+    .catch((error) => console.error('Failed to get token:', error));
+  },[])
 
   // Memoize the message sending logic
   const handleSendMessage = useCallback(
@@ -219,7 +232,7 @@ export const Researcher: React.FC = () => {
 
           dispatch(
             setCurrentConversation({
-              conversationId: currentConversation?.id ??  '',
+              conversationId: currentConversation?.id ?? '',
             })
           );
 
@@ -288,13 +301,12 @@ export const Researcher: React.FC = () => {
           <React.Suspense
             fallback={<LoadingOverlay zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />}
           >
-            <ResearcherLeftSideBar />
+            <ResearcherLeftSideBar containerWidth={20} />
           </React.Suspense>
-          <div
+          <Flex
+            direction="column"
+            w={'100%'}
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              flex: 1,
               padding: '8px',
             }}
           >
@@ -319,8 +331,8 @@ export const Researcher: React.FC = () => {
                 />
               </>
             )}
-          </div>
-          <ResearcherRightSideBar />
+          </Flex>
+          <ResearcherRightSideBar containerWidth={10} />
         </div>
       </div>
     </div>

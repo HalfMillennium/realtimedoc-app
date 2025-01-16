@@ -1,25 +1,16 @@
 import React from 'react';
-import {
-  Badge,
-  Button,
-  Card,
-  Center,
-  Container,
-  Divider,
-  Flex,
-  Group,
-  Stack,
-  Text,
-  Title,
-  useMantineColorScheme,
-} from '@mantine/core';
+import { useAuth, useUser } from '@clerk/clerk-react';
+import { Flex, Text, useMantineColorScheme } from '@mantine/core';
 import { StripePricingTable } from './StripePricingTable';
+import { UnauthPricingTable } from './UnauthPricingPage';
 
 export const PricingPage: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
-
+  const { isSignedIn } = useAuth();
+  const user = useUser();
+  const userId = user.user?.id;
   return (
-    <Flex direction="column" style={{justifyContent: 'center', width: '100%'}}>
+    <Flex direction="column" style={{ justifyContent: 'center', width: '100%' }}>
       <Text style={{ textAlign: 'center', fontWeight: 300, fontSize: 36 }} mb="md">
         Choose Your Plan
       </Text>
@@ -27,9 +18,12 @@ export const PricingPage: React.FC = () => {
         Whether you're just starting out or need enterprise-grade tools, we have a plan tailored for
         you. Start small and scale as your needs grow.
       </Text>
-      <div style={{padding: 30, backgroundColor: colorScheme === 'dark' ? '#272727' : '#ffffff', width: 'auto'}}>
-        <StripePricingTable />
-      </div>
+      {(!isSignedIn || !userId) && <UnauthPricingTable />}
+      {isSignedIn && userId && (
+        <span style={{padding: 30, backgroundColor: colorScheme === 'dark' ? "#272727" : "#FFFFFF"}}>
+          <StripePricingTable userId={userId} />
+        </span>
+      )}
     </Flex>
   );
 };

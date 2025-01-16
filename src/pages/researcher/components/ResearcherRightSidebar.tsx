@@ -11,7 +11,7 @@ import {
 import { AppDispatch, RootState } from '@/store/store';
 import { DataSetOptionsPanel } from './DataSetOptionsPanel';
 
-export const ResearcherRightSideBar: React.FC = () => {
+export const ResearcherRightSideBar: React.FC<{containerWidth: number}> = (containerWidth) => {
   const { colorScheme } = useMantineColorScheme();
   const selectedDataSetId = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const dispatch = useDispatch<AppDispatch>();
@@ -26,10 +26,6 @@ export const ResearcherRightSideBar: React.FC = () => {
     })
   );
 
-  React.useEffect(() => {
-    console.log('selectedDataSetId change:', selectedDataSetId);
-  }, [selectedDataSetId]);
-
   const isDataSetSelected = (dataSet: SupportedDataSet) => {
     return (
       !!selectedDataSetId &&
@@ -37,11 +33,11 @@ export const ResearcherRightSideBar: React.FC = () => {
     );
   };
   return (
-    <div style={{ width: '20%', paddingTop: '8px' }}>
+    <Flex direction="column" w={`${containerWidth}%`} style={{ paddingTop: '8px' }}>
       <Card withBorder style={{ gap: 10 }} radius={10}>
         <Flex
+          direction="column"
           style={{
-            flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
             gap: 5,
@@ -148,6 +144,6 @@ export const ResearcherRightSideBar: React.FC = () => {
           </Button>
         </Flex>
       </Card>
-    </div>
+    </Flex>
   );
 };

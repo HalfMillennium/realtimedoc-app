@@ -32,7 +32,7 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
         padding: 10,
         cursor: 'pointer',
         backgroundColor:
-          currentConversation.id === conversationId
+          currentConversation?.id === conversationId
             ? colorScheme === 'light'
               ? '#f0f0f0'
               : 'black'
@@ -44,7 +44,7 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
         setDeleteButtonIsVisible(true);
       }}
       onMouseLeave={(e) => {
-        if (currentConversation.id !== conversationId) {
+        if (currentConversation?.id !== conversationId) {
           e.currentTarget.style.backgroundColor = 'transparent';
         }
         setDeleteButtonIsVisible(false);
@@ -54,7 +54,7 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
         {title}
       </Text>
       <Flex direction="row" align="center" gap="10">
-        {conversation.messages.length === 1 && (
+        {conversation?.messages.length === 1 && (
           <Badge size="sm" color="green">
             Ready
           </Badge>

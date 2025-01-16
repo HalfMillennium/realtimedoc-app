@@ -1,10 +1,10 @@
+import * as React from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import { IconCloudUpload, IconEyeQuestion, IconHistory } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Button, Card, Divider, Flex, Group, LoadingOverlay, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { COLORS } from '@/common/colors';
-import { GradientButton } from '@/components/GradientButton';
 import {
   setCurrentConversation,
   uploadFileAndCreateConversation,
@@ -13,7 +13,7 @@ import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
 
-export const ResearcherLeftSideBar = () => {
+export const ResearcherLeftSideBar: React.FC<{containerWidth: number}> = (containerWidth) => {
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const user = useUser();
   const { getToken } = useAuth();
@@ -42,9 +42,9 @@ export const ResearcherLeftSideBar = () => {
   );
   // Access the user state from the Redux store
   const allConversations = conversationsSelector.conversations;
-
+  
   return (
-    <div style={{ width: '20%', display: 'flex', flexDirection: 'column' }}>
+    <Flex direction="column" w={`${containerWidth}%`}>
       <Group>
         <Avatar radius="xl" />
         <div>
@@ -59,7 +59,7 @@ export const ResearcherLeftSideBar = () => {
           Chat History
         </Text>
       </div>
-      {Object.values(allConversations).map((conversation) => (
+      {!!conversationsSelector.currentConversation?.id && Object.values(allConversations).map((conversation) => (
         <div
           key={conversation.id}
           style={{
@@ -72,7 +72,7 @@ export const ResearcherLeftSideBar = () => {
           <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
         </div>
       ))}
-      {(!!!allConversations || Object.values(allConversations).length === 0) &&
+      {!conversationsSelector.currentConversation?.id &&
         !isLoadingNewConversation && (
           <Card
             withBorder
@@ -146,6 +146,6 @@ export const ResearcherLeftSideBar = () => {
           To start a new chat with realtimedoc, simply upload a new PDF document.
         </Text>
       </Flex>
-    </div>
+    </Flex>
   );
 };

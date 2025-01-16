@@ -4,7 +4,6 @@ export const EXAMPLE_CONVERSATIONS: Conversation[] = [
   {
     id: crypto.randomUUID(),
     title: 'Discussing Productivity Habits',
-    embeddingId: '',
     messages: [
       {
         id: crypto.randomUUID(),
@@ -36,7 +35,6 @@ export const EXAMPLE_CONVERSATIONS: Conversation[] = [
   {
     id: crypto.randomUUID(),
     title: 'Learning About Investing',
-    embeddingId: '',
     messages: [
       {
         id: crypto.randomUUID(),
@@ -68,7 +66,6 @@ export const EXAMPLE_CONVERSATIONS: Conversation[] = [
   {
     id: crypto.randomUUID(),
     title: 'Dealing with Work Stress',
-    embeddingId: '',
     messages: [
       {
         id: crypto.randomUUID(),
@@ -99,10 +96,11 @@ export const EXAMPLE_CONVERSATIONS: Conversation[] = [
   },
 ];
 
-export const EXAMPLE_CONVERSATIONS_MAP: ConversationMap = EXAMPLE_CONVERSATIONS.reduce(
-  (acc, conversation) => {
+export const conversationsMapFromArray = (conversations: Conversation[]) => {
+  return conversations.reduce((acc, conversation) => {
     acc[conversation.id] = conversation;
     return acc;
-  },
-  {} as ConversationMap
-);
+  }, {} as ConversationMap);
+};
+
+export const EXAMPLE_CONVERSATIONS_MAP: ConversationMap = conversationsMapFromArray(EXAMPLE_CONVERSATIONS)

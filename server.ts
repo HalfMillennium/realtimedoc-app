@@ -63,6 +63,26 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
   }
 });
 
+app.post('/api/conversations', requireAuth(), async (req, res) => {
+  const response = await fetch(`${apiUrl}/conversations`, 
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: req.body.userId,
+      })
+    }
+  )
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const responseText = await response.text();
+  console.log('Response body:', responseText);
+  res.status(200).json(responseText);
+});
+
 app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => {
   try {
     console.log('Request body:', req.body);
@@ -80,7 +100,7 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    console.log('here')
+
     const responseText = await response.text();
     console.log('Response body:', responseText);
     res.status(200).json(responseText);
