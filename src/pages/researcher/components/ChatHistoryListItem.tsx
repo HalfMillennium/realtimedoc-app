@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IconTrash } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Badge, Button, Flex, Text, useMantineColorScheme } from '@mantine/core';
-import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
+import { deselectAllDataSets } from '@/store/datasets/dataSetsSlice';
 import { RootState } from '@/store/store';
 
 interface ChatHistoryListItemProps {

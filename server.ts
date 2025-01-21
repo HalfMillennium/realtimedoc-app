@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
+import Stripe from 'stripe';
 
 dotenv.config();
 
@@ -111,6 +112,35 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
       details: error.message,
     });
   }
+});
+
+async function getCustomerByUserId(userId: string, stripe: Stripe) {
+  try {
+    const customers = await stripe.customers.search({
+      query: `metadata['client-reference-id']:'${userId}'`,
+      limit: 1
+    });
+
+    if (customers.data.length === 0) {
+      throw new Error(`No customer found for userId: ${userId}`);
+    }
+
+    return customers.data[0];
+  } catch (error) {
+    console.error('Error searching for customer:', error);
+    throw error;
+  }
+}
+
+app.get('/api/subscriptions/:userId', requireAuth(), async (req, res) => {
+  const stripe = new Stripe('sk_test_51QMHMqGIOCXPZaJURz6Q3D67iSDdHH6CxaUX9yuO9qTtJfXpetfIkCgqpNlc8QmtEeaUpWjUr9PbFXmirIgiRhrL00mgJY5I35');
+  const result = await getCustomerByUserId(req.params.userId, stripe);
+  const subscriptions = await stripe.subscriptions.list({
+    customer: result.id,
+  });
+  console.log('Found customer:', subscriptions.data);
+  console.log('Found subscriptions:', subscriptions.data);
+  res.status(200).json(subscriptions.data ?? []);
 });
 
 app.listen(port, () => {

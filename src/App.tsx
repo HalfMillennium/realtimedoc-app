@@ -3,7 +3,6 @@ import '@mantine/core/styles.css';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { MantineProvider } from '@mantine/core';
-import { Header } from './components/Header/Header';
 import { Router } from './Router';
 import { theme } from './theme';
 

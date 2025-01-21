@@ -13,7 +13,6 @@ import {
   TextInput,
 } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { MEMBERSHIP_TYPES } from '@/store/membership/membershipSlice';
 import { RootState } from '@/store/store';
 import { User } from '../../types/user';
 

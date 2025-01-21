@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export enum MEMBERSHIP_TYPES {
+export enum MembershipType {
     BASIC = "BASIC",
     STANDARD = "STANDARD",
     PREMIUM = "PREMIUM",
@@ -9,7 +9,7 @@ export enum MEMBERSHIP_TYPES {
 export const membershipSlice = createSlice({
     name: "membership",
     initialState: {
-        currentUserMembership: MEMBERSHIP_TYPES.BASIC,
+        currentUserMembership: MembershipType.BASIC,
     },
     reducers: {
         updateMembership: (state, action) => {
