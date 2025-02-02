@@ -1,26 +1,24 @@
+import { useEffect } from 'react';
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
-import { IconAward, IconFileNeutral, IconMoon, IconSun, IconTrophyFilled, IconUser } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
 import {
-  Button,
-  Container,
-  Flex,
-  Group,
-  Image,
-  Text,
-  useMantineColorScheme,
-} from '@mantine/core';
+  IconAward,
+  IconFileNeutral,
+  IconMoon,
+  IconSun,
+  IconTrophyFilled,
+  IconUser,
+} from '@tabler/icons-react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Button, Container, Flex, Group, Image, Text, useMantineColorScheme } from '@mantine/core';
+import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
+import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
+import { AppDispatch } from '@/store/store';
+import { getUserSubscriptions } from '@/store/subscriptions/subscriptionsSlice';
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
-import classes from './Header.module.css';
-import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
-import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
-import { useDispatch } from 'react-redux';
-import { STRIPE_PRODUCT_IDS } from '@/store/subscriptions/subscriptionsSlice';
-import { getUserSubscriptions } from '@/store/subscriptions/subscriptionsSlice';
 import { UserSubscriptionIndicator } from './UserSubscriptionIndicator';
-import { useEffect } from 'react';
-import { AppDispatch } from '@/store/store';
+import classes from './Header.module.css';
 
 const links = [
   { link: '/features', label: 'Features' },
@@ -28,12 +26,16 @@ const links = [
     link: '/faq',
     label: 'FAQ',
   },
-  { link: '/', label: 'How It Works', action: setCurrentSegmentMenuOption({menuOption: SegmentMenuOptions.HowItWorks}) },
+  {
+    link: '/',
+    label: 'How It Works',
+    action: setCurrentSegmentMenuOption({ menuOption: SegmentMenuOptions.HowItWorks }),
+  },
   { link: '/pricing', label: 'Pricing' },
   {
     link: '/',
     label: 'Contact',
-    action: setCurrentSegmentMenuOption({menuOption: SegmentMenuOptions.AnyQuestions})
+    action: setCurrentSegmentMenuOption({ menuOption: SegmentMenuOptions.AnyQuestions }),
   },
 ];
 
@@ -51,7 +53,7 @@ export function Header() {
         onClick={(event) => {
           event.preventDefault();
           navigate(link.link);
-          if(!!link.action) {
+          if (!!link.action) {
             dispatch(link.action);
           }
         }}
@@ -62,12 +64,13 @@ export function Header() {
   });
   useEffect(() => {
     const userEmail = user.user?.emailAddresses[0].emailAddress;
-    if(userEmail) {
+    if (userEmail) {
       dispatch(getUserSubscriptions({ userEmail: userEmail }));
     } else {
       console.error('User ID not found.');
     }
   }, [user, dispatch]);
+
   return (
     <div
       style={{
@@ -137,7 +140,7 @@ export function Header() {
               <UserButton />
             </SignedIn>
             <SignedIn>
-              <UserSubscriptionIndicator/>
+              <UserSubscriptionIndicator />
             </SignedIn>
           </Flex>
         </div>

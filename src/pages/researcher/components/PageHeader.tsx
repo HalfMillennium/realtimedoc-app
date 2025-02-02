@@ -1,12 +1,22 @@
 import React from 'react';
 import { IconCrown, IconHelp } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Center, Divider, Flex, Group, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
+import { useDispatch } from 'react-redux';
+import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
+import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
 
 export const ResearcherPageHeader: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const lightOnDarkMode = colorScheme === 'dark' ? 'white' : '#212121';
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleAskForHelpClick = () => {
+    dispatch(setCurrentSegmentMenuOption({ menuOption: SegmentMenuOptions.AnyQuestions }));
+    navigate('/');
 
+  }
   return (
     <Flex>
       <Center style={{ marginBottom: '1rem', justifyContent: 'space-between', width: '100%' }}>
@@ -48,6 +58,7 @@ export const ResearcherPageHeader: React.FC = () => {
                 backgroundColor: 'transparent',
                 transition: 'background 0.3s ease',
               }}
+              onClick={() => navigate('/pricing')}
             >
               <IconCrown size={14} style={{ marginRight: 10, color: 'white' }} />
               <Text style={{ fontSize: 14, fontWeight: 700 }}>Upgrade to Premium</Text>
@@ -60,9 +71,10 @@ export const ResearcherPageHeader: React.FC = () => {
             style={{
               boxShadow: '0px 5px 5px #00000010',
             }}
+            onClick={handleAskForHelpClick}
           >
             <IconHelp size={18} style={{ marginRight: 5 }} />
-            Ask For Help
+            <Text style={{ fontSize: 14, fontWeight: 300 }}>Ask For Help</Text>
           </Button>
         </Group>
       </Center>

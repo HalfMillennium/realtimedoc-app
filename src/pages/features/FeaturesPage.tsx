@@ -15,7 +15,7 @@ export const FeaturesPage: React.FC = () => {
   return (
     <Container size="lg" p={50} style={{ display: 'flex', flexDirection: 'column', gap: 100 }}>
       <section style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 36 }}>Features</Title>
+        <Text style={{ textAlign: 'center', fontWeight: 400, fontSize: 36 }}>Features</Text>
         <Flex direction="row" gap="lg">
           <Card shadow="sm" padding="lg" radius={20}>
             <Center>

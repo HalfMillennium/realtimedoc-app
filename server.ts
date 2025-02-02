@@ -152,7 +152,32 @@ app.get('/api/subscriptions/:userEmail', async (req, res) => {
   }
 });
 
-app.delete('/api/subscriptions/:subscriptionId', async (req, res) => {
+app.get('/api/quotas/:userId', async (req, res) => {
+  try {
+    const response = await fetch(`${apiUrl}/quotas/${req.params.userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseText = await response.text();
+    console.log('Response body:', responseText);
+    res.status(200).json(responseText);
+  } catch (error) {
+    console.error('Failed to process quotas request:', error);
+    res.status(500).json({
+      error: `Could not complete quotas request for userId ${req.params.userId}`,
+      details: error.message,
+    });
+  }
+});
+
+app.delete('/api/subscriptions/:subscriptionId', requireAuth(), async (req, res) => {
   try {
     const stripe = new Stripe(STRIPE_TEST_KEY);
     const deletedSubscription = await stripe.subscriptions.cancel(req.params.subscriptionId);

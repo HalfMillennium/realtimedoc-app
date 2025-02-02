@@ -12,12 +12,13 @@ import {
 import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
+import { QuotaStatus } from './QuotaStatus';
 
-export const ResearcherLeftSideBar: React.FC<{containerWidth: number}> = (containerWidth) => {
+export const ResearcherLeftSideBar: React.FC<{ containerWidth: number }> = (containerWidth) => {
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const user = useUser();
   const { getToken } = useAuth();
-  const userName = user.user?.fullName ?? 'Alex Ferguson';
+  const userName = user.user?.fullName ?? 'Arbitrary Robert';
   const dispatch = useDispatch<AppDispatch>();
   const handleFileUpload = async (files: File[]) => {
     try {
@@ -42,16 +43,19 @@ export const ResearcherLeftSideBar: React.FC<{containerWidth: number}> = (contai
   );
   // Access the user state from the Redux store
   const allConversations = conversationsSelector.conversations;
-  
+
   return (
     <Flex direction="column" w={`${containerWidth}%`}>
-      <Group>
-        <Avatar radius="xl" />
-        <div>
-          <Text size="md">{userName}</Text>
-          <Text size="xs">Chat User</Text>
-        </div>
-      </Group>
+      <Flex direction="row" align="center" justify="space-between" style={{ width: 'full' }}>
+        <Group>
+          <Avatar radius="xl" />
+          <div>
+            <Text size="md">{userName}</Text>
+            <Text size="xs">Chat User</Text>
+          </div>
+        </Group>
+        <QuotaStatus/>
+      </Flex>
       <Divider my="sm" />
       <div style={{ display: 'flex', flexDirection: 'row', gap: 5, opacity: 0.5 }}>
         <IconHistory size={16} />
@@ -59,44 +63,44 @@ export const ResearcherLeftSideBar: React.FC<{containerWidth: number}> = (contai
           Chat History
         </Text>
       </div>
-      {!!conversationsSelector.currentConversation?.id && Object.values(allConversations).map((conversation) => (
-        <div
-          key={conversation.id}
-          style={{
-            transition: 'background-color 0.3s ease',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onClick={() => dispatch(setCurrentConversation({ conversationId: conversation.id }))}
-        >
-          <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
-        </div>
-      ))}
-      {!conversationsSelector.currentConversation?.id &&
-        !isLoadingNewConversation && (
-          <Card
-            withBorder
-            shadow="xs"
-            p="lg"
-            mt="sm"
+      {!!conversationsSelector.currentConversation?.id &&
+        Object.values(allConversations).map((conversation) => (
+          <div
+            key={conversation.id}
             style={{
-              opacity: 0.4,
-              display: 'flex',
+              transition: 'background-color 0.3s ease',
               alignItems: 'center',
-              padding: 10,
-              position: 'relative',
-              backdropFilter: 'blur(5px)',
-              borderRadius: 10,
+              justifyContent: 'center',
             }}
+            onClick={() => dispatch(setCurrentConversation({ conversationId: conversation.id }))}
           >
-            <Flex direction="row" gap="10">
-              <IconEyeQuestion size={14} />
-              <Text size="xs" style={{ fontWeight: 400 }}>
-                No chat history found
-              </Text>
-            </Flex>
-          </Card>
-        )}
+            <ChatHistoryListItem title={conversation.title} conversationId={conversation.id} />
+          </div>
+        ))}
+      {!conversationsSelector.currentConversation?.id && !isLoadingNewConversation && (
+        <Card
+          withBorder
+          shadow="xs"
+          p="lg"
+          mt="sm"
+          style={{
+            opacity: 0.4,
+            display: 'flex',
+            alignItems: 'center',
+            padding: 10,
+            position: 'relative',
+            backdropFilter: 'blur(5px)',
+            borderRadius: 10,
+          }}
+        >
+          <Flex direction="row" gap="10">
+            <IconEyeQuestion size={14} />
+            <Text size="xs" style={{ fontWeight: 400 }}>
+              No chat history found
+            </Text>
+          </Flex>
+        </Card>
+      )}
       {isLoadingNewConversation && (
         <Card
           withBorder

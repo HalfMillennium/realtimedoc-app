@@ -1,17 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  IconArrowUpRight,
-  IconAward,
-  IconTrophyFilled,
-  IconX,
-} from '@tabler/icons-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useAuth } from '@clerk/clerk-react';
+import { IconArrowUpRight, IconAward, IconBox, IconTrophyFilled, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Stripe from 'stripe';
-import { Button, Flex, Text, Divider } from '@mantine/core';
+import { Button, Divider, Flex, Modal, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { RootState } from '@/store/store';
-import { STRIPE_PRODUCT_IDS } from '@/store/subscriptions/subscriptionsSlice';
+import { AppDispatch, RootState } from '@/store/store';
+import { cancelSubscription, STRIPE_PRODUCT_IDS } from '@/store/subscriptions/subscriptionsSlice';
+import { LoadingStatus } from '@/store/utils';
 
 interface ModalProps {
   x: number;
@@ -20,10 +18,13 @@ interface ModalProps {
   onClose: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ x, y, onClose, userSubscriptions }) => {
+const SubscriptionModal: React.FC<ModalProps> = ({ x, y, onClose, userSubscriptions }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-
-  // Detect clicks outside the modal to close it
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { getToken } = useAuth();
+  const { colorScheme } = useMantineColorScheme();
+  const [confirmCancel, setConfirmCancel] = useState(false);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -36,6 +37,36 @@ const Modal: React.FC<ModalProps> = ({ x, y, onClose, userSubscriptions }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose]);
+
+  const handleCancelPlan = () => {
+    setConfirmCancel(true);
+  };
+
+  const handleConfirmCancel = useCallback(async () => {
+    const token = await getToken();
+    if (!!token && !!userSubscriptions[0]?.id) {
+      dispatch(cancelSubscription({ subscriptionId: userSubscriptions[0]?.id, authToken: token }));
+    } else {
+      console.error(
+        `No token found or subscription ID not found. Subscription: ${userSubscriptions[0]?.id}, Token: ${token}`
+      );
+    }
+  }, [dispatch, getToken, userSubscriptions]);
+
+  const handleCloseConfirm = () => {
+    setConfirmCancel(false);
+  };
+
+  const cancelSubscriptionStatus = useSelector(
+    (state: RootState) => state.subscriptions.cancelSubscriptionStatus
+  );
+
+  useEffect(() => {
+    if (cancelSubscriptionStatus === LoadingStatus.SUCCEEDED) {
+      setConfirmCancel(true);
+      navigate('/');
+    }
+  }, [cancelSubscriptionStatus]);
 
   return (
     <AnimatePresence>
@@ -77,17 +108,23 @@ const Modal: React.FC<ModalProps> = ({ x, y, onClose, userSubscriptions }) => {
           width: '350px',
         }}
       >
-        <Flex direction="row" align={'center'} justify="space-between">
-          <Text style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>Your Subscription</Text>
+        <Flex direction="row" align={'center'} justify="space-between" style={{ width: '100%' }}>
+          <Text style={{ fontSize: 18, fontWeight: 600 }}>Your Subscription</Text>
           <Button
             onClick={onClose}
-            p={0}
+            variant="transparent"
             style={{
               display: 'flex',
-              background: 'none',
+              background: colorScheme === 'dark' ? '#000000' : '#ffffff70',
+              borderRadius: 100,
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: 30,
+              height: 30,
               border: 'none',
               cursor: 'pointer',
               color: '#666',
+              padding: 0,
             }}
           >
             <IconX size={20} />
@@ -138,7 +175,8 @@ const Modal: React.FC<ModalProps> = ({ x, y, onClose, userSubscriptions }) => {
             >
               {!!!userSubscriptions
                 ? 'No active subscription.'
-                : userSubscriptions?.[0]?.items?.data?.[0].plan.product === 'RESEARCHER_LITE' // Replace with your actual product ID
+                : userSubscriptions?.[0]?.items?.data?.[0].plan.product ===
+                    STRIPE_PRODUCT_IDS.RESEARCHER_LITE
                   ? 'Researcher Lite'
                   : 'Researcher Pro'}
             </Text>
@@ -155,15 +193,11 @@ const Modal: React.FC<ModalProps> = ({ x, y, onClose, userSubscriptions }) => {
               border: 10,
             }}
             color={COLORS.peach}
-            variant='outline'
+            variant="light"
             radius={'xl'}
+            onClick={() => navigate('/pricing')}
           >
-            <Flex
-              direction={'row'}
-              align={'center'}
-              justify={'center'}
-              gap={5}
-            >
+            <Flex direction={'row'} align={'center'} justify={'center'} gap={5}>
               <IconArrowUpRight size={16} />
               Change Plan
             </Flex>
@@ -176,18 +210,14 @@ const Modal: React.FC<ModalProps> = ({ x, y, onClose, userSubscriptions }) => {
               gap: 5,
               border: 10,
               flex: 1,
-              color: 'black'
+              color: 'black',
             }}
-            variant='filled'
+            variant="filled"
             radius={'xl'}
             color={COLORS.peach}
+            onClick={handleConfirmCancel}
           >
-            <Flex
-              direction={'row'}
-              align={'center'}
-              justify={'center'}
-              gap={5}
-            >
+            <Flex direction={'row'} align={'center'} justify={'center'} gap={5}>
               <IconX size={16} />
               Cancel Plan
             </Flex>
@@ -210,9 +240,6 @@ export const UserSubscriptionIndicator = () => {
     setModalPosition(null);
   };
 
-  useEffect(() => {
-    console.log('value', userSubscriptions[0]?.items?.data[0].plan);
-  }, []);
   return (
     <>
       <Button p="0" variant="white" radius={100} w={30} h={30} onClick={handleClick}>
@@ -220,9 +247,10 @@ export const UserSubscriptionIndicator = () => {
           STRIPE_PRODUCT_IDS.RESEARCHER_LITE && <IconAward size={18} />}
         {userSubscriptions[0]?.items?.data[0].plan.product ===
           STRIPE_PRODUCT_IDS.RESEARCHER_PRO && <IconTrophyFilled size={18} />}
+          {!userSubscriptions[0]?.items?.data[0].plan.product && <IconBox size={18} />}
       </Button>
       {modalPosition && (
-        <Modal
+        <SubscriptionModal
           x={modalPosition.x + 15}
           y={modalPosition.y + 10}
           onClose={handleClose}
