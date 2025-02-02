@@ -117,6 +117,7 @@ export const ResearcherLeftSideBar: React.FC<{containerWidth: number}> = (contai
         <Dropzone
           onDrop={handleFileUpload}
           maxSize={30 * 1024 ** 2}
+          accept={['application/pdf']}
           style={{
             display: 'flex',
             flex: 1,

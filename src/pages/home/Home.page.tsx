@@ -12,6 +12,7 @@ export function HomePage() {
     navigate('/researcher');
   };
   const { isSignedIn } = useAuth();
+
   return (
     <div
       style={{

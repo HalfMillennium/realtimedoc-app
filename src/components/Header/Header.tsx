@@ -1,5 +1,5 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
-import { IconMoon, IconSun, IconUser } from '@tabler/icons-react';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
+import { IconAward, IconFileNeutral, IconMoon, IconSun, IconTrophyFilled, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -16,6 +16,11 @@ import classes from './Header.module.css';
 import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
 import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
 import { useDispatch } from 'react-redux';
+import { STRIPE_PRODUCT_IDS } from '@/store/subscriptions/subscriptionsSlice';
+import { getUserSubscriptions } from '@/store/subscriptions/subscriptionsSlice';
+import { UserSubscriptionIndicator } from './UserSubscriptionIndicator';
+import { useEffect } from 'react';
+import { AppDispatch } from '@/store/store';
 
 const links = [
   { link: '/features', label: 'Features' },
@@ -35,7 +40,8 @@ const links = [
 export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useUser();
   const items = links.map((link) => {
     return (
       <a
@@ -54,7 +60,14 @@ export function Header() {
       </a>
     );
   });
-
+  useEffect(() => {
+    const userEmail = user.user?.emailAddresses[0].emailAddress;
+    if(userEmail) {
+      dispatch(getUserSubscriptions({ userEmail: userEmail }));
+    } else {
+      console.error('User ID not found.');
+    }
+  }, [user, dispatch]);
   return (
     <div
       style={{
@@ -73,7 +86,7 @@ export function Header() {
           <Group gap={5} visibleFrom="sm">
             {items}
           </Group>
-          <Group gap={10}>
+          <Flex direction="row" justify="space-between" align="center" gap={20}>
             {colorScheme === 'dark' ? (
               <div
                 onClick={() => setColorScheme('light')}
@@ -123,7 +136,10 @@ export function Header() {
             <SignedIn>
               <UserButton />
             </SignedIn>
-          </Group>
+            <SignedIn>
+              <UserSubscriptionIndicator/>
+            </SignedIn>
+          </Flex>
         </div>
       </Container>
     </div>

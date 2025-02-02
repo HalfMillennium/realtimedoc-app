@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { IconX } from '@tabler/icons-react';
+import { IconRefresh, IconX } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Badge,
@@ -13,15 +13,18 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { deselectAllDataSets } from '@/store/datasets/dataSetsSlice';
+import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
 import { RootState } from '@/store/store';
+import { useNavigate } from 'react-router-dom';
 
 export interface CurrentChatMessagesProps {
   isLoadingNewMessage: boolean;
+  hasFailedToLoadNewMessage: boolean;
 }
 
 export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   isLoadingNewMessage,
+  hasFailedToLoadNewMessage,
 }) => {
   const messages = useSelector(
     (state: RootState) => state.conversations.currentConversation?.messages
@@ -29,6 +32,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   const selectedDataSet = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
+  const navigate = useNavigate();
   useEffect(() => {
     // Scroll to the bottom when new messages are added
     const chatContainer = document.querySelector('.chat-container');
@@ -166,6 +170,39 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
           >
             <LoadingOverlay visible loaderProps={{ type: 'dots', color: 'orange' }} />
+          </Card>
+        )}
+        {hasFailedToLoadNewMessage && (
+          <Card
+            withBorder
+            shadow="xs"
+            radius="md"
+            p="lg"
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 10,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.softRed + '20',
+              borderColor: COLORS.softRed + '30',
+            }}
+          >
+            <IconX size={16} style={{ color: COLORS.softRed }} />
+            <Text size="md" style={{ color: COLORS.softRed }}>
+              Failed to load new message
+            </Text>
+            <div>
+              <Button
+                size="xs"
+                color="red"
+                variant="light"
+                onClick={() => navigate(0)}
+              >
+                <IconRefresh size={14} style={{ marginRight: 5 }} />
+                Reload
+              </Button>
+            </div>
           </Card>
         )}
       </Flex>

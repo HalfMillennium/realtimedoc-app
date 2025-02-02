@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { Conversation, conversationsReducer } from './conversations/conversationsSlice';
-import { dataSetsReducer } from './datasets/dataSetsSlice';
+import { dataSetsReducer } from './dataSets/dataSetsSlice';
 import { homePageActivityReducer } from './homePageActivity/homePageActivitySlice';
-import { membershipReducer } from './membership/membershipSlice';
 import { userReducer } from './user/userSlice';
+import { subscriptionsReducer } from './subscriptions/subscriptionsSlice';
 
 export const store = configureStore({
   reducer: {
     conversations: conversationsReducer,
-    membership: membershipReducer,
     user: userReducer,
+    subscriptions: subscriptionsReducer,
     dataSets: dataSetsReducer,
     homePageActivity: homePageActivityReducer,
   },

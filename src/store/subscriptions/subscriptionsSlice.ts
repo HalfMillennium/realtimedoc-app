@@ -1,34 +1,42 @@
-import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { MembershipType } from "../membership/membershipSlice";
-import { createSlice} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import Stripe from 'stripe';
+import { setError } from '../error/errorSlice';
 
-export const getUserSubscriptions = createAsyncThunk(
+export const STRIPE_PRODUCT_IDS = {
+  RESEARCHER_LITE: 'prod_RYxGo5f1mjy7Q6',
+  RESEARCHER_PRO: 'prod_RYxJXeQ0LKIXLb',
+};
+
+export const getUserSubscriptions = createAsyncThunk<any, { userEmail: string }>(
   'subscriptions/getUserSubscription',
-  async (userId: string, thunkAPI) => {
+  async ({ userEmail }, thunkAPI) => {
     try {
-      const subscriptions = await fetch(`/api/subscriptions/${userId}`);
-      return subscriptions;
+      const response = await fetch(`/api/subscriptions/${userEmail}`);
+      const userSubscriptions = await response.json();
+      return userSubscriptions;
     } catch (error) {
+      thunkAPI.dispatch(
+        setError({
+          errorTitle: 'Failed to get user subscriptions',
+          errorMessage: error?.toString(),
+        })
+      );
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
 export const subscriptionsSlice = createSlice({
-    name: 'subscriptions',
-    initialState: {
-        stripeCustomerId: undefined as string | undefined,
-        subscriptionTier: MembershipType.BASIC
-    },
-    reducers: {
-        setCustomerId: (state, action: PayloadAction<{customerId: string}>) => {
-            state.stripeCustomerId = action.payload.customerId;
-        },
-        updateSubscriptionTier: (state, action: PayloadAction<{subscriptionTier: MembershipType}>) => {
-            state.subscriptionTier = action.payload.subscriptionTier;
-        }
-    }
+  name: 'subscriptions',
+  initialState: {
+    subscriptions: [] as Stripe.Subscription[],
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getUserSubscriptions.fulfilled, (state, action) => {
+      state.subscriptions = JSON.parse(action.payload.userSubscriptions);
+    });
+  },
 });
 
 export const subscriptionsReducer = subscriptionsSlice.reducer;
-export const { setCustomerId, updateSubscriptionTier } = subscriptionsSlice.actions;

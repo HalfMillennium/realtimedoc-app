@@ -7,11 +7,11 @@ import {
   deselectAllDataSets,
   selectDataSet,
   SupportedDataSet,
-} from '@/store/datasets/dataSetsSlice';
+} from '@/store/dataSets/dataSetsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { DataSetOptionsPanel } from './DataSetOptionsPanel';
 
-export const ResearcherRightSideBar: React.FC<{containerWidth: number}> = (containerWidth) => {
+export const ResearcherRightSideBar = () => {
   const { colorScheme } = useMantineColorScheme();
   const selectedDataSetId = useSelector((state: RootState) => state.dataSets.selectedDataSetId);
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +33,7 @@ export const ResearcherRightSideBar: React.FC<{containerWidth: number}> = (conta
     );
   };
   return (
-    <Flex direction="column" w={`${containerWidth}%`} style={{ paddingTop: '8px' }}>
+    <Flex direction="column" w="30%" style={{ paddingTop: '8px' }}>
       <Card withBorder style={{ gap: 10 }} radius={10}>
         <Flex
           direction="column"
