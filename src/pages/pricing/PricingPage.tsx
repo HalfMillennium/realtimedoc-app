@@ -9,6 +9,7 @@ export const PricingPage: React.FC = () => {
   const { isSignedIn } = useAuth();
   const user = useUser();
   const userId = user.user?.id;
+  const userEmail = user.user?.emailAddresses[0].emailAddress;
   return (
     <Flex direction="column" style={{ justifyContent: 'center', width: '100%' }}>
       <Text style={{ textAlign: 'center', fontWeight: 300, fontSize: 36 }} mb="md">
@@ -19,9 +20,9 @@ export const PricingPage: React.FC = () => {
         you. Start small and scale as your needs grow.
       </Text>
       {(!isSignedIn || !userId) && <UnauthPricingTable />}
-      {isSignedIn && userId && (
+      {isSignedIn && userId && userEmail && (
         <span style={{padding: 30, backgroundColor: colorScheme === 'dark' ? "#272727" : "#FFFFFF"}}>
-          <StripePricingTable userId={userId} />
+          <StripePricingTable userId={userId} userEmail={userEmail} />
         </span>
       )}
     </Flex>

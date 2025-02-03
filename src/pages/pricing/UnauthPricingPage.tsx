@@ -34,7 +34,7 @@ export const UnauthPricingTable = () => {
               variant="filled"
               style={{ backgroundColor: '#fbbd68', color: '#1a1a1a', fontWeight: 'bold' }}
             >
-              Subscribe
+              Register
             </Button>
           </SignInButton>
           <Stack gap="xs" mt="sm">
@@ -89,7 +89,7 @@ export const UnauthPricingTable = () => {
               variant="filled"
               style={{ backgroundColor: '#fbbd68', color: '#1a1a1a', fontWeight: 'bold' }}
             >
-              Start trial
+              Register
             </Button>
           </SignInButton>
           <Stack gap="xs" mt="sm">

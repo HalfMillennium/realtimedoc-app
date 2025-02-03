@@ -3,8 +3,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
+import Stripe from 'stripe';
 
 dotenv.config();
+
+const STRIPE_TEST_KEY: string = process.env.STRIPE_TEST_API_KEY || '';
 
 const port = 5050;
 
@@ -64,23 +67,22 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
 });
 
 app.post('/api/conversations', requireAuth(), async (req, res) => {
-  const response = await fetch(`${apiUrl}/conversations`, 
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: req.body.userId,
-      })
-    }
-  )
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  try {
+    const response = await fetch(`${apiUrl}/conversations/${req.body.userId}`, 
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
   const responseText = await response.text();
   console.log('Response body:', responseText);
   res.status(200).json(responseText);
+  } catch(e) {
+    res.status(500).json(`HTTP error! status: ${e}`);
+  }
+
 });
 
 app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => {
@@ -110,6 +112,80 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
       error: `Could not complete new-message request for conversationId ${req.params.conversationId}`,
       details: error.message,
     });
+  }
+});
+
+async function getCustomerByUserEmail(userEmail: string, stripe: Stripe) {
+  try {
+    const customers = await stripe.customers.search({
+      query: `email:'${userEmail}'`,
+      limit: 1
+    });
+
+    if (customers.data.length === 0) {
+      throw new Error(`No customer found for userEmail: ${userEmail}`);
+    }
+
+    return customers.data[0];
+  } catch (error) {
+    console.error('Error searching for customer:', error);
+    throw error;
+  }
+}
+
+app.get('/api/subscriptions/:userEmail', async (req, res) => {
+  try {
+    const stripe = new Stripe(STRIPE_TEST_KEY);
+    const result = await getCustomerByUserEmail(req.params.userEmail, stripe);
+    const subscriptions = await stripe.subscriptions.list({
+      customer: result.id,
+    });
+    res.status(200).json({userSubscriptions: JSON.stringify(subscriptions.data) ?? []});
+  } catch (error) {
+    if(error.message.includes('No customer found for email')) {
+      console.error('Error retrieving subscriptions:', error);
+      res.status(404).json({ error: 'No subscriptions found' });
+      return;
+    }
+    console.error('Error retrieving subscriptions:', error);
+    res.status(500).json({ error: 'Failed to retrieve subscriptions' });
+  }
+});
+
+app.get('/api/quotas/:userId', async (req, res) => {
+  try {
+    const response = await fetch(`${apiUrl}/quotas/${req.params.userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseText = await response.text();
+    console.log('Response body:', responseText);
+    res.status(200).json(responseText);
+  } catch (error) {
+    console.error('Failed to process quotas request:', error);
+    res.status(500).json({
+      error: `Could not complete quotas request for userId ${req.params.userId}`,
+      details: error.message,
+    });
+  }
+});
+
+app.delete('/api/subscriptions/:subscriptionId', requireAuth(), async (req, res) => {
+  try {
+    const stripe = new Stripe(STRIPE_TEST_KEY);
+    const deletedSubscription = await stripe.subscriptions.cancel(req.params.subscriptionId);
+    console.log('Deleted subscription:', deletedSubscription);
+    res.status(200).json({ message: 'Subscription deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting subscription:', error);
+    res.status(500).json({ error: 'Failed to delete subscription' });
   }
 });
 

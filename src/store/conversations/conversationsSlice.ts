@@ -104,6 +104,7 @@ export const conversationsSlice = createSlice({
     currentConversation: null as Conversation | null,
     isLoadingNewMessage: false,
     isLoadingNewConversation: false,
+    hasFailedToLoadNewMessage: false,
     isDailyLimitExceeded: false,
   },
   reducers: {
@@ -153,8 +154,9 @@ export const conversationsSlice = createSlice({
         }
         state.isDailyLimitExceeded = false;
         if(!!state.conversations && state.conversations !== undefined) {
+          const conversationId = payloadResponse.conversation_id;
           state.conversations[payloadResponse.conversation_id] = {
-            id: payloadResponse.conversation_id,
+            id: conversationId,
             title: payloadResponse.conversation_title,
             messages: [
               {
@@ -167,14 +169,20 @@ export const conversationsSlice = createSlice({
           };
           state.isLoadingNewConversation = false;
           state.currentConversation = state.conversations[payloadResponse.conversation_id];
+        } else {
+          console.error('Could not create new conversation - No conversations found');
         }
       }),
       builder.addCase(getNewChatResponse.pending, (state) => {
+        state.hasFailedToLoadNewMessage = false;
         state.isLoadingNewMessage = true;
+      }),
+      builder.addCase(getNewChatResponse.rejected, (state) => {
+        state.isLoadingNewMessage = false;
+        state.hasFailedToLoadNewMessage = true;
       }),
       builder.addCase(getNewChatResponse.fulfilled, (state, action) => {
         if (typeof action.payload === 'string' && action.payload.charAt(0) === '<') {
-          // Token may have expired, so we need to refresh it
           getNewChatResponse(action.meta.arg);
           return;
         }
@@ -187,7 +195,6 @@ export const conversationsSlice = createSlice({
           tag: 'Doc Bot Message',
         };
         state.isLoadingNewMessage = false;
-        console.log('Current conversation:', state.conversations[payloadResponse.conversation_id]);
         state.conversations[payloadResponse.conversation_id].messages.push(newMessage);
         state.currentConversation = state.conversations[payloadResponse.conversation_id];
       }),
@@ -196,7 +203,6 @@ export const conversationsSlice = createSlice({
         state.isDailyLimitExceeded = false;
         if (!!payloadResponse && typeof payloadResponse !== 'string') {
           let camelCasedPayload = toCamelCase(payloadResponse);
-          console.log('camelCasedPayload:', camelCasedPayload);
           let cleanedConversations = []
           for(const convo of camelCasedPayload) {
             cleanedConversations.push({

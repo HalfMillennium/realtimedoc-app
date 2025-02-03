@@ -11,7 +11,7 @@ export const HowItWorks: React.FC = () => {
         <IconChartDots3
           color={colorScheme === 'dark' ? COLORS.peach : COLORS.mantineDefaultBlack}
         />
-        <Text style={{ fontWeight: 400, fontSize: 32 }}>
+        <Text style={{ fontWeight: 400, fontSize: 26 }}>
           PDF Insights with Live Datasets
         </Text>
       </Flex>
@@ -72,22 +72,24 @@ export const HowItWorks: React.FC = () => {
 const styles = {
   container: {
     width: '75%',
+    height: '100%',
+    overflowY: 'auto' as 'auto'
   },
   sectionTitle: {
     marginTop: 30,
     fontWeight: 500,
-    fontSize: 20,
+    fontSize: 16,
   },
   text: {
     marginTop: '0.5rem',
     fontWeight: 400,
-    fontSize: 14,
+    fontSize: 12,
   },
   list: {
-    marginTop: '1rem',
+    marginTop: 10,
   },
   icon: {
-    size: '1.5rem',
+    size: 15,
     borderRadius: '50%',
   },
 };

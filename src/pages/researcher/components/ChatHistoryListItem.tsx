@@ -22,7 +22,6 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
     (state: RootState) => state.conversations.conversations[conversationId]
   );
   const dispatch = useDispatch();
-  const [deleteButtonIsVisible, setDeleteButtonIsVisible] = useState(false);
 
   return (
     <Flex
@@ -39,44 +38,29 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
             : 'transparent',
         justifyContent: 'space-between',
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colorScheme === 'light' ? '#f0f0f0' : 'black';
-        setDeleteButtonIsVisible(true);
-      }}
-      onMouseLeave={(e) => {
-        if (currentConversation?.id !== conversationId) {
-          e.currentTarget.style.backgroundColor = 'transparent';
-        }
-        setDeleteButtonIsVisible(false);
-      }}
     >
       <Text size="sm" flex={1} style={{wordBreak: 'break-word'}}>
         {title}
       </Text>
-      <Flex direction="row" align="center" gap="10">
+      <Flex direction="row" align="center" gap={15}>
         {conversation?.messages.length === 1 && (
           <Badge size="sm" color="green">
             Ready
           </Badge>
         )}
-        {deleteButtonIsVisible && (
-          <Button
-            radius={1000}
+          <div
             color="gray"
             style={{
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-              width: 5,
-              height: 20,
+              width: 20,
             }}
-            variant="light"
             onClick={() => dispatch(deselectAllDataSets())}
           >
-            <IconTrash size={10} />
-          </Button>
-        )}
+            <IconTrash size={14} />
+          </div>
       </Flex>
     </Flex>
   );

@@ -1,21 +1,23 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
-import { IconMoon, IconSun, IconUser } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
 import {
-  Button,
-  Container,
-  Flex,
-  Group,
-  Image,
-  Text,
-  useMantineColorScheme,
-} from '@mantine/core';
+  IconMoon,
+  IconSun,
+  IconUser,
+} from '@tabler/icons-react';
+import { useDispatch, useSelector} from 'react-redux';
+import { LoadingStatus } from '@/store/utils';
+import { RootState } from '@/store/store';
+import { useNavigate } from 'react-router-dom';
+import { Button, Container, Flex, Group, Image, Text, useMantineColorScheme } from '@mantine/core';
+import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
+import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
+import { AppDispatch } from '@/store/store';
+import { getUserSubscriptions } from '@/store/subscriptions/subscriptionsSlice';
 import darkModeLogo from '../../assets/logo_dark_mode.png';
 import lightModeLogo from '../../assets/logo_light_mode.png';
+import { UserSubscriptionIndicator } from './UserSubscriptionIndicator';
 import classes from './Header.module.css';
-import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
-import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
-import { useDispatch } from 'react-redux';
 
 const links = [
   { link: '/features', label: 'Features' },
@@ -23,19 +25,27 @@ const links = [
     link: '/faq',
     label: 'FAQ',
   },
-  { link: '/', label: 'How It Works', action: setCurrentSegmentMenuOption({menuOption: SegmentMenuOptions.HowItWorks}) },
+  {
+    link: '/',
+    label: 'How It Works',
+    action: setCurrentSegmentMenuOption({ menuOption: SegmentMenuOptions.HowItWorks }),
+  },
   { link: '/pricing', label: 'Pricing' },
   {
     link: '/',
     label: 'Contact',
-    action: setCurrentSegmentMenuOption({menuOption: SegmentMenuOptions.AnyQuestions})
+    action: setCurrentSegmentMenuOption({ menuOption: SegmentMenuOptions.AnyQuestions }),
   },
 ];
 
 export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const cancelSubscriptionStatus = useSelector(
+    (state: RootState) => state.subscriptions.cancelSubscriptionStatus
+  );
+  const user = useUser();
   const items = links.map((link) => {
     return (
       <a
@@ -45,7 +55,7 @@ export function Header() {
         onClick={(event) => {
           event.preventDefault();
           navigate(link.link);
-          if(!!link.action) {
+          if (!!link.action) {
             dispatch(link.action);
           }
         }}
@@ -54,6 +64,21 @@ export function Header() {
       </a>
     );
   });
+  useEffect(() => {
+    const userEmail = user.user?.emailAddresses[0].emailAddress;
+    if (userEmail) {
+      dispatch(getUserSubscriptions({ userEmail: userEmail }));
+    } else {
+      console.error('User ID not found.');
+    }
+  }, [user, dispatch]);
+  
+
+  useEffect(() => {
+    if (cancelSubscriptionStatus === LoadingStatus.SUCCEEDED) {
+      navigate('/');
+    }
+  }, [cancelSubscriptionStatus]);
 
   return (
     <div
@@ -73,7 +98,7 @@ export function Header() {
           <Group gap={5} visibleFrom="sm">
             {items}
           </Group>
-          <Group gap={10}>
+          <Flex direction="row" justify="space-between" align="center" gap={20}>
             {colorScheme === 'dark' ? (
               <div
                 onClick={() => setColorScheme('light')}
@@ -123,7 +148,10 @@ export function Header() {
             <SignedIn>
               <UserButton />
             </SignedIn>
-          </Group>
+            <SignedIn>
+              <UserSubscriptionIndicator />
+            </SignedIn>
+          </Flex>
         </div>
       </Container>
     </div>

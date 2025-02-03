@@ -23,6 +23,7 @@ import {
 } from '@/store/conversations/conversationsSlice';
 import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
 import { AppDispatch, RootState } from '@/store/store';
+import { getUserSubscriptions } from '@/store/subscriptions/subscriptionsSlice';
 import { setToken } from '@/store/user/userSlice';
 import { ResearcherPageHeader } from './components/PageHeader';
 import { PlaceholderChatUI } from './components/PlaceholderChatUI';
@@ -42,6 +43,11 @@ const selectCurrentConversation = createSelector(
 const selectIsLoadingMessage = createSelector(
   [selectConversations],
   (conversations) => conversations.isLoadingNewMessage
+);
+
+const selectHasFailedToLoadNewMessage = createSelector(
+  [selectConversations],
+  (conversations) => conversations.hasFailedToLoadNewMessage
 );
 
 const selectDailyLimitExceeded = createSelector(
@@ -170,6 +176,7 @@ export const Researcher: React.FC = () => {
   const currentConversation = useSelector(selectCurrentConversation, shallowEqual);
   const isLoadingNewMessage = useSelector(selectIsLoadingMessage);
   const hasExceededDailyLimit = useSelector(selectDailyLimitExceeded);
+  const hasFailedToLoadNewMessage = useSelector(selectHasFailedToLoadNewMessage);
   const selectedDataSetId = useSelector(
     (state: RootState) => selectDataSets(state).selectedDataSetId
   );
@@ -190,16 +197,16 @@ export const Researcher: React.FC = () => {
 
   useEffect(() => {
     getToken()
-    .then((token) => {
-      if (token) {
-        dispatch(setToken({ token }));
-        dispatch(loadUserConversations({ authToken: token, userId: user.user?.id ?? '' }));
-      } else {
-        console.error('Token fetched, but undefined.');
-      }
-    })
-    .catch((error) => console.error('Failed to get token:', error));
-  },[])
+      .then((token) => {
+        if (token) {
+          dispatch(setToken({ token }));
+          dispatch(loadUserConversations({ authToken: token, userId: user.user?.id ?? '' }));
+        } else {
+          console.error('Token fetched, but undefined.');
+        }
+      })
+      .catch((error) => console.error('Failed to get token:', error));
+  }, []);
 
   // Memoize the message sending logic
   const handleSendMessage = useCallback(
@@ -322,7 +329,10 @@ export const Researcher: React.FC = () => {
                     scrollBehavior: 'smooth',
                   }}
                 >
-                  <CurrentChatMessages isLoadingNewMessage={isLoadingNewMessage} />
+                  <CurrentChatMessages
+                    isLoadingNewMessage={isLoadingNewMessage}
+                    hasFailedToLoadNewMessage={hasFailedToLoadNewMessage}
+                  />
                 </Flex>
                 <MessageInput
                   onSend={handleSendMessage}
@@ -332,7 +342,7 @@ export const Researcher: React.FC = () => {
               </>
             )}
           </Flex>
-          <ResearcherRightSideBar containerWidth={10} />
+          <ResearcherRightSideBar />
         </div>
       </div>
     </div>

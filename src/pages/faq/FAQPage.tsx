@@ -2,9 +2,19 @@ import React, { useState } from 'react';
 import { IconCirclePlus, IconMail, IconMessage, IconVideo } from '@tabler/icons-react';
 import { Accordion, Button, Flex, SegmentedControl, Text, Title } from '@mantine/core';
 import { COLORS } from '@/common/colors';
+import { useNavigate } from 'react-router-dom';
+import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
+import { useDispatch } from 'react-redux';
+import { SegmentMenuOptions } from '../home/menus/segment_menu';
 
 export const FAQPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('General');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleReachOutButtonClick = () => {
+    dispatch(setCurrentSegmentMenuOption({menuOption: SegmentMenuOptions.AnyQuestions}));
+    navigate('/');
+  };
 
   const faqData: Record<string, { question: string; answer: string; icon: JSX.Element }[]> = {
     General: [
@@ -75,9 +85,9 @@ export const FAQPage: React.FC = () => {
     <Flex direction="column" gap={15} style={{ width: '100%' }} py="xl">
       <Flex direction="row" style={{ flex: 1, justifyContent: 'center' }}>
         <Flex direction="column" style={{ width: '50%' }} py={20} gap={20}>
-          <Title style={{ textAlign: 'center', fontWeight: 400, fontSize: 56 }}>
+          <Text style={{ textAlign: 'center', fontWeight: 400, fontSize: 56 }}>
             Frequently asked questions
-          </Title>
+          </Text>
           <Text style={{ textAlign: 'center', fontSize: 18, opacity: 0.5 }}>
             These are the most commonly asked questions about RealTimeDoc.
           </Text>
@@ -95,7 +105,7 @@ export const FAQPage: React.FC = () => {
       </Flex>
       <Flex style={{ alignItems: 'center', justifyContent: 'center' }} gap={20}>
         <Text style={{ opacity: 0.5 }}>Can’t find what you’re looking for?</Text>
-        <Button radius={10} variant="light" color={COLORS.pink}>
+        <Button radius={10} variant="light" color={COLORS.pink} onClick={handleReachOutButtonClick}>
           <Flex gap={5} direction="row" style={{ alignItems: 'center', width: 'auto' }}>
             <IconMessage />
             <Text>Reach Out</Text>
