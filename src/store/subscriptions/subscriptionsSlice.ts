@@ -75,6 +75,7 @@ export const subscriptionsSlice = createSlice({
     builder.addCase(cancelSubscription.fulfilled, (state, action) => {
       state.subscriptions = state.subscriptions.filter((subscription) => subscription.id !== action.meta.arg.subscriptionId);
       state.cancelSubscriptionStatus = LoadingStatus.SUCCEEDED;
+      console.log('Subscription cancelled successfully with response:', action.payload, LoadingStatus.SUCCEEDED);
     });
     builder.addCase(cancelSubscription.rejected, (state) => {
       state.cancelSubscriptionStatus = LoadingStatus.FAILED;

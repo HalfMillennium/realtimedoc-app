@@ -9,9 +9,9 @@ export const QuotaStatus = () => {
   const uploadsRemaining = 7;
   const product = getSubscriptionType(userSubscriptions?.[0]);
   const tooltipContent =
-    product === STRIPE_PRODUCT_IDS.RESEARCHER_LITE
-      ? `${uploadsRemaining} out of 10 uploads remaining`
-      : 'Unlimited uploads with Researcher Pro';
+    product === STRIPE_PRODUCT_IDS.RESEARCHER_PRO
+      ? 'Unlimited uploads with Researcher Pro'
+      : `${uploadsRemaining} out of 10 uploads remaining`
 
   return (
     <Tooltip label={tooltipContent} withArrow>

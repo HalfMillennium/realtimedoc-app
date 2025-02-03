@@ -38,10 +38,6 @@ const SubscriptionModal: React.FC<ModalProps> = ({ x, y, onClose, userSubscripti
     };
   }, [onClose]);
 
-  const handleCancelPlan = () => {
-    setConfirmCancel(true);
-  };
-
   const handleConfirmCancel = useCallback(async () => {
     const token = await getToken();
     if (!!token && !!userSubscriptions[0]?.id) {
@@ -52,21 +48,6 @@ const SubscriptionModal: React.FC<ModalProps> = ({ x, y, onClose, userSubscripti
       );
     }
   }, [dispatch, getToken, userSubscriptions]);
-
-  const handleCloseConfirm = () => {
-    setConfirmCancel(false);
-  };
-
-  const cancelSubscriptionStatus = useSelector(
-    (state: RootState) => state.subscriptions.cancelSubscriptionStatus
-  );
-
-  useEffect(() => {
-    if (cancelSubscriptionStatus === LoadingStatus.SUCCEEDED) {
-      setConfirmCancel(true);
-      navigate('/');
-    }
-  }, [cancelSubscriptionStatus]);
 
   return (
     <AnimatePresence>
@@ -183,45 +164,70 @@ const SubscriptionModal: React.FC<ModalProps> = ({ x, y, onClose, userSubscripti
           </Flex>
         </Flex>
         <Flex direction="row" flex={1} gap={10} style={{ marginTop: 10 }}>
-          <Button
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: 10,
-            }}
-            color={COLORS.peach}
-            variant="light"
-            radius={'xl'}
-            onClick={() => navigate('/pricing')}
-          >
-            <Flex direction={'row'} align={'center'} justify={'center'} gap={5}>
-              <IconArrowUpRight size={16} />
-              Change Plan
-            </Flex>
-          </Button>
-          <Button
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 5,
-              border: 10,
-              flex: 1,
-              color: 'black',
-            }}
-            variant="filled"
-            radius={'xl'}
-            color={COLORS.peach}
-            onClick={handleConfirmCancel}
-          >
-            <Flex direction={'row'} align={'center'} justify={'center'} gap={5}>
-              <IconX size={16} />
-              Cancel Plan
-            </Flex>
-          </Button>
+          {!confirmCancel && (
+            <>
+              <Button
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: 10,
+                }}
+                color={COLORS.peach}
+                variant="light"
+                radius={'xl'}
+                onClick={() => navigate('/pricing')}
+              >
+                <Flex direction={'row'} align={'center'} justify={'center'} gap={5}>
+                  <IconArrowUpRight size={16} />
+                  Change Plan
+                </Flex>
+              </Button>
+              <Button
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 5,
+                  border: 10,
+                  flex: 1,
+                  color: 'black',
+                }}
+                variant="filled"
+                radius={'xl'}
+                color={COLORS.peach}
+                onClick={() => setConfirmCancel(true)}
+              >
+                <Flex direction={'row'} align={'center'} justify={'center'} gap={5}>
+                  <IconX size={16} />
+                  Cancel Plan
+                </Flex>
+              </Button>
+            </>
+          )}
+          {confirmCancel && (
+            <Button
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 5,
+                border: 10,
+                flex: 1,
+                color: 'black',
+              }}
+              variant="filled"
+              radius={'xl'}
+              color={COLORS.softRed}
+              onClick={handleConfirmCancel}
+            >
+              <Flex direction={'column'} align={'center'} justify={'center'} gap={5}>
+                <Text style={{color: 'white', fontSize: 14, fontWeight: 600}}>Are you sure you want to cancel?</Text>
+              </Flex>
+            </Button>
+          )}
         </Flex>
       </motion.div>
     </AnimatePresence>
@@ -239,7 +245,9 @@ export const UserSubscriptionIndicator = () => {
   const handleClose = () => {
     setModalPosition(null);
   };
-
+  if (!userSubscriptions || userSubscriptions.length === 0) {
+    return <></>;
+  }
   return (
     <>
       <Button p="0" variant="white" radius={100} w={30} h={30} onClick={handleClick}>
@@ -247,7 +255,7 @@ export const UserSubscriptionIndicator = () => {
           STRIPE_PRODUCT_IDS.RESEARCHER_LITE && <IconAward size={18} />}
         {userSubscriptions[0]?.items?.data[0].plan.product ===
           STRIPE_PRODUCT_IDS.RESEARCHER_PRO && <IconTrophyFilled size={18} />}
-          {!userSubscriptions[0]?.items?.data[0].plan.product && <IconBox size={18} />}
+        {!userSubscriptions[0]?.items?.data[0].plan.product && <IconBox size={18} />}
       </Button>
       {modalPosition && (
         <SubscriptionModal

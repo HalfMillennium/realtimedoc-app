@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
 import {
-  IconAward,
-  IconFileNeutral,
   IconMoon,
   IconSun,
-  IconTrophyFilled,
   IconUser,
 } from '@tabler/icons-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
+import { LoadingStatus } from '@/store/utils';
+import { RootState } from '@/store/store';
 import { useNavigate } from 'react-router-dom';
 import { Button, Container, Flex, Group, Image, Text, useMantineColorScheme } from '@mantine/core';
 import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
@@ -43,6 +42,9 @@ export function Header() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const cancelSubscriptionStatus = useSelector(
+    (state: RootState) => state.subscriptions.cancelSubscriptionStatus
+  );
   const user = useUser();
   const items = links.map((link) => {
     return (
@@ -70,6 +72,13 @@ export function Header() {
       console.error('User ID not found.');
     }
   }, [user, dispatch]);
+  
+
+  useEffect(() => {
+    if (cancelSubscriptionStatus === LoadingStatus.SUCCEEDED) {
+      navigate('/');
+    }
+  }, [cancelSubscriptionStatus]);
 
   return (
     <div
