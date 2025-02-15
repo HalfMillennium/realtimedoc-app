@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import Stripe from 'stripe';
+import timeout from 'connect-timeout';
 
 dotenv.config();
 
@@ -15,7 +16,16 @@ const app = express();
 const apiUrl = 'http://localhost:8000';
 const upload = multer();
 
-// Middleware
+// Middlewares
+app.use(timeout(120000));
+app.use(haltOnTimedout);
+function haltOnTimedout(req: express.Request, res: express.Response, next: express.NextFunction): void {
+  if (req.timedout) {
+    console.log('Request timed out! Fuck.');
+    return;
+  }
+  next();
+}
 app.use(cors());
 app.use(express.json());
 
@@ -192,3 +202,4 @@ app.delete('/api/subscriptions/:subscriptionId', requireAuth(), async (req, res)
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+

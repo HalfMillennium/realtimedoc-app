@@ -6,7 +6,8 @@ import { getSubscriptionType, STRIPE_PRODUCT_IDS } from '@/store/subscriptions/s
 
 export const QuotaStatus = () => {
   const userSubscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions);
-  const uploadsRemaining = 7;
+  const quotaDetails = useSelector((state: RootState) => state.quotas.quotaDetails);
+  const uploadsRemaining = quotaDetails.daily_counter;
   const product = getSubscriptionType(userSubscriptions?.[0]);
   const tooltipContent =
     product === STRIPE_PRODUCT_IDS.RESEARCHER_PRO

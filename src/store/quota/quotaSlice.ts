@@ -7,14 +7,16 @@ interface QuotaState {
     daily_max: number;
 }
 
-export const getQuotaDetails = createAsyncThunk<any, { userEmail: string }>(
+export const getQuotaDetails = createAsyncThunk<any, { userId: string }>(
     'quotas/getQuotaDetails',
-    async ({ userEmail }, thunkAPI) => {
+    async ({ userId }, thunkAPI) => {
         try {
-            const response = await fetch(`/api/quotas/${userEmail}`);
+            const response = await fetch(`/api/quotas/${userId}`);
             const userQuotas = await response.json();
+            console.log(`userQuotas ${JSON.stringify(userQuotas)}`);
             return userQuotas;
         } catch (error) {
+            console.log(`Get quota details error ${error}`);
             thunkAPI.dispatch(
                 setError({
                     errorTitle: 'Failed to get user quotas',
@@ -38,10 +40,19 @@ export const quotaSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getQuotaDetails.fulfilled, (state, action) => {
             const response = action.payload.userQuota;
+            /**
+             *  db schema:
+             *             
+             *  user_id,
+                admission_date,
+                daily_counter,
+                daily_max,
+                total_counter
+             */
             state.quotaDetails = {
-                admission_date: response.admission_date,
-                daily_counter: response.daily_counter,
-                daily_max: response.daily_max
+                admission_date: response[1],
+                daily_counter: response[2],
+                daily_max: response[3]
             }
         });
     }

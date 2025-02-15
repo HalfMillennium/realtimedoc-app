@@ -2331,6 +2331,13 @@
     "@types/express-serve-static-core" "*"
     "@types/node" "*"
 
+"@types/connect-timeout@^0.0.39":
+  version "0.0.39"
+  resolved "https://registry.npmjs.org/@types/connect-timeout/-/connect-timeout-0.0.39.tgz"
+  integrity sha512-PHUX9yixjm4qjQ27Uz+F5cyG9Fio9iY7e6eWHvNT0wbA8eu9JaDqxRRiXn5uYnd09zx1fM+wEHnuBHMm9gwOuQ==
+  dependencies:
+    "@types/express" "*"
+
 "@types/connect@*":
   version "3.4.38"
   resolved "https://registry.npmjs.org/@types/connect/-/connect-3.4.38.tgz"
@@ -4104,6 +4111,16 @@ connect-history-api-fallback@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/connect-history-api-fallback/-/connect-history-api-fallback-2.0.0.tgz"
   integrity sha512-U73+6lQFmfiNPrYbXqr6kZ1i1wiRqXnp2nhMsINseWXO8lDau0LGEffJ8kQi4EjLZympVgRdvqjAgiZ1tgzDDA==
+
+connect-timeout@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.npmjs.org/connect-timeout/-/connect-timeout-1.9.0.tgz"
+  integrity sha512-q4bsBIPd+eSGtnh/u6EBOKfuG+4YvwsN0idlOsg6KAw71Qpi0DCf2eCc/Va63QU9qdOeYC8katxoC+rHMNygZg==
+  dependencies:
+    http-errors "~1.6.1"
+    ms "2.0.0"
+    on-finished "~2.3.0"
+    on-headers "~1.0.1"
 
 content-disposition@0.5.4:
   version "0.5.4"
@@ -6309,6 +6326,16 @@ http-deceiver@^1.2.7:
   resolved "https://registry.npmjs.org/http-deceiver/-/http-deceiver-1.2.7.tgz"
   integrity sha512-LmpOGxTfbpgtGVxJrj5k7asXHCgNZp5nLfp+hWc8QQRqtb7fUy6kRY3BO1h9ddF6yIPYUARgxGOwB42DnxIaNw==
 
+http-errors@~1.6.1:
+  version "1.6.3"
+  resolved "https://registry.npmjs.org/http-errors/-/http-errors-1.6.3.tgz"
+  integrity sha512-lks+lVC8dgGyh97jxvxeYTWQFvh4uw4yC12gVl63Cg30sjPX4wuGcdkICVXDAESr6OJGjqGA8Iz5mkeN6zlD7A==
+  dependencies:
+    depd "~1.1.2"
+    inherits "2.0.3"
+    setprototypeof "1.1.0"
+    statuses ">= 1.4.0 < 2"
+
 http-errors@~1.6.2:
   version "1.6.3"
   resolved "https://registry.npmjs.org/http-errors/-/http-errors-1.6.3.tgz"
@@ -8175,6 +8202,13 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.npmjs.org/obuf/-/obuf-1.1.2.tgz"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
+on-finished@~2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/on-finished/-/on-finished-2.3.0.tgz"
+  integrity sha512-ikqdkGAAyf/X/gPhXGvfgAytDZtDbr+bkNUJ0N9h5MI/dmdgCs3l6hoHrcUv41sRKew3jIwrp4qQDXiK99Utww==
+  dependencies:
+    ee-first "1.1.1"
+
 on-finished@2.4.1:
   version "2.4.1"
   resolved "https://registry.npmjs.org/on-finished/-/on-finished-2.4.1.tgz"
@@ -8182,7 +8216,7 @@ on-finished@2.4.1:
   dependencies:
     ee-first "1.1.1"
 
-on-headers@~1.0.2:
+on-headers@~1.0.1, on-headers@~1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/on-headers/-/on-headers-1.0.2.tgz"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==

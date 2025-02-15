@@ -22,6 +22,7 @@ import {
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
 import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
+import { getQuotaDetails } from '@/store/quota/quotaSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { getUserSubscriptions } from '@/store/subscriptions/subscriptionsSlice';
 import { setToken } from '@/store/user/userSlice';
@@ -190,9 +191,16 @@ export const Researcher: React.FC = () => {
   const navigate = useNavigate();
 
   const [errorModalOpen, setErrorModalOpen] = useState(hasExceededDailyLimit);
-
+  const quotaDetails = useSelector((state: RootState) => state.quotas.quotaDetails);
   useEffect(() => {
     dispatch(deselectAllDataSets());
+    const userId = user.user?.id;
+    if (userId) {
+      console.log('Fetching quota details for user:', userId);
+      dispatch(getQuotaDetails({ userId: userId }));
+    } else {
+      console.error('User ID not found.');
+    }
   }, [dispatch]);
 
   useEffect(() => {
