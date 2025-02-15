@@ -4,6 +4,7 @@ import { dataSetsReducer } from './dataSets/dataSetsSlice';
 import { homePageActivityReducer } from './homePageActivity/homePageActivitySlice';
 import { userReducer } from './user/userSlice';
 import { subscriptionsReducer } from './subscriptions/subscriptionsSlice';
+import { quotaReducer } from './quota/quotaSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     subscriptions: subscriptionsReducer,
     dataSets: dataSetsReducer,
     homePageActivity: homePageActivityReducer,
+    quotas: quotaReducer
   },
 });
 

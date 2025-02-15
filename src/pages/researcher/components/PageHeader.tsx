@@ -1,11 +1,11 @@
 import React from 'react';
 import { IconCrown, IconHelp } from '@tabler/icons-react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Center, Divider, Flex, Group, Text, useMantineColorScheme } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { useDispatch } from 'react-redux';
-import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
 import { SegmentMenuOptions } from '@/pages/home/menus/segment_menu';
+import { setCurrentSegmentMenuOption } from '@/store/homePageActivity/homePageActivitySlice';
 
 export const ResearcherPageHeader: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -15,8 +15,7 @@ export const ResearcherPageHeader: React.FC = () => {
   const handleAskForHelpClick = () => {
     dispatch(setCurrentSegmentMenuOption({ menuOption: SegmentMenuOptions.AnyQuestions }));
     navigate('/');
-
-  }
+  };
   return (
     <Flex>
       <Center style={{ marginBottom: '1rem', justifyContent: 'space-between', width: '100%' }}>
