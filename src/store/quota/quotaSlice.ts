@@ -57,7 +57,8 @@ export const quotaSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(getQuotaDetails.fulfilled, (state, action) => {
-                const response = JSON.parse(action.payload);
+                let data = JSON.parse(action.payload);
+                const response = data.quotas;
                 state.quotaDetails = {
                     admissionDate: response[1],
                     dailyCounter: response[2],

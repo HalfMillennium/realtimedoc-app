@@ -35,7 +35,8 @@ app.use(clerkMiddleware());
 app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), async (req, res) => {
   try {
     const userId = req.params.userId;
-
+    const productTypeId = req.body.productTypeId;
+    
     if (!req.file) {
       res.status(400).json({ error: 'No file uploaded' });
     }
@@ -47,6 +48,7 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
     if (!!req.file?.buffer) {
       const blob = new Blob([req.file?.buffer], { type: req.file.mimetype });
       formData.append('file', blob, req.file.originalname);
+      formData.append('productTypeId', productTypeId)
     } else {
       res.status(500).json({
         error: 'No buffer content found. req.file.buffer is null or undefined.',
@@ -86,6 +88,7 @@ app.post('/api/conversations', requireAuth(), async (req, res) => {
       }
     )
   const responseText = await response.text();
+  console.log('Request body:', req.body);
   console.log('Response body:', responseText);
   res.status(200).json(responseText);
   } catch(e) {
@@ -113,6 +116,7 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
     }
 
     const responseText = await response.text();
+    console.log('Request body:', req.body);
     console.log('Response body:', responseText);
     res.status(200).json(responseText);
   } catch (error) {
@@ -175,6 +179,7 @@ app.get('/api/quotas/:userId', async (req, res) => {
     }
 
     const responseText = await response.text();
+    console.log('Request body:', req.body);
     console.log('Response body:', responseText);
     res.status(200).json(responseText);
   } catch (error) {
