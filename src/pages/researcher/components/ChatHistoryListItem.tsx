@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { IconTrash } from '@tabler/icons-react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Button, Flex, Text, useMantineColorScheme } from '@mantine/core';
-import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
+import { Badge, Flex, Text, useMantineColorScheme } from '@mantine/core';
 import { RootState } from '@/store/store';
 
 interface ChatHistoryListItemProps {
@@ -39,29 +37,14 @@ export const ChatHistoryListItem: React.FC<ChatHistoryListItemProps> = ({
         justifyContent: 'space-between',
       }}
     >
-      <Text size="sm" flex={1} style={{wordBreak: 'break-word'}}>
+      <Text size="sm" flex={1} style={{ wordBreak: 'break-word' }}>
         {title}
       </Text>
-      <Flex direction="row" align="center" gap={15}>
-        {conversation?.messages.length === 1 && (
-          <Badge size="sm" color="green">
-            Ready
-          </Badge>
-        )}
-          <div
-            color="gray"
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 20,
-            }}
-            onClick={() => dispatch(deselectAllDataSets())}
-          >
-            <IconTrash size={14} />
-          </div>
-      </Flex>
+      {conversation?.messages.length === 1 && (
+        <Badge size="sm" color="green">
+          Ready
+        </Badge>
+      )}
     </Flex>
   );
 };

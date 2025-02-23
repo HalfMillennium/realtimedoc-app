@@ -13,12 +13,14 @@ import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ChatHistoryListItem } from './ChatHistoryListItem';
 import { QuotaStatus } from './QuotaStatus';
+import { getSubscriptionTypeId } from '@/store/subscriptions/subscriptionsSlice';
 
 export const ResearcherLeftSideBar: React.FC<{ containerWidth: number }> = (containerWidth) => {
   const conversationsSelector = useSelector((state: RootState) => state.conversations);
   const user = useUser();
   const { getToken } = useAuth();
   const userName = user.user?.fullName ?? 'Arbitrary Robert';
+  const userSubscriptions = useSelector((state: RootState) => state.subscriptions.subscriptions);
   const dispatch = useDispatch<AppDispatch>();
   const handleFileUpload = async (files: File[]) => {
     try {
@@ -28,6 +30,8 @@ export const ResearcherLeftSideBar: React.FC<{ containerWidth: number }> = (cont
       if (user.user?.id) {
         const formData = new FormData();
         formData.append('file', files[0]);
+        const productTypeId = !!userSubscriptions?.[0] ? getSubscriptionTypeId(userSubscriptions[0]) : '';
+        formData.append('productTypeId', productTypeId);
         dispatch(
           uploadFileAndCreateConversation({ authToken: token, formData, userId: user.user.id })
         );
@@ -45,7 +49,7 @@ export const ResearcherLeftSideBar: React.FC<{ containerWidth: number }> = (cont
   const allConversations = conversationsSelector.conversations;
 
   return (
-    <Flex direction="column" w={`${containerWidth}%`}>
+    <Flex direction="column" w={`30%`}>
       <Flex direction="row" align="center" justify="space-between" style={{ width: 'full' }}>
         <Group>
           <Avatar radius="xl" />
@@ -54,7 +58,7 @@ export const ResearcherLeftSideBar: React.FC<{ containerWidth: number }> = (cont
             <Text size="xs">Chat User</Text>
           </div>
         </Group>
-        <QuotaStatus/>
+        {!!user.user?.id && <QuotaStatus userId={user.user?.id}/>}
       </Flex>
       <Divider my="sm" />
       <div style={{ display: 'flex', flexDirection: 'row', gap: 5, opacity: 0.5 }}>

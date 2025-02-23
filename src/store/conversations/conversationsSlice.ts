@@ -4,6 +4,8 @@ import {
   conversationsMapFromArray
 } from '@/pages/researcher/components/utils';
 import { setToken } from '../user/userSlice';
+import { setError } from '../error/errorSlice';
+import { getQuotaDetails } from '../quota/quotaSlice';
 
 export interface Message {
   id: string;
@@ -25,7 +27,7 @@ export interface ConversationMap {
 
 export const uploadFileAndCreateConversation = createAsyncThunk<
   any,
-  { authToken: string; formData: FormData; userId: string }
+  { authToken: string; formData: FormData; userId: string; }
 >(
   'conversations/uploadFileAndCreateConversation',
   async ({ authToken, formData, userId }, thunkAPI) => {
@@ -38,7 +40,17 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
       },
     }).catch((error) => console.error('Failed to uploadFileAndCreateConversation:', error));
     if (!!response) {
-      return await response.text();
+      const result = await response.text();
+      thunkAPI.dispatch(getQuotaDetails({ userId }));
+      if(!!JSON.parse(result).error) {
+        thunkAPI.dispatch(setError({
+          errorTitle: 'Failed to create conversation', errorMessage: result
+        }));
+        thunkAPI.dispatch(setIsDailyLimitExceeded(true));
+      } else {
+        console.log('type of result:', typeof result);
+      }
+      return result;
     }
   }
 );
@@ -123,6 +135,9 @@ export const conversationsSlice = createSlice({
         console.error('Could not update conversation - No conversations found');
       }
     },
+    setIsDailyLimitExceeded: (state, action: PayloadAction<boolean>) => {
+      state.isDailyLimitExceeded = action.payload;
+    },
     setCurrentConversation: (state, action: PayloadAction<{ conversationId: string }>) => {
       if (!!state.conversations) {
         const conversation = state.conversations[action.payload.conversationId];
@@ -167,11 +182,11 @@ export const conversationsSlice = createSlice({
               },
             ],
           };
-          state.isLoadingNewConversation = false;
           state.currentConversation = state.conversations[payloadResponse.conversation_id];
         } else {
-          console.error('Could not create new conversation - No conversations found');
+          console.log('Could not create new conversation - No conversations found');
         }
+        state.isLoadingNewConversation = false;
       }),
       builder.addCase(getNewChatResponse.pending, (state) => {
         state.hasFailedToLoadNewMessage = false;
@@ -241,7 +256,7 @@ function toCamelCase(obj: any): any {
 }
 
 // Action creators are generated for each case reducer function
-export const { updateConversation, setCurrentConversation, deleteConversation } =
+export const { updateConversation, setCurrentConversation, deleteConversation, setIsDailyLimitExceeded } =
   conversationsSlice.actions;
 
 export const conversationsReducer = conversationsSlice.reducer;

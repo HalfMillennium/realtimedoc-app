@@ -34,7 +34,6 @@ app.use(clerkMiddleware());
 // Route to handle FormData
 app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), async (req, res) => {
   try {
-    // Access userId from params
     const userId = req.params.userId;
 
     if (!req.file) {

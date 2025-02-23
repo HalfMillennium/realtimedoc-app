@@ -51,7 +51,7 @@ export const FAQPage: React.FC = () => {
       {
         question: 'Can I upload multiple PDF documents at once?',
         answer:
-          'Yes, RealTimeDoc supports uploading multiple PDF documents simultaneously, enabling you to query across multiple files seamlessly.',
+          'This feature is coming soon! RealTimeDoc will soon support uploading multiple PDF documents simultaneously, enabling you to query across multiple files seamlessly.',
         icon: <IconCirclePlus size={20} />,
       },
       {

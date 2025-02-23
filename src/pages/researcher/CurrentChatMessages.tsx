@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { IconRefresh, IconX } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Badge,
   Button,
@@ -9,13 +10,13 @@ import {
   Divider,
   Flex,
   LoadingOverlay,
+  Stack,
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { COLORS } from '@/common/colors';
 import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
 import { RootState } from '@/store/store';
-import { useNavigate } from 'react-router-dom';
 
 export interface CurrentChatMessagesProps {
   isLoadingNewMessage: boolean;
@@ -61,32 +62,29 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             display: 'flex',
             flexDirection: 'row',
             gap: 5,
-            backgroundColor: '#212121',
+            backgroundColor: colorScheme === 'dark' ? '#212121' : '#fafafa',
             alignItems: 'center',
             marginBottom: 10,
             width: '100%',
             justifyContent: 'space-between',
           }}
-          shadow="xs"
           radius="md"
           p="sm"
         >
-          <Flex align="center" gap="5">
+          <Flex align="center" gap="5" justify="center">
             <DotLottieReact
-              src="https://lottie.host/d11a40ce-5dec-4622-af88-a55765ab41db/tbCmYNgfhu.lottie"
+              src={colorScheme === 'dark' ? "https://lottie.host/d11a40ce-5dec-4622-af88-a55765ab41db/tbCmYNgfhu.lottie" : "https://lottie.host/ec651857-f823-432c-88f7-c9ce74b60add/zWM1XnmSBw.lottie" }
               loop
               autoplay
-              style={{ width: 30 }}
-              color={COLORS.teal}
+              style={{ width: 30, paddingBottom: 4 }}
             />
             <Text
               size="xs"
               style={{
                 display: 'flex',
-                fontWeight: 500,
+                fontWeight: 600,
                 letterSpacing: 1,
-                color: 'white',
-                marginTop: 2,
+                lineHeight: 1,
               }}
             >
               LIVE DATASET CONNECTED
@@ -126,6 +124,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
         {!!messages &&
           messages.map((message, index) => (
             <>
+              {/** TODO: This logic delineates between whether message is from user or the bot. This is asinine, and I should change it */}
               {!!message.tag && (
                 <>
                   <div
@@ -152,7 +151,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
                 <>
                   <div key={index}>
                     <Text size="xs" style={{ opacity: 0.7, fontWeight: 500 }}>
-                      {message.userName} - {message.timestamp}
+                      {'You'} - {message.timestamp}
                     </Text>
                     <Text size="md">{message.content}</Text>
                   </div>
@@ -162,15 +161,18 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
             </>
           ))}
         {isLoadingNewMessage && (
-          <Card
-            withBorder
-            shadow="xs"
-            radius="md"
-            p="lg"
-            style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
-          >
-            <LoadingOverlay visible loaderProps={{ type: 'dots', color: 'orange' }} />
-          </Card>
+          <Stack>
+            <Divider my="sm" />
+            <Card
+              withBorder
+              shadow="xs"
+              radius="md"
+              p="lg"
+              style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
+            >
+              <LoadingOverlay visible loaderProps={{ type: 'dots', color: 'orange' }} />
+            </Card>
+          </Stack>
         )}
         {hasFailedToLoadNewMessage && (
           <Card
@@ -193,12 +195,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
               Failed to load new message
             </Text>
             <div>
-              <Button
-                size="xs"
-                color="red"
-                variant="light"
-                onClick={() => navigate(0)}
-              >
+              <Button size="xs" color="red" variant="light" onClick={() => navigate(0)}>
                 <IconRefresh size={14} style={{ marginRight: 5 }} />
                 Reload
               </Button>

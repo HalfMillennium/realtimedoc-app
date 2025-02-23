@@ -8,13 +8,13 @@ export const STRIPE_PRODUCT_IDS = {
   RESEARCHER_PRO: 'prod_RYxJXeQ0LKIXLb',
 };
 
-export const getSubscriptionType = (subscription: Stripe.Subscription|undefined) => {
-  return subscription?.items.data[0].plan.product;
+export const getSubscriptionTypeId = (subscription: Stripe.Subscription|undefined): string => {
+  return subscription?.items.data[0].plan.product as string;
 }
 
-export const getUserSubscriptions = createAsyncThunk<any, { userEmail: string }>(
+export const getUserSubscriptions = createAsyncThunk<any, { userEmail: string}>(
   'subscriptions/getUserSubscription',
-  async ({ userEmail }, thunkAPI) => {
+  async ({ userEmail}, thunkAPI) => {
     try {
       const response = await fetch(`/api/subscriptions/${userEmail}`);
       const userSubscriptions = await response.json();

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import { createSelector } from '@reduxjs/toolkit';
 import { IconArrowUp, IconMoodWrrrFilled } from '@tabler/icons-react';
@@ -22,9 +22,7 @@ import {
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
 import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
-import { getQuotaDetails } from '@/store/quota/quotaSlice';
 import { AppDispatch, RootState } from '@/store/store';
-import { getUserSubscriptions } from '@/store/subscriptions/subscriptionsSlice';
 import { setToken } from '@/store/user/userSlice';
 import { ResearcherPageHeader } from './components/PageHeader';
 import { PlaceholderChatUI } from './components/PlaceholderChatUI';
@@ -56,38 +54,34 @@ const selectDailyLimitExceeded = createSelector(
   (conversations) => conversations.isDailyLimitExceeded
 );
 
-// Separate, memoized message input component to prevent unnecessary re-renders
+// MessageInput component without extra memoization
 interface MessageInputProps {
   onSend: (message: string) => void;
   colorScheme: string;
   disabled?: boolean;
 }
 
-const MessageInput = React.memo(({ onSend, colorScheme, disabled }: MessageInputProps) => {
+const MessageInput: React.FC<MessageInputProps> = ({ onSend, colorScheme, disabled }) => {
   const [newMessage, setNewMessage] = useState('');
 
-  // Memoize handlers to prevent recreating on every render
-  const handleTextAreaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.currentTarget.value);
-  }, []);
+  };
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey && newMessage.trim() !== '') {
-        e.preventDefault();
-        onSend(newMessage);
-        setNewMessage('');
-      }
-    },
-    [newMessage, onSend]
-  );
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && newMessage.trim() !== '') {
+      e.preventDefault();
+      onSend(newMessage);
+      setNewMessage('');
+    }
+  };
 
-  const handleSendClick = useCallback(() => {
+  const handleSendClick = () => {
     if (newMessage.trim() !== '') {
       onSend(newMessage);
       setNewMessage('');
     }
-  }, [newMessage, onSend]);
+  };
 
   return (
     <div style={{ position: 'relative', marginTop: 16 }}>
@@ -131,9 +125,9 @@ const MessageInput = React.memo(({ onSend, colorScheme, disabled }: MessageInput
       </div>
     </div>
   );
-});
+};
 
-// Separate error modal component to isolate modal-related re-renders
+// ErrorModal component without extra memoization
 interface ErrorModalProps {
   errorTitle: string;
   errorDescription: string;
@@ -141,46 +135,48 @@ interface ErrorModalProps {
   setErrorModalOpen: (open: boolean) => void;
 }
 
-const ErrorModal = React.memo<ErrorModalProps>(
-  ({ errorTitle, errorDescription, errorModalOpen, setErrorModalOpen }) => {
-    const handleCloseErrorModal = useCallback(() => {
-      setErrorModalOpen(false);
-    }, [setErrorModalOpen]);
+const ErrorModal: React.FC<ErrorModalProps> = ({
+  errorTitle,
+  errorDescription,
+  errorModalOpen,
+  setErrorModalOpen,
+}) => {
+  const handleCloseErrorModal = () => {
+    setErrorModalOpen(false);
+  };
 
-    return (
-      <Modal
-        opened={errorModalOpen}
-        onClose={handleCloseErrorModal}
-        size="md"
-        centered
-        withCloseButton={false}
-        radius={20}
-      >
-        <Flex direction="column" gap={15} flex="1" style={{ alignItems: 'center' }}>
-          <IconMoodWrrrFilled size={72} color="#f54266" />
-          <Text style={{ fontSize: 24, fontWeight: 400, textAlign: 'center' }}>{errorTitle}</Text>
-          <Text style={{ fontSize: 14, fontWeight: 400, textAlign: 'center' }}>
-            {errorDescription}
-          </Text>
-          <Button variant="light" onClick={handleCloseErrorModal} color="gray" mt="md">
-            Close
-          </Button>
-        </Flex>
-      </Modal>
-    );
-  }
-);
+  return (
+    <Modal
+      opened={errorModalOpen}
+      onClose={handleCloseErrorModal}
+      size="md"
+      centered
+      withCloseButton={false}
+      radius={20}
+    >
+      <Flex direction="column" gap={15} flex="1" style={{ alignItems: 'center' }}>
+        <IconMoodWrrrFilled size={72} color="#f54266" />
+        <Text style={{ fontSize: 24, fontWeight: 400, textAlign: 'center' }}>
+          {errorTitle}
+        </Text>
+        <Text style={{ fontSize: 14, fontWeight: 400, textAlign: 'center' }}>
+          {errorDescription}
+        </Text>
+        <Button variant="light" onClick={handleCloseErrorModal} color="gray" mt="md">
+          Close
+        </Button>
+      </Flex>
+    </Modal>
+  );
+};
 
 // Main Researcher component
 export const Researcher: React.FC = () => {
-  // Use memoized selectors with shallowEqual comparison - H
   const currentConversation = useSelector(selectCurrentConversation, shallowEqual);
   const isLoadingNewMessage = useSelector(selectIsLoadingMessage);
   const hasExceededDailyLimit = useSelector(selectDailyLimitExceeded);
   const hasFailedToLoadNewMessage = useSelector(selectHasFailedToLoadNewMessage);
-  const selectedDataSetId = useSelector(
-    (state: RootState) => selectDataSets(state).selectedDataSetId
-  );
+  const selectedDataSetId = useSelector((state: RootState) => selectDataSets(state).selectedDataSetId);
   const authToken = useSelector((state: RootState) => selectUser(state).token);
 
   const { colorScheme } = useMantineColorScheme();
@@ -191,17 +187,20 @@ export const Researcher: React.FC = () => {
   const navigate = useNavigate();
 
   const [errorModalOpen, setErrorModalOpen] = useState(hasExceededDailyLimit);
-  const quotaDetails = useSelector((state: RootState) => state.quotas.quotaDetails);
+
+  useEffect(() => {
+    setErrorModalOpen(hasExceededDailyLimit);
+  }, [hasExceededDailyLimit]);
+
   useEffect(() => {
     dispatch(deselectAllDataSets());
     const userId = user.user?.id;
     if (userId) {
       console.log('Fetching quota details for user:', userId);
-      dispatch(getQuotaDetails({ userId: userId }));
     } else {
       console.error('User ID not found.');
     }
-  }, [dispatch]);
+  }, [dispatch, user.user?.id]);
 
   useEffect(() => {
     getToken()
@@ -214,73 +213,58 @@ export const Researcher: React.FC = () => {
         }
       })
       .catch((error) => console.error('Failed to get token:', error));
-  }, []);
+  }, [dispatch, getToken, user.user?.id]);
 
-  // Memoize the message sending logic
-  const handleSendMessage = useCallback(
-    async (message: string) => {
-      if (!!!authToken) {
-        navigate('/');
-        return;
+  const handleSendMessage = async (message: string) => {
+    if (!authToken) {
+      navigate('/');
+      return;
+    }
+
+    try {
+      const token = await getToken();
+      if (!token) throw new Error('No token found');
+
+      dispatch(setToken({ token }));
+
+      if (user.user?.id) {
+        const newChatMessage = {
+          id: crypto.randomUUID(),
+          userName: 'You',
+          timestamp: new Date().toLocaleTimeString(),
+          content: message,
+        };
+
+        dispatch(
+          updateConversation({
+            message: newChatMessage,
+            conversationId: currentConversation?.id ?? '',
+          })
+        );
+
+        dispatch(
+          setCurrentConversation({
+            conversationId: currentConversation?.id ?? '',
+          })
+        );
+
+        dispatch(
+          getNewChatResponse({
+            authToken,
+            conversationId: currentConversation?.id ?? '',
+            message,
+            selectedDataSetId,
+          })
+        );
       }
+    } catch (error) {
+      console.error(`Could not update conversation: ${error}`);
+      setErrorModalOpen(true);
+    }
+  };
 
-      try {
-        const token = await getToken();
-        if (!token) throw new Error('No token found');
-
-        dispatch(setToken({ token }));
-
-        if (user.user?.id) {
-          const newChatMessage = {
-            id: crypto.randomUUID(),
-            userName: userName,
-            timestamp: new Date().toLocaleTimeString(),
-            content: message,
-          };
-
-          dispatch(
-            updateConversation({
-              message: newChatMessage,
-              conversationId: currentConversation?.id ?? '',
-            })
-          );
-
-          dispatch(
-            setCurrentConversation({
-              conversationId: currentConversation?.id ?? '',
-            })
-          );
-
-          dispatch(
-            getNewChatResponse({
-              authToken,
-              conversationId: currentConversation?.id ?? '',
-              message,
-              selectedDataSetId,
-            })
-          );
-        }
-      } catch (error) {
-        console.error(`Could not update conversation: ${error}`);
-        setErrorModalOpen(true);
-      }
-    },
-    [
-      authToken,
-      navigate,
-      getToken,
-      user.user?.id,
-      userName,
-      currentConversation?.id,
-      selectedDataSetId,
-      dispatch,
-    ]
-  );
-
-  // Memoize the conversation state check
-  const hasActiveConversation = useMemo(() => {
-    return !!currentConversation?.messages && currentConversation.messages.length > 0;
-  }, [currentConversation?.messages]);
+  const hasActiveConversation =
+    !!currentConversation?.messages && currentConversation.messages.length > 0;
 
   return (
     <div style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 30 }}>
@@ -309,22 +293,12 @@ export const Researcher: React.FC = () => {
           gap: 10,
         }}
       >
-        <ResearcherPageHeader />
-        <div
-          style={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row', gap: 20 }}
-        >
-          <React.Suspense
-            fallback={<LoadingOverlay zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />}
-          >
+        {false && <ResearcherPageHeader />}
+        <div style={{ display: 'flex', flex: 1, overflow: 'hidden', flexDirection: 'row', gap: 20 }}>
+          <React.Suspense fallback={<LoadingOverlay zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />}>
             <ResearcherLeftSideBar containerWidth={20} />
           </React.Suspense>
-          <Flex
-            direction="column"
-            w={'100%'}
-            style={{
-              padding: '8px',
-            }}
-          >
+          <Flex direction="column" w={'100%'} style={{ padding: '8px' }}>
             {!hasActiveConversation && <PlaceholderChatUI />}
             {hasActiveConversation && (
               <>
