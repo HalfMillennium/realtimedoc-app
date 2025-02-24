@@ -26,7 +26,6 @@ export const HowItWorks: React.FC = () => {
       </Text>
       <Flex direction="column" justify="space-between">
         <Text style={styles.sectionTitle}>How It Works</Text>
-        <Text style={styles.text}>Getting started is simple.</Text>
         <List
           style={styles.list}
           spacing="sm"
@@ -43,10 +42,7 @@ export const HowItWorks: React.FC = () => {
           </List.Item>
           <List.Item>Ask questions or search specific content using natural language.</List.Item>
         </List>
-        <Text style={styles.sectionTitle}>Who is this for?</Text>
-        <Text style={styles.text}>
-          Whether you're a researcher, analyst, or business professional, our tool is designed to:
-        </Text>
+        <Text style={styles.sectionTitle}>Our tool is designed to:</Text>
         <List
           style={styles.list}
           spacing="sm"
