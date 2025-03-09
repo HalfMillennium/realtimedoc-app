@@ -13,7 +13,7 @@ const STRIPE_TEST_KEY: string = process.env.STRIPE_TEST_API_KEY || '';
 const port = 5050;
 
 const app = express();
-const apiUrl = process.env.API_KEY || 'http://localhost:8000';
+const apiUrl = process.env.API_URL || 'http://localhost:8000';
 const upload = multer();
 
 // Middlewares

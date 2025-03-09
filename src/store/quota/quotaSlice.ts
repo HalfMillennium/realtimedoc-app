@@ -27,7 +27,6 @@ export const getQuotaDetails = createAsyncThunk<any, { userId: string }>(
         try {
             const response = await fetch(`/api/quotas/${userId}`);
             const userQuotas = await response.json();
-            console.log('userQuotas', userQuotas);
             return userQuotas;
         } catch (error) {
             console.log(`Get quota details error ${error}`);

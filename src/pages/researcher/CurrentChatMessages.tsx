@@ -9,6 +9,7 @@ import {
   Card,
   Divider,
   Flex,
+  Group,
   LoadingOverlay,
   Stack,
   Text,
@@ -21,11 +22,13 @@ import { RootState } from '@/store/store';
 export interface CurrentChatMessagesProps {
   isLoadingNewMessage: boolean;
   hasFailedToLoadNewMessage: boolean;
+  newMessageRetry: () => void;
 }
 
 export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   isLoadingNewMessage,
   hasFailedToLoadNewMessage,
+  newMessageRetry
 }) => {
   const messages = useSelector(
     (state: RootState) => state.conversations.currentConversation?.messages
@@ -34,6 +37,9 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
+  const handleNewMessageRetry = () => {
+    newMessageRetry();
+  }
   useEffect(() => {
     // Scroll to the bottom when new messages are added
     const chatContainer = document.querySelector('.chat-container');
@@ -73,7 +79,11 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
         >
           <Flex align="center" gap="5" justify="center">
             <DotLottieReact
-              src={colorScheme === 'dark' ? "https://lottie.host/d11a40ce-5dec-4622-af88-a55765ab41db/tbCmYNgfhu.lottie" : "https://lottie.host/ec651857-f823-432c-88f7-c9ce74b60add/zWM1XnmSBw.lottie" }
+              src={
+                colorScheme === 'dark'
+                  ? 'https://lottie.host/d11a40ce-5dec-4622-af88-a55765ab41db/tbCmYNgfhu.lottie'
+                  : 'https://lottie.host/ec651857-f823-432c-88f7-c9ce74b60add/zWM1XnmSBw.lottie'
+              }
               loop
               autoplay
               style={{ width: 30, paddingBottom: 4 }}
@@ -128,7 +138,7 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
               {!!message.tag && (
                 <>
                   <div
-                    key={index}
+                    key={message.id}
                     style={{
                       padding: 10,
                       backgroundColor: colorScheme === 'dark' ? '#4d4c4c' : `${COLORS.teal}20`,
@@ -167,10 +177,31 @@ export const CurrentChatMessages: React.FC<CurrentChatMessagesProps> = ({
               withBorder
               shadow="xs"
               radius="md"
-              p="lg"
-              style={{ padding: 10, position: 'relative', backdropFilter: 'blur(5px)' }}
+              p="xl"
+              style={{
+                padding: 10,
+                position: 'relative',
+                backdropFilter: 'blur(5px)',
+              }}
             >
-              <LoadingOverlay visible loaderProps={{ type: 'dots', color: 'orange' }} />
+              <LoadingOverlay
+                visible
+                loaderProps={{ type: 'dots', color: 'orange' }}
+                overlayProps={{
+                  children: (
+                    <Flex p={10} gap={100} align="center" justify="flex-end">
+                      <Text size="sm">Taking too long?</Text>
+                      <Button radius={10} size="xs" variant="light" onClick={handleNewMessageRetry}>
+                        <IconRefresh />
+                        <Text size="sm" ml={5}>
+                          Retry
+                        </Text>
+                      </Button>
+                    </Flex>
+                  ),
+                  center: true
+                }}
+              />
             </Card>
           </Stack>
         )}

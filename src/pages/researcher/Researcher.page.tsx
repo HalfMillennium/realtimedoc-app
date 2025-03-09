@@ -2,17 +2,15 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import { createSelector } from '@reduxjs/toolkit';
-import { IconArrowUp, IconMoodWrrrFilled } from '@tabler/icons-react';
+import { IconMoodWrrrFilled } from '@tabler/icons-react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  ActionIcon,
   Button,
   Flex,
   LoadingOverlay,
   Modal,
   Text,
-  Textarea,
   useMantineColorScheme,
 } from '@mantine/core';
 import {
@@ -29,6 +27,7 @@ import { PlaceholderChatUI } from './components/PlaceholderChatUI';
 import { ResearcherLeftSideBar } from './components/ResearcherLeftSideBar';
 import { ResearcherRightSideBar } from './components/ResearcherRightSidebar';
 import { CurrentChatMessages } from './CurrentChatMessages';
+import { MessageInput } from './MessageInput';
 
 const selectConversations = (state: RootState) => state.conversations;
 const selectDataSets = (state: RootState) => state.dataSets;
@@ -53,79 +52,6 @@ const selectDailyLimitExceeded = createSelector(
   [selectConversations],
   (conversations) => conversations.isDailyLimitExceeded
 );
-
-// MessageInput component without extra memoization
-interface MessageInputProps {
-  onSend: (message: string) => void;
-  colorScheme: string;
-  disabled?: boolean;
-}
-
-const MessageInput: React.FC<MessageInputProps> = ({ onSend, colorScheme, disabled }) => {
-  const [newMessage, setNewMessage] = useState('');
-
-  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewMessage(e.currentTarget.value);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && newMessage.trim() !== '') {
-      e.preventDefault();
-      onSend(newMessage);
-      setNewMessage('');
-    }
-  };
-
-  const handleSendClick = () => {
-    if (newMessage.trim() !== '') {
-      onSend(newMessage);
-      setNewMessage('');
-    }
-  };
-
-  return (
-    <div style={{ position: 'relative', marginTop: 16 }}>
-      <Textarea
-        placeholder="How can I help you?"
-        radius={12}
-        size="md"
-        value={newMessage}
-        onKeyDown={handleKeyDown}
-        onChange={handleTextAreaChange}
-        style={{
-          width: '100%',
-          borderColor: colorScheme === 'light' ? 'black' : 'white',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          right: 20,
-          top: 0,
-          bottom: 0,
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <ActionIcon
-          style={{
-            backgroundColor: colorScheme === 'light' ? '#f1f1f1' : '#212121',
-            borderRadius: '100%',
-            width: 45,
-            height: 45,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onClick={handleSendClick}
-          disabled={disabled}
-        >
-          <IconArrowUp size={18} color={colorScheme === 'dark' ? '#f1f1f1' : '#212121'} />
-        </ActionIcon>
-      </div>
-    </div>
-  );
-};
 
 // ErrorModal component without extra memoization
 interface ErrorModalProps {
@@ -178,14 +104,16 @@ export const Researcher: React.FC = () => {
   const hasFailedToLoadNewMessage = useSelector(selectHasFailedToLoadNewMessage);
   const selectedDataSetId = useSelector((state: RootState) => selectDataSets(state).selectedDataSetId);
   const authToken = useSelector((state: RootState) => selectUser(state).token);
-
+  const [shouldRetryMessage, setShouldRetryMessage] = useState(false);
   const { colorScheme } = useMantineColorScheme();
   const { getToken } = useAuth();
   const user = useUser();
   const userName = user.user?.fullName ?? 'Arbitrary Robert';
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+  const handleNewMessageRetry = () => {
+    setShouldRetryMessage(true);
+  }
   const [errorModalOpen, setErrorModalOpen] = useState(hasExceededDailyLimit);
 
   useEffect(() => {
@@ -196,7 +124,7 @@ export const Researcher: React.FC = () => {
     dispatch(deselectAllDataSets());
     const userId = user.user?.id;
     if (userId) {
-      console.log('Fetching quota details for user:', userId);
+      console.log('Fetching quota details for user');
     } else {
       console.error('User ID not found.');
     }
@@ -313,11 +241,13 @@ export const Researcher: React.FC = () => {
                 >
                   <CurrentChatMessages
                     isLoadingNewMessage={isLoadingNewMessage}
+                    newMessageRetry={handleNewMessageRetry}
                     hasFailedToLoadNewMessage={hasFailedToLoadNewMessage}
                   />
                 </Flex>
                 <MessageInput
                   onSend={handleSendMessage}
+                  shouldRetry={shouldRetryMessage}
                   colorScheme={colorScheme}
                   disabled={isLoadingNewMessage || hasExceededDailyLimit}
                 />
