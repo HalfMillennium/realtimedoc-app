@@ -19,7 +19,7 @@ import {
   setCurrentConversation,
   updateConversation,
 } from '@/store/conversations/conversationsSlice';
-import { deselectAllDataSets } from '../../store/dataSets/dataSetsSlice';
+import { deselectAllDataSets } from '../../store/datasets/dataSetsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { setToken } from '@/store/user/userSlice';
 import { ResearcherPageHeader } from './components/PageHeader';

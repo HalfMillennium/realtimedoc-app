@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { Conversation, conversationsReducer } from './conversations/conversationsSlice';
-import { dataSetsReducer } from './dataSets/dataSetsSlice';
+import { dataSetsReducer } from './datasets/dataSetsSlice';
 import { homePageActivityReducer } from './homePageActivity/homePageActivitySlice';
 import { userReducer } from './user/userSlice';
 import { subscriptionsReducer } from './subscriptions/subscriptionsSlice';
