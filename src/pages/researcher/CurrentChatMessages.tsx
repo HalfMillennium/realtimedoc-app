@@ -16,7 +16,7 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { deselectAllDataSets } from '@/store/dataSets/dataSetsSlice';
+import { deselectAllDataSets } from '../../store/dataSets/dataSetsSlice';
 import { RootState } from '@/store/store';
 
 export interface CurrentChatMessagesProps {

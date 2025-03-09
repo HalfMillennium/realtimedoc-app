@@ -7,7 +7,7 @@ import {
   deselectAllDataSets,
   selectDataSet,
   SupportedDataSet,
-} from '@/store/dataSets/dataSetsSlice';
+} from '../../../store/dataSets/dataSetsSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { DataSetOptionsPanel } from './DataSetOptionsPanel';
 

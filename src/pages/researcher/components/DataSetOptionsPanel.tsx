@@ -3,7 +3,7 @@ import { IconFlag } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Radio, RadioGroup, Text } from '@mantine/core';
 import { COLORS } from '@/common/colors';
-import { selectDataSet, SupportedDataSet } from '@/store/datasets/dataSetsSlice';
+import { selectDataSet, SupportedDataSet } from '../../../store/dataSets/dataSetsSlice';
 import { RootState } from '@/store/store';
 
 interface DataSetOptionsPanelProps {
