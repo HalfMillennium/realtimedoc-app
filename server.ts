@@ -8,7 +8,7 @@ import timeout from 'connect-timeout';
 
 dotenv.config();
 
-const STRIPE_TEST_KEY: string = process.env.STRIPE_TEST_API_KEY || '';
+const STRIPE_KEY: string = process.env.STRIPE_API_KEY || '';
 
 const port = process.env.PORT || 5050;
 
@@ -148,7 +148,7 @@ async function getCustomerByUserEmail(userEmail: string, stripe: Stripe) {
 
 app.get('/api/subscriptions/:userEmail', async (req, res) => {
   try {
-    const stripe = new Stripe(STRIPE_TEST_KEY);
+    const stripe = new Stripe(STRIPE_KEY);
     const result = await getCustomerByUserEmail(req.params.userEmail, stripe);
     const subscriptions = await stripe.subscriptions.list({
       customer: result.id,
@@ -193,7 +193,7 @@ app.get('/api/quotas/:userId', async (req, res) => {
 
 app.delete('/api/subscriptions/:subscriptionId', requireAuth(), async (req, res) => {
   try {
-    const stripe = new Stripe(STRIPE_TEST_KEY);
+    const stripe = new Stripe(STRIPE_KEY);
     const deletedSubscription = await stripe.subscriptions.cancel(req.params.subscriptionId);
     console.log('Deleted subscription:', deletedSubscription);
     res.status(200).json({ message: 'Subscription deleted successfully' });
