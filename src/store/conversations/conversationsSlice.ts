@@ -32,7 +32,7 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
   'conversations/uploadFileAndCreateConversation',
   async ({ authToken, formData, userId }, thunkAPI) => {
     const response = await fetch(`/api/create-convo/${userId}`, {
-      method: 'POST',
+      method: 'GET',
       body: formData,
       headers: {
         Authorization: `Bearer ${authToken}`,
@@ -68,7 +68,7 @@ export const getNewChatResponse = createAsyncThunk<
   async ({ authToken, conversationId, message, selectedDataSetId }, thunkAPI) => {
     console.log('selectedDataSetId passed to API:', selectedDataSetId);
     const response = await fetch(`/api/new-message/${conversationId}`, {
-      method: 'POST',
+      method: 'GET',
       body: JSON.stringify({
         queryText: message,
         dataSetId: selectedDataSetId,
@@ -95,7 +95,7 @@ export const loadUserConversations = createAsyncThunk<
   'conversations/loadUserConversations',
   async ({ authToken, userId }, thunkAPI) => {
     const response = await fetch(`/api/conversations`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${authToken}`,
