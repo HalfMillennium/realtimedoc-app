@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(clerkMiddleware());
 
 // Route to handle FormData
-app.get('/api/create-convo/:userId', requireAuth(), upload.single('file'), async (req, res) => {
+app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), async (req, res) => {
   try {
     const userId = req.params.userId;
     const productTypeId = req.body.productTypeId;
@@ -94,10 +94,9 @@ app.get('/api/conversations', requireAuth(), async (req, res) => {
   } catch(e) {
     res.status(500).json(`HTTP error! status: ${e}`);
   }
-
 });
 
-app.get('/api/new-message/:conversationId', requireAuth(), async (req, res) => {
+app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => {
   try {
     console.log('Request body:', req.body);
     const response = await fetch(`${apiUrl}/new-message/${req.params.conversationId}`, {
