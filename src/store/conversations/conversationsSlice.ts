@@ -94,14 +94,13 @@ export const loadUserConversations = createAsyncThunk<
 >(
   'conversations/loadUserConversations',
   async ({ authToken, userId }, thunkAPI) => {
-    const response = await fetch(`/api/conversations`, {
+    const response = await fetch(`/api/conversations/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${authToken}`,
         mode: 'cors',
-      },
-      body: JSON.stringify({userId}),
+      }
     }).catch((error) => console.error('Failed to load user conversations:', error));
     if (!!response) {
       return response.text();

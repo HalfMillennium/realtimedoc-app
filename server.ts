@@ -1,10 +1,10 @@
 import { clerkMiddleware, requireAuth } from '@clerk/express';
+import timeout from 'connect-timeout';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import Stripe from 'stripe';
-import timeout from 'connect-timeout';
 
 dotenv.config();
 
@@ -19,7 +19,11 @@ const upload = multer();
 // Middlewares
 app.use(timeout(120000));
 app.use(haltOnTimedout);
-function haltOnTimedout(req: express.Request, res: express.Response, next: express.NextFunction): void {
+function haltOnTimedout(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+): void {
   if (req.timedout) {
     console.log('Request timed out!');
     return;
@@ -36,7 +40,7 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
   try {
     const userId = req.params.userId;
     const productTypeId = req.body.productTypeId;
-    
+
     if (!req.file) {
       res.status(400).json({ error: 'No file uploaded' });
     }
@@ -48,7 +52,7 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
     if (!!req.file?.buffer) {
       const blob = new Blob([req.file?.buffer], { type: req.file.mimetype });
       formData.append('file', blob, req.file.originalname);
-      formData.append('productTypeId', productTypeId)
+      formData.append('productTypeId', productTypeId);
     } else {
       res.status(500).json({
         error: 'No buffer content found. req.file.buffer is null or undefined.',
@@ -77,21 +81,14 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
   }
 });
 
-app.get('/api/conversations', requireAuth(), async (req, res) => {
+app.get('/api/conversations/:userId', requireAuth(), async (req, res) => {
   try {
-    const response = await fetch(`${apiUrl}/conversations/${req.body.userId}`, 
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  const responseText = await response.text();
-  console.log('Request body:', req.body);
-  console.log('Response body:', responseText);
-  res.status(200).json(responseText);
-  } catch(e) {
+    const response = await fetch(`${apiUrl}/conversations/${req.params.userId}`);
+    const responseText = await response.text();
+    console.log('Request body:', req.body);
+    console.log('Response body:', responseText);
+    res.status(200).json(responseText);
+  } catch (e) {
     res.status(500).json(`HTTP error! status: ${e}`);
   }
 });
@@ -131,7 +128,7 @@ async function getCustomerByUserEmail(userEmail: string, stripe: Stripe) {
   try {
     const customers = await stripe.customers.search({
       query: `email:'${userEmail}'`,
-      limit: 1
+      limit: 1,
     });
 
     if (customers.data.length === 0) {
@@ -152,9 +149,9 @@ app.get('/api/subscriptions/:userEmail', async (req, res) => {
     const subscriptions = await stripe.subscriptions.list({
       customer: result.id,
     });
-    res.status(200).json({userSubscriptions: JSON.stringify(subscriptions.data) ?? []});
+    res.status(200).json({ userSubscriptions: JSON.stringify(subscriptions.data) ?? [] });
   } catch (error) {
-    if(error.message.includes('No customer found for email')) {
+    if (error.message.includes('No customer found for email')) {
       console.error('Error retrieving subscriptions:', error);
       res.status(404).json({ error: 'No subscriptions found' });
       return;
@@ -205,4 +202,3 @@ app.delete('/api/subscriptions/:subscriptionId', requireAuth(), async (req, res)
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
-
