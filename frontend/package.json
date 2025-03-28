@@ -4,7 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "dev": "concurrently \"vite\" \"npx tsx server.ts\"",
+    "dev": "concurrently \"vite\" \"npx tsx ../backend/server.ts\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
