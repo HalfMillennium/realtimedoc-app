@@ -79,8 +79,12 @@ export const getNewChatResponse = createAsyncThunk<
         mode: 'cors',
       },
     }).catch((error) => console.error('Failed to getNewChatResponse:', error));
-    if (!!response) {
-      return await response.text();
+    try {
+      let result = response!.text();
+      return result
+    } catch(error) {
+      console.error('Failed to parse get new chat conversations response:', error);
+      return 
     }
   }
 );
@@ -102,8 +106,15 @@ export const loadUserConversations = createAsyncThunk<
         mode: 'cors',
       }
     }).catch((error) => console.error('Failed to load user conversations:', error));
-    if (!!response) {
-      return response.text();
+    try {
+      let result = response!.text();
+      return result
+    } catch(error) {
+      thunkAPI.dispatch(setError({
+        errorTitle: 'Failed to load conversations', errorMessage: error?.toString()
+      }));
+      console.error('Failed to parse load user conversations response:', error);
+      return 
     }
   }
 );
