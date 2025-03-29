@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 import { setError } from '../error/errorSlice';
+const EXPRESS_API_URL = import.meta.env.EXPRESS_API_URL;
 
 interface QuotaState {
     quotaDetails: {
@@ -25,7 +26,7 @@ export const getQuotaDetails = createAsyncThunk<any, { userId: string }>(
     'quotas/getQuotaDetails',
     async ({ userId }, thunkAPI) => {
         try {
-            const response = await fetch(`/api/quotas/${userId}`);
+            const response = await fetch(`${EXPRESS_API_URL}/api/quotas/${userId}`);
             const userQuotas = await response.json();
             console.log(`Quotas result ${userQuotas}`);
             return userQuotas;

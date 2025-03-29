@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(clerkMiddleware());
 
 // Route to handle FormData
-app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), async (req, res) => {
+app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), async (req: any, res: any) => {
   try {
     const userId = req.params.userId;
     const productTypeId = req.body.productTypeId;
@@ -81,7 +81,7 @@ app.post('/api/create-convo/:userId', requireAuth(), upload.single('file'), asyn
   }
 });
 
-app.get('/api/conversations/:userId', requireAuth(), async (req, res) => {
+app.get('/api/conversations/:userId', requireAuth(), async (req: any, res: any) => {
   try {
     const response = await fetch(`${apiUrl}/conversations/${req.params.userId}`);
     const responseText = await response.text();
@@ -93,7 +93,7 @@ app.get('/api/conversations/:userId', requireAuth(), async (req, res) => {
   }
 });
 
-app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => {
+app.post('/api/new-message/:conversationId', requireAuth(), async (req: any, res: any) => {
   try {
     console.log('Request body:', req.body);
     const response = await fetch(`${apiUrl}/new-message/${req.params.conversationId}`, {
@@ -119,9 +119,13 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
     console.error('Failed to process new-message request:', error);
     res.status(500).json({
       error: `Could not complete new-message request for conversationId ${req.params.conversationId}`,
-      details: error.message,
+      details: JSON.stringify(error),
     });
   }
+});
+
+app.get('/health', (req: any, res: any) => {
+  res.status(200).json({ status: 'ok' });
 });
 
 async function getCustomerByUserEmail(userEmail: string, stripe: Stripe) {
@@ -142,7 +146,7 @@ async function getCustomerByUserEmail(userEmail: string, stripe: Stripe) {
   }
 }
 
-app.get('/api/subscriptions/:userEmail', async (req, res) => {
+app.get('/api/subscriptions/:userEmail', async (req: any, res: any) => {
   try {
     const stripe = new Stripe(STRIPE_KEY);
     const result = await getCustomerByUserEmail(req.params.userEmail, stripe);
@@ -151,7 +155,7 @@ app.get('/api/subscriptions/:userEmail', async (req, res) => {
     });
     res.status(200).json({ userSubscriptions: JSON.stringify(subscriptions.data) ?? [] });
   } catch (error) {
-    if (error.message.includes('No customer found for email')) {
+    if (JSON.stringify(error).includes('No customer found for email')) {
       console.error('Error retrieving subscriptions:', error);
       res.status(404).json({ error: 'No subscriptions found' });
       return;
@@ -161,7 +165,7 @@ app.get('/api/subscriptions/:userEmail', async (req, res) => {
   }
 });
 
-app.get('/api/quotas/:userId', async (req, res) => {
+app.get('/api/quotas/:userId', async (req: any, res: any) => {
   try {
     const response = await fetch(`${apiUrl}/quotas/${req.params.userId}`, {
       method: 'GET',
@@ -182,12 +186,12 @@ app.get('/api/quotas/:userId', async (req, res) => {
     console.error('Failed to process quotas request:', error);
     res.status(500).json({
       error: `Could not complete quotas request for userId ${req.params.userId}`,
-      details: error.message,
+      details: JSON.stringify(error),
     });
   }
 });
 
-app.delete('/api/subscriptions/:subscriptionId', requireAuth(), async (req, res) => {
+app.delete('/api/subscriptions/:subscriptionId', requireAuth(), async (req: any, res: any) => {
   try {
     const stripe = new Stripe(STRIPE_KEY);
     const deletedSubscription = await stripe.subscriptions.cancel(req.params.subscriptionId);
