@@ -124,6 +124,10 @@ app.post('/api/new-message/:conversationId', requireAuth(), async (req, res) => 
   }
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 async function getCustomerByUserEmail(userEmail: string, stripe: Stripe) {
   try {
     const customers = await stripe.customers.search({
