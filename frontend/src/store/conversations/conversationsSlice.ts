@@ -7,6 +7,8 @@ import { setToken } from '../user/userSlice';
 import { setError } from '../error/errorSlice';
 import { getQuotaDetails } from '../quota/quotaSlice';
 
+const EXPRESS_API_URL = import.meta.env.EXPRESS_API_URL;
+
 export interface Message {
   id: string;
   userName: string;
@@ -31,7 +33,7 @@ export const uploadFileAndCreateConversation = createAsyncThunk<
 >(
   'conversations/uploadFileAndCreateConversation',
   async ({ authToken, formData, userId }, thunkAPI) => {
-    const response = await fetch(`/api/create-convo/${userId}`, {
+    const response = await fetch(`${EXPRESS_API_URL}/api/create-convo/${userId}`, {
       method: 'POST',
       body: formData,
       headers: {
@@ -67,7 +69,7 @@ export const getNewChatResponse = createAsyncThunk<
   'conversations/getNewChatResponse',
   async ({ authToken, conversationId, message, selectedDataSetId }, thunkAPI) => {
     console.log('selectedDataSetId passed to API:', selectedDataSetId);
-    const response = await fetch(`/api/new-message/${conversationId}`, {
+    const response = await fetch(`${EXPRESS_API_URL}/api/new-message/${conversationId}`, {
       method: 'POST',
       body: JSON.stringify({
         queryText: message,
@@ -98,7 +100,7 @@ export const loadUserConversations = createAsyncThunk<
 >(
   'conversations/loadUserConversations',
   async ({ authToken, userId }, thunkAPI) => {
-    const response = await fetch(`/api/conversations/${userId}`, {
+    const response = await fetch(`${EXPRESS_API_URL}/api/conversations/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

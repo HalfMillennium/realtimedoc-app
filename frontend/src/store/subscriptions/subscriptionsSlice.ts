@@ -3,6 +3,8 @@ import Stripe from 'stripe';
 import { setError } from '../error/errorSlice';
 import { LoadingStatus } from '../utils';
 
+const EXPRESS_API_URL = import.meta.env.EXPRESS_API_URL;
+
 export const STRIPE_PRODUCT_IDS = {
   RESEARCHER_LITE: 'prod_RYxGo5f1mjy7Q6',
   RESEARCHER_PRO: 'prod_RYxJXeQ0LKIXLb',
@@ -16,7 +18,7 @@ export const getUserSubscriptions = createAsyncThunk<any, { userEmail: string}>(
   'subscriptions/getUserSubscription',
   async ({ userEmail}, thunkAPI) => {
     try {
-      const response = await fetch(`/api/subscriptions/${userEmail}`);
+      const response = await fetch(`${EXPRESS_API_URL}/api/subscriptions/${userEmail}`);
       const userSubscriptions = await response.json();
       return userSubscriptions;
     } catch (error) {
@@ -36,7 +38,7 @@ export const cancelSubscription = createAsyncThunk<any, { subscriptionId: string
   async ({ subscriptionId, authToken }, thunkAPI) => {
     console.log('reached cancelSubscription thunk');
     try {
-      const response = await fetch(`/api/subscriptions/${subscriptionId}`, {
+      const response = await fetch(`${EXPRESS_API_URL}/api/subscriptions/${subscriptionId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
