@@ -8,13 +8,5 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './vitest.setup.mjs',
-  },  
-  server: {
-    proxy: {
-      '/api': {
-        target: `http://localhost:5050`, 
-        changeOrigin: true
-      },
-    },
   },
 });
